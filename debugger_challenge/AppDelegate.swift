@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  debugger_challenge
-//
-//  Created by rusty_magneto on 13/04/2018.
-//  Copyright © 2018 rusty_magneto. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain
@@ -15,7 +7,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        /*** Mark: change navigation header colour ***/
+        UINavigationBar.appearance().barTintColor = UIColor.green
+        UINavigationBar.appearance().tintColor = UIColor.black
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
         return true
     }
 
