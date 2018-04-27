@@ -1,8 +1,8 @@
-#include "debugger_check.h"
+#include "debugger_sysctl.h"
 
-bool debugger_check(void)
+bool debugger_sysctl(void)
 {
-        printf("HOMEBREW -> debugger check\n\n");
+        printf("HOMEBREW -> debugger sysctl\n\n");
         int                 junk;
         int                 mib[4];
         struct kinfo_proc   info;

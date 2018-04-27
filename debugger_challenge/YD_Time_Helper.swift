@@ -8,7 +8,7 @@ class YD_Time_Helper {
     convenience init(raw_date: Date) {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
-        formatter.dateFormat = "EEEE H:mm.ss"
+        formatter.dateFormat = "EEEE H:mm.ss"       // "yyyyMMdd"
         let easy_date = formatter.string(from: raw_date)
         let easy_epoch = Int(raw_date.timeIntervalSince1970)
         self.init(raw_date: raw_date, readable_date: easy_date, epoch_time: easy_epoch)
