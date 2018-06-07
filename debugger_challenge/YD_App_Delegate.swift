@@ -11,6 +11,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().barTintColor = UIColor.green
         UINavigationBar.appearance().tintColor = UIColor.black
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
+        
+        if let cString = getenv("HOME") {
+            let homeEnv = String(cString: cString)
+            print("HOME env: \(homeEnv)")
+        }
+        
         return true
     }
 

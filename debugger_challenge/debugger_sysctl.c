@@ -2,7 +2,7 @@
 
 bool debugger_sysctl(void)
 {
-        printf("HOMEBREW -> debugger sysctl\n\n");
+        printf("Apple's recommended sysctl debugger check. Hook about to kick-in\n");
         int                 junk;
         int                 mib[4];
         struct kinfo_proc   info;
@@ -28,6 +28,6 @@ bool debugger_sysctl(void)
         assert(junk == 0);
         
         // We're being debugged if the P_TRACED flag is set.
-        
-        return ( (info.kp_proc.p_flag & P_TRACED) != 0 );
+        int x = (info.kp_proc.p_flag & P_TRACED);
+        return ( x != 0 );  //0 == no debugger 2048 == debugger
 }

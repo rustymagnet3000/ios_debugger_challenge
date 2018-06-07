@@ -18,37 +18,65 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="yCz-Th-X4B">
-                                <rect key="frame" x="142.5" y="280.5" width="90" height="170"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="6hh-mC-k8n">
+                                <rect key="frame" x="77" y="280.5" width="221" height="170"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7f0-vk-6d2">
-                                        <rect key="frame" x="2" y="0.0" width="86" height="30"/>
-                                        <state key="normal" title="sysctl check"/>
-                                        <connections>
-                                            <action selector="debug_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nqi-03-2bq"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH0-zF-jqs">
-                                        <rect key="frame" x="0.0" y="70" width="90" height="30"/>
-                                        <state key="normal" title="ptrace check"/>
-                                        <connections>
-                                            <action selector="ptrace_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WpV-tx-g09"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zMB-45-iZM">
-                                        <rect key="frame" x="11" y="140" width="68" height="30"/>
-                                        <state key="normal" title="crash app"/>
-                                        <connections>
-                                            <action selector="crash_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vJx-bS-qT8"/>
-                                        </connections>
-                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="yCz-Th-X4B">
+                                        <rect key="frame" x="0.0" y="0.0" width="82" height="170"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7f0-vk-6d2">
+                                                <rect key="frame" x="4" y="0.0" width="74" height="30"/>
+                                                <state key="normal" title="sysctl sniff"/>
+                                                <connections>
+                                                    <action selector="debug_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nqi-03-2bq"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH0-zF-jqs">
+                                                <rect key="frame" x="0.0" y="70" width="82" height="30"/>
+                                                <state key="normal" title="ptrace deny"/>
+                                                <connections>
+                                                    <action selector="ptrace_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WpV-tx-g09"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zMB-45-iZM">
+                                                <rect key="frame" x="7" y="140" width="68" height="30"/>
+                                                <state key="normal" title="crash app"/>
+                                                <connections>
+                                                    <action selector="crash_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vJx-bS-qT8"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="gjV-oO-Jry">
+                                        <rect key="frame" x="142" y="0.0" width="79" height="170"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WRS-1A-paJ">
+                                                <rect key="frame" x="2" y="0.0" width="75" height="30"/>
+                                                <state key="normal" title="close hook"/>
+                                                <connections>
+                                                    <action selector="close_hook_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zmc-FS-9Cx"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y3u-je-n3j">
+                                                <rect key="frame" x="0.0" y="70" width="79" height="30"/>
+                                                <state key="normal" title="ptrace sniff"/>
+                                                <connections>
+                                                    <action selector="ptrace_sniff_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2hI-s6-iku"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZJS-b2-VDg">
+                                                <rect key="frame" x="11.5" y="140" width="56" height="30"/>
+                                                <state key="normal" title="future C"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="yCz-Th-X4B" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="baQ-ao-HrW"/>
-                            <constraint firstItem="yCz-Th-X4B" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="xI4-dj-0A6"/>
+                            <constraint firstItem="6hh-mC-k8n" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="H1A-6l-vRw"/>
+                            <constraint firstItem="6hh-mC-k8n" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="Wx0-lf-1hl"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
