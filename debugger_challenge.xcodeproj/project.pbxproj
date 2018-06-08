@@ -34,7 +34,6 @@
 		30D4E6FD208072CD00ABE7AA /* YD_Time_Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YD_Time_Helper.swift; sourceTree = "<group>"; };
 		30E59AE0209C9EAE00CCFAE2 /* debugger_ptrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debugger_ptrace.h; sourceTree = "<group>"; };
 		30E59AE1209C9EAF00CCFAE2 /* debugger_ptrace.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = debugger_ptrace.c; sourceTree = "<group>"; };
-		30E59AE3209CDDD400CCFAE2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		30F792A420AABAD800198A8A /* hook_sysctl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hook_sysctl.h; sourceTree = "<group>"; };
 		30F792A520AABAD800198A8A /* hook_sysctl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = hook_sysctl.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -80,7 +79,6 @@
 				30D4E6FA2080729900ABE7AA /* debugger_sysctl.h */,
 				30E59AE1209C9EAF00CCFAE2 /* debugger_ptrace.c */,
 				30E59AE0209C9EAE00CCFAE2 /* debugger_ptrace.h */,
-				30E59AE3209CDDD400CCFAE2 /* README.md */,
 				30D4E6ED2080725900ABE7AA /* Assets.xcassets */,
 				30D4E6EF2080725900ABE7AA /* LaunchScreen.storyboard */,
 				30D4E6F22080725900ABE7AA /* Info.plist */,
