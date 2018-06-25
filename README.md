@@ -1,29 +1,50 @@
 # Debugger Challenge
-  The app has a real and a fake debugger check API call.  Sysctl is the Apple recommended way to check whether a debugger is attached to the running process.    Refer to: https://developer.apple.com/library/archive/qa/qa1361/index.html  
+  The app was written to practice bypassing anti-debugger techniques.  The idea was to use only a debugger like `lldb` - at run-time - to perform the bypasses.
 
-Inside of this app, the fake sysctl function is called instead of the real sysctl function.
+- **Challenge 1: ptrace** can you bypass ptrace deny?
 
-**Challenge:** with `lldb` alone, can you perform the same attack using a jailbroken iOS device with a app that was built in "Release" mode?  Release mode = no debug symbols, line numbers, file names, etc.  All have been stripped from the app.
+- **Challenge 2: sysctl** can you hook sysctl?
 
-### Setup lldb
+## Challenge 1: PTrace on iOS
+The header files for ptrace are not easily available on iOS, unlike macOS.  But you can still start a *DENY_ATTACH* on iOS.  
 
-##### Mac - setup port listeners
-`iproxy 6666 6666`       (for lldb over USB access) 
+##### Attach debugger after ptrace DENY_ATTACH set
+This is a common technique to stop a debugger attaching to an iOS app.  If you try and attach a debugger AFTER  *deny attach* you will see something like this...
 
-`iproxy 2222 22`        (for SSH over USB access)
-##### Mac - SSH onto jailbroken device
-`ssh -p 2222 root@localhost` 
+```
+(lldb) process attach --pid 93791
+error: attach failed: lost connection
+```
+##### Attach debugger before ptrace DENY_ATTACH set
+You will see a process crash.
 
-`ps -ax | grep -i my_app`  -> get your process ID 
+##### Bypass explained
+Depending on how your ptrace API call is made, you can either issue a `(lldb) process attach --name "my_app" --waitfor` instruction or the following lldb commands..
 
-`debugserver localhost:6666 -a my_app`
-##### Mac - start lldb
-`lldb` 
+```
+process attach --pid 96441                // attach to process
+rb ptrace -s libsystem_kernel.dylib       // set a regex breakpoint for ptrace
+continue                                  // continue after breakpoint
+dis                                       // look for the syscall
+```
+Now check what you are looking at..
+![thread_list](/images/2018/06/thread_list_image_ptrace.png)
+```
+thread list                               // validate you are in the ptrace call
+thread return 0                           // ptrace success sends a Int 0 response
+```
+![bypass](images/2018/06/bypass.png)
 
-`process connect connect://localhost:6666` 
+## Challenge 2: sysctl on iOS
+Sysctl is the Apple recommended way to check whether a debugger is attached to the running process.    Refer to: https://developer.apple.com/library/archive/qa/qa1361/index.html  
 
-`(lldb) help methods.`  smoke test.
-### DEBUG build - Add each lldb to a script
+
+
+
+
+
+
+### Print out the Hooked, fake result
 ```
 breakpoint set -p "return" -f hook_sysctl.c
 breakpoint modify --auto-continue 1
