@@ -16,7 +16,6 @@
 		30D4E6FE208072CD00ABE7AA /* YD_Alert_Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4E6FC208072CD00ABE7AA /* YD_Alert_Helper.swift */; };
 		30D4E6FF208072CD00ABE7AA /* YD_Time_Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4E6FD208072CD00ABE7AA /* YD_Time_Helper.swift */; };
 		30E59AE2209C9EAF00CCFAE2 /* debugger_ptrace.c in Sources */ = {isa = PBXBuildFile; fileRef = 30E59AE1209C9EAF00CCFAE2 /* debugger_ptrace.c */; };
-		30F792A620AABAD800198A8A /* hook_sysctl.c in Sources */ = {isa = PBXBuildFile; fileRef = 30F792A520AABAD800198A8A /* hook_sysctl.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,8 +33,6 @@
 		30D4E6FD208072CD00ABE7AA /* YD_Time_Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YD_Time_Helper.swift; sourceTree = "<group>"; };
 		30E59AE0209C9EAE00CCFAE2 /* debugger_ptrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debugger_ptrace.h; sourceTree = "<group>"; };
 		30E59AE1209C9EAF00CCFAE2 /* debugger_ptrace.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = debugger_ptrace.c; sourceTree = "<group>"; };
-		30F792A420AABAD800198A8A /* hook_sysctl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hook_sysctl.h; sourceTree = "<group>"; };
-		30F792A520AABAD800198A8A /* hook_sysctl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = hook_sysctl.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,8 +70,6 @@
 				30D4E6FC208072CD00ABE7AA /* YD_Alert_Helper.swift */,
 				30D4E6FD208072CD00ABE7AA /* YD_Time_Helper.swift */,
 				30D4E6EA2080725700ABE7AA /* Main.storyboard */,
-				30F792A420AABAD800198A8A /* hook_sysctl.h */,
-				30F792A520AABAD800198A8A /* hook_sysctl.c */,
 				30D4E6F92080729900ABE7AA /* debugger_sysctl.c */,
 				30D4E6FA2080729900ABE7AA /* debugger_sysctl.h */,
 				30E59AE1209C9EAF00CCFAE2 /* debugger_ptrace.c */,
@@ -163,7 +158,6 @@
 				30D4E6FB2080729900ABE7AA /* debugger_sysctl.c in Sources */,
 				30D4E6FF208072CD00ABE7AA /* YD_Time_Helper.swift in Sources */,
 				30E59AE2209C9EAF00CCFAE2 /* debugger_ptrace.c in Sources */,
-				30F792A620AABAD800198A8A /* hook_sysctl.c in Sources */,
 				30D4E6E72080725700ABE7AA /* YD_App_Delegate.swift in Sources */,
 				30D4E6FE208072CD00ABE7AA /* YD_Alert_Helper.swift in Sources */,
 			);

@@ -28,68 +28,82 @@ continue                                  // continue after breakpoint
 dis                                       // look for the syscall
 ```
 Now check what you are looking at..
-![thread_list](/images/2018/06/thread_list_image_ptrace.png)
+![thread_list](/debugger_challenge/readme_images/thread_list_image_ptrace.png)
 ```
 thread list                               // validate you are in the ptrace call
 thread return 0                           // ptrace success sends a Int 0 response
 ```
-![bypass](images/2018/06/bypass.png)
+![bypass](/debugger_challenge/readme_images/ptrace_bypass.png)
 
 ## Challenge 2: sysctl on iOS
 Sysctl is the Apple recommended way to check whether a debugger is attached to the running process.    Refer to: https://developer.apple.com/library/archive/qa/qa1361/index.html  
 
 
+**The same trick from ptrace works sysctl.**  But that is not the point of this learning exercise.  For this bypass I wanted to be more creative.  I was inspired by https://github.com/DerekSelander/LLDB to create a new, empty Swift framework that loaded a C function API named...you guessed it...`sysctl`.
 
+#### dlopen and dlsym
+Start by trying to see if you can find the load address for the `sysctl` function inside the iOS app.
 
-
-
-
-### Print out the Hooked, fake result
+##### Find the load addresses for C API sysctl() in the symbol table
 ```
-breakpoint set -p "return" -f hook_sysctl.c
+(lldb) expression (void*)dlopen("/usr/lib/system/libsystem_c.dylib",0x2)
+(void *) $2 = 0x000000010e7086e0
+(lldb) expression (void*)dlsym($2,"sysctl")
+(void *) $3 = 0x0000000113be7c04
+```
+Ok, now check my address of my bypass...
+```
+(lldb) expression (void*)dlopen("/Users/rusty_magneto/Desktop/rusty_bypass.framework/rusty_bypass",0x2)
+(lldb) ) $4 = 0x0000604000133ec0
+(lldb) expression (void*)dlsym($4,"sysctl")
+(void *) $5 = 0x000000012e292dc0
+```
+##### Run the app
+Now you have loaded the rusty_bypass framework, did your bypass work?  No.  sysctl was still being called before you.
+##### Now for a scarier dump...
+```
+(lldb) image dump symtab -m libsystem_c.dylib
+Now check your Load Address.  0x0000000113be7c04.
+```
+##### Verify what you found, the easy way
+```
+(lldb) image dump symtab -m rusty_bypass`
+`0x000000012e292dc0` for `sysctl`.
+```
+##### Set a breakpoint
+Whoop whoop.
+```
+(lldb) b 0x0000000113be7c04
+(lldb) register read
+```
+Now we can see the fruit of our labor.
+```
+General Purpose Registers:
+       rax = 0x000000000000028e
+        .....
+        .....
+        .....
+       rip = 0x0000000113be7c04  libsystem_c.dylib\`sysctl
+```
+##### Change load address of API call
+```
+register write rip 0x000000012e292dc0`
+rip = 0x000000012e292dc0  rusty_bypass`sysctl at hook_debugger_check.c:5
+```
+##### BYPASS DONE
+`continue`
+### Bonus - use lldb to print when inside your fake sysctl API
+I wanted to check I was inside of my hooked-sysctl.  I could add some `syslog` statements to acheive this.  But that misses the point of improving my lldb skills.  Here is a more fun way...
+```
+breakpoint set -p "return" -f hook_debugger_check.c
 breakpoint modify --auto-continue 1
 breakpoint command add 1
-  po fake_result
   script print "hello”
   DONE
 continue
 ```
-
-### Pro tips
-###### text file:
-`command source <file_path>/lldb_script.txt`
-
-###### Python script:
-`command script import <file_path>/lldb_python.py`
-
-###### The Python debugger:
-Avoid using xCode if you are using
-- Kill xcode
-- Run iOS app in the simulator
-- run a `ps -ax` to find your PID
-- `$ lldb -p <PID>`
-
-### LLDB References
-###### Inspiration for anything lldb
-https://github.com/DerekSelander/LLDB
-###### Multi-line lldb commands
-https://swifting.io/blog/2016/02/19/6-basic-lldb-tips/
-###### lldb cheatsheet
-https://www.nesono.com/sites/default/files/lldb%20cheat%20sheet.pdf
-###### some lldb commands
-https://gist.github.com/ryanchang/a2f738f0c3cc6fbd71fa
-###### great lldb overview
-https://www.bignerdranch.com/blog/xcode-breakpoint-wizardry/
-###### more lldb info
-https://www.objc.io/issues/19-debugging/lldb-debugging/
-### lldb | python References
-https://lldb.llvm.org/python-reference.html
-### ptrace References
-Tonnes of articles on ptrace's wide API and a surprisingly large amount on using ptrace as a defence mechanism for iOS apps.
-###### useful debugger blogs
-https://www.unvanquished.net/\~modi/code/include/x86\_64-linux-gnu/sys/ptrace.h.html 
-http://www.vantagepoint.sg/blog/89-more-android-anti-debugging-fun
-###### ptrace enum values
-http://www.secretmango.com/jimb/Whitepapers/ptrace/ptrace.html
-###### anti-debug code samples
-https://gist.github.com/joswr1ght/fb8c9f4f3f9a2feebf7f https://www.theiphonewiki.com/wiki/Bugging\_Debuggers
+### Bonus - use lldb to print when inside your fake sysctl API
+```
+(lldb)  script print "hello"
+hello
+```

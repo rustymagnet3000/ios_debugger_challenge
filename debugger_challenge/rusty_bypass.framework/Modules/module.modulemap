@@ -1,0 +1,6 @@
+framework module rusty_bypass {
+  umbrella header "rusty_bypass.h"
+
+  export *
+  module * { export * }
+}
