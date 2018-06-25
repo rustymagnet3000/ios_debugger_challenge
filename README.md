@@ -41,6 +41,40 @@ Sysctl is the Apple recommended way to check whether a debugger is attached to t
 
 **The same trick from ptrace works sysctl.**  But that is not the point of this learning exercise.  For this bypass I wanted to be more creative.  I was inspired by https://github.com/DerekSelander/LLDB to create a new, empty Swift framework that loaded a C function API named...you guessed it...`sysctl`.
 
+#### Create an empty Swift framework
+  Then add a C file.  You don't even need a C header file.
+![framework_settings](/debugger_challenge/readme_images/framework_creation.png)
+#### Write your fake sysctl API
+```
+int sysctl(int * mib, u_int byte_size, void *info, size_t *size, void *temp, size_t(f)){
+
+    static void *handle;
+    static void *real_sysctl;
+    static int fake_result = 0;
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{  // ensure this is only called once & not on every function call
+        handle = dlopen("/usr/lib/system/libsystem_c.dylib", RTLD_NOW);
+        real_sysctl = dlsym(handle, "sysctl");  // get function pointer
+    });
+
+    printf("Real sysctl function: %p\nFake sysctl: %p\n", real_sysctl, sysctl);
+    printf("HOOKED SYSCTL");
+    return fake_result;
+}
+```
+#### Use LLDB to load your hooking framework
+```
+(lldb) image list -b hello_framework
+error: no modules found that match 'hello_framework'
+```
+#### Load dylib from Mac into device
+Now load the process...
+```
+(lldb) process load /Users/PATH_TO_FRAMEWORK/hello_framework.framework/hello_framework
+Loading "/Users/PATH_TO_FRAMEWORK/hello_framework.framework/hello_framework"...ok
+Image 0 loaded.
+```
 #### dlopen and dlsym
 Start by trying to see if you can find the load address for the `sysctl` function inside the iOS app.
 
@@ -59,7 +93,7 @@ Ok, now check my address of my bypass...
 (void *) $5 = 0x000000012e292dc0
 ```
 ##### Run the app
-Now you have loaded the rusty_bypass framework, did your bypass work?  No.  sysctl was still being called before you.
+Now you have loaded the rusty_bypass framework, did your bypass work?  No.  the libsystem_kernel `sysctl` was called before your own code.
 ##### Now for a scarier dump...
 ```
 (lldb) image dump symtab -m libsystem_c.dylib
