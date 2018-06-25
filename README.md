@@ -28,12 +28,12 @@ continue                                  // continue after breakpoint
 dis                                       // look for the syscall
 ```
 Now check what you are looking at..
-![thread_list](/images/2018/06/thread_list_image_ptrace.png)
+![](/debugger_challenge/readme_images/thread_list_image_ptrace.png)
 ```
 thread list                               // validate you are in the ptrace call
 thread return 0                           // ptrace success sends a Int 0 response
 ```
-![bypass](images/2018/06/bypass.png)
+![](/debugger_challenge/readme_images/ptrace_bypass.png)
 
 ## Challenge 2: sysctl on iOS
 Sysctl is the Apple recommended way to check whether a debugger is attached to the running process.    Refer to: https://developer.apple.com/library/archive/qa/qa1361/index.html  
