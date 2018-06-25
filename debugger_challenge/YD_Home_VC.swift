@@ -2,16 +2,17 @@ import UIKit
 
 class YD_Home_VC: UIViewController {
 
-    private let feedback_string = "Debugger attached ="
+    func secret_return_value(a: Int, b: Int) -> Int {
+        return a * b
+    }
     
-    @IBAction func ptrace_sniff_btn(_ sender: Any) {
-        let result = report_on_detection()
-        present_alert_controller(user_message: "ptrace running: " + "\(result)")
+    @IBAction func secret_btn(_ sender: Any) {
+        
+        let result = secret_return_value(a: 6, b: 7)
+        present_alert_controller(user_message: "Secret: \(result)")
     }
-    @IBAction func close_hook_btn(_ sender: Any) {
-        close_homebrew_sysctl()
-        present_alert_controller(user_message: "attempted to close")
-    }
+    
+    private let feedback_string = "Debugger attached ="
     
     @IBAction func crash_chk_btn(_ sender: Any) {
         var string: String! = "I'm a string!"
@@ -32,6 +33,7 @@ class YD_Home_VC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Debugger Challenge"
     }
 
     func present_alert_controller(user_message: String) {

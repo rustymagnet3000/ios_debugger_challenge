@@ -6,4 +6,3 @@
 #include <strings.h>
 #include <mach-o/dyld.h> // required to read dynamically loaded libraries
 bool debugger_ptrace(void);
-bool report_on_detection(void);
