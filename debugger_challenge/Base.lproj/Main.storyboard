@@ -19,10 +19,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="6hh-mC-k8n">
-                                <rect key="frame" x="93.5" y="245" width="188" height="240"/>
+                                <rect key="frame" x="93.5" y="175.5" width="188" height="380"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="yCz-Th-X4B">
-                                        <rect key="frame" x="0.0" y="0.0" width="188" height="240"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="188" height="380"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7f0-vk-6d2">
                                                 <rect key="frame" x="16" y="0.0" width="156" height="30"/>
@@ -38,15 +38,29 @@
                                                     <action selector="ptrace_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WpV-tx-g09"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kga-FB-80a">
+                                                <rect key="frame" x="46" y="140" width="96" height="30"/>
+                                                <state key="normal" title="random string"/>
+                                                <connections>
+                                                    <action selector="random_string_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gYV-hH-REO"/>
+                                                </connections>
+                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zMB-45-iZM">
-                                                <rect key="frame" x="60" y="140" width="68" height="30"/>
+                                                <rect key="frame" x="60" y="210" width="68" height="30"/>
                                                 <state key="normal" title="crash app"/>
                                                 <connections>
                                                     <action selector="crash_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vJx-bS-qT8"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SXg-2K-6CZ">
+                                                <rect key="frame" x="40" y="280" width="108" height="30"/>
+                                                <state key="normal" title="common crypto"/>
+                                                <connections>
+                                                    <action selector="crypto_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XUC-83-UWS"/>
+                                                </connections>
+                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZJS-b2-VDg">
-                                                <rect key="frame" x="59" y="210" width="70" height="30"/>
+                                                <rect key="frame" x="59" y="350" width="70" height="30"/>
                                                 <state key="normal" title="get secret"/>
                                                 <connections>
                                                     <action selector="secret_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wqu-e4-SWC"/>

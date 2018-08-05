@@ -6,6 +6,15 @@ class YD_Home_VC: UIViewController {
         return a * b
     }
     
+    @IBAction func crypto_button(_ sender: Any) {
+        print("about to call common crypto API")
+        YD_Crypto_Helper.funky()
+    }
+    
+    @IBAction func random_string_btn(_ sender: Any) {
+        let randomString = NSUUID().uuidString
+        present_alert_controller(user_message: "Random string: \(randomString)")
+    }
     @IBAction func secret_btn(_ sender: Any) {
         
         let result = secret_return_value(a: 6, b: 7)

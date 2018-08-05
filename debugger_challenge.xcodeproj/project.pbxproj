@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		30D4BA0A2115E00700C31AE5 /* RNCryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA092115E00600C31AE5 /* RNCryptor.swift */; };
+		30D4BA0F2115E1C100C31AE5 /* YD_Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */; };
 		30D4E6E72080725700ABE7AA /* YD_App_Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4E6E62080725700ABE7AA /* YD_App_Delegate.swift */; };
 		30D4E6E92080725700ABE7AA /* YD_Home_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4E6E82080725700ABE7AA /* YD_Home_VC.swift */; };
 		30D4E6EC2080725700ABE7AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30D4E6EA2080725700ABE7AA /* Main.storyboard */; };
@@ -19,6 +21,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		30D4BA092115E00600C31AE5 /* RNCryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNCryptor.swift; sourceTree = "<group>"; };
+		30D4BA0C2115E03500C31AE5 /* RNCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCryptor.h; sourceTree = "<group>"; };
+		30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Crypto.swift; sourceTree = "<group>"; };
 		30D4E6E32080725700ABE7AA /* debugger_challenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = debugger_challenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30D4E6E62080725700ABE7AA /* YD_App_Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_App_Delegate.swift; sourceTree = "<group>"; };
 		30D4E6E82080725700ABE7AA /* YD_Home_VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Home_VC.swift; sourceTree = "<group>"; };
@@ -46,9 +51,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		30D4BA082115E00600C31AE5 /* RNCryptor */ = {
+			isa = PBXGroup;
+			children = (
+				30D4BA0C2115E03500C31AE5 /* RNCryptor.h */,
+				30D4BA092115E00600C31AE5 /* RNCryptor.swift */,
+			);
+			name = RNCryptor;
+			path = debugger_challenge/RNCryptor;
+			sourceTree = "<group>";
+		};
 		30D4E6DA2080725700ABE7AA = {
 			isa = PBXGroup;
 			children = (
+				30D4BA082115E00600C31AE5 /* RNCryptor */,
 				30D4E6E52080725700ABE7AA /* debugger_challenge */,
 				30D4E6E42080725700ABE7AA /* Products */,
 			);
@@ -67,6 +83,7 @@
 			children = (
 				30D4E6E62080725700ABE7AA /* YD_App_Delegate.swift */,
 				30D4E6E82080725700ABE7AA /* YD_Home_VC.swift */,
+				30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */,
 				30D4E6FC208072CD00ABE7AA /* YD_Alert_Helper.swift */,
 				30D4E6FD208072CD00ABE7AA /* YD_Time_Helper.swift */,
 				30D4E6EA2080725700ABE7AA /* Main.storyboard */,
@@ -157,9 +174,11 @@
 				30D4E6E92080725700ABE7AA /* YD_Home_VC.swift in Sources */,
 				30D4E6FB2080729900ABE7AA /* debugger_sysctl.c in Sources */,
 				30D4E6FF208072CD00ABE7AA /* YD_Time_Helper.swift in Sources */,
+				30D4BA0A2115E00700C31AE5 /* RNCryptor.swift in Sources */,
 				30E59AE2209C9EAF00CCFAE2 /* debugger_ptrace.c in Sources */,
 				30D4E6E72080725700ABE7AA /* YD_App_Delegate.swift in Sources */,
 				30D4E6FE208072CD00ABE7AA /* YD_Alert_Helper.swift in Sources */,
+				30D4BA0F2115E1C100C31AE5 /* YD_Crypto.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
