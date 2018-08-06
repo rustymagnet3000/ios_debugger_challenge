@@ -227,7 +227,7 @@ The CommonCrypto API `CCCryptorCreate init` was the target.  It was invoked behi
     // Encrypt
     let myString = "Ewoks don't wear pyjamas."
     let myData = myString.data(using: String.Encoding.utf8)! as Data  // note, not using NSData
-    let password = "password"
+    let password = "AAAAAAAA" // eight 0x41 values in hex
     let ciphertext = RNCryptor.encrypt(data: myData, withPassword: password)
 ```
 ##### Leveraging Frida-Trace
@@ -329,6 +329,28 @@ Note ->  RSI can be access via $arg2 in lldb
 (lldb) po (char*) $rsi
 (lldb) mem read 0x00006040000106a0 -c10
 ```
-Sometimes, the decrypted text was not together.  I have an assumption this relates to the `Malloc` API - that is being used the hood by CommonCrypto - not being always given sequential blocks of memory.
+Sometimes, the decrypted text was not together.  I had an assumption this related to the C `Malloc` API - that was used the hood by CommonCrypto.  `Malloc` was not always given sequential blocks of memory from the O/S.
+### Challenge 4 - failed to get raw key
+```
+(lldb) rb CCCryptorCreateWithMode
+Breakpoint 1: where = libcommonCrypto.dylib`CCCryptorCreateWithMode, address = 0x00000001826c8474
+(lldb) rb CCCryptorCreateWithMode
+
+API definition from Apple:
+CCCryptorCreateWithMode(op, mode, alg, padding, iv, key, keyLength, tweak, tweakLength, numRounds, modeOptions, cryptorRef);
+
+To get the Key Length.....
+(lldb) po (size_t) $arg7
+32  // 256 bit key
+
+To get the raw key...
+(lldb) memory read -s4 -fx -c32 $arg6
+<< never get an understandble key, in here. >>
+```
+
 ### Challenge 4 - almost there..
-I can stop in the correct part of code.  The game is now casting from binary back to a readable hex value and ideally back to the raw key that will reveal: `password`
+I can stop in the correct part of code.  The game is now casting from binary back to a readable hex value and ideally back to the raw key that will reveal: `AAAAAAAA`.  Maybe :o)
+
+### Useful references
+https://richardwarrender.com/2016/04/encrypt-data-using-aes-and-256-bit-keys/
+https://stackoverflow.com/questions/25754147/issue-using-cccrypt-commoncrypt-in-swift
