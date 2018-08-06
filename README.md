@@ -248,7 +248,7 @@ key  |  A pointer to the Binary key (Data encoded)
 iv  |  A pointer to the Binary I.V. (Data encoded)
 cryptorRef  |  Opaque reference to a CCCryptor object
 
-##### Writing a Frida-Script
+##### Watch the encryption key with a Frida-Script
 ```
 /* Usage:   frida -U "Debug CrackMe" -l cc_hook.js --no-pause */
 
@@ -279,6 +279,56 @@ else
 }
 console.log("[+] ...script completed")
 ```
+##### Where is the plaintext about to be encrypted?
+If you look at http://www.manpagez.com/man/3/CCCryptorCreate/ this API will lead to the Encryption Key.  But what if I want the actual plaintext that is being encrypted?  You can use lldb to show the lifecycle of the CommonCrypto API calls.  The flow is the same for encrypt and decrypt.  
+```
+(lldb) rb CCCrypt
+```
+- [ ] CCCryptorCreate
+- [ ] CCCryptorCreateWithMode
+- [ ] CCCryptorGetOutputLength
+- [ ] CCCryptorUpdate
+- [ ] CCCryptorGetOutputLength
+- [ ] CCCryptorFinal
+- [ ] CCCryptorRelease
 
+The man page tells you the plaintext is sent into this API:
+```
+CCCryptorUpdate(CCCryptorRef cryptorRef, const void *dataIn,
+         size_t dataInLength, void *dataOut, size_t dataOutAvailable,
+         size_t *dataOutMoved);
+```
+Now we have our target - argument 2 - let's use lldb to reveal the plaintext.
+
+RDI - first arg, **RSI - second arg**, RCX - fourth arg
+
+
+```
+lldb) rb CCCryptorUpdate
+Breakpoint 1: where = libcommonCrypto.dylib`CCCryptorUpdate, address = 0x000000010b91092c
+(lldb) c
+Process 11315 resuming
+
+(lldb) register read
+General Purpose Registers:
+       rsi = 0x000060400044a2a0
+
+Note ->  RSI can be access via $arg2 in lldb
+(lldb) po (char*) $arg2
+"Ewoks don't wear pyjamas."
+
+(lldb) memory read 0x000060400044a2a0
+0x60400044a2a0: 45 77 6f 6b 73 20 64 6f 6e 27 74 20 77 65 61 72  Ewoks don't wear
+0x60400044a2b0: 20 70 79 6a 61 6d 61 73 2e 00 00 00 00 00 00 00   pyjamas........
+```
+##### What is the decrypted plaintext?
+```
+(lldb) b CCCryptorFinal
+(lldb) c
+(lldb) po (char*) $arg2
+(lldb) po (char*) $rsi
+(lldb) mem read 0x00006040000106a0 -c10
+```
+Sometimes, the decrypted text was not together.  I have an assumption this relates to the `Malloc` API - that is being used the hood by CommonCrypto - not being always given sequential blocks of memory.
 ### Challenge 4 - almost there..
 I can stop in the correct part of code.  The game is now casting from binary back to a readable hex value and ideally back to the raw key that will reveal: `password`

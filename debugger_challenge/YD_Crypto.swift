@@ -7,9 +7,8 @@ class YD_Crypto_Helper {
         let myString = "Ewoks don't wear pyjamas."
         let myData = myString.data(using: String.Encoding.utf8)! as Data  // note, not using NSData
         print("Input: \t\t\t\t" + myData.hexDescription)
-        let password = "password"
+        let password = "AAAAAAAA"
         let ciphertext = RNCryptor.encrypt(data: myData, withPassword: password)
-        
         
         // Decrypt
         do {
@@ -23,7 +22,6 @@ class YD_Crypto_Helper {
             print(error)
         }
     }
-
 }
 
 extension Data {
