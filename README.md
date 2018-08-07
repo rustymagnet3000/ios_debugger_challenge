@@ -348,8 +348,35 @@ To get the raw key...
 << never get an understandble key, in here. >>
 ```
 
-### Challenge 4 - almost there..
-I can stop in the correct part of code.  The game is now casting from binary back to a readable hex value and ideally back to the raw key that will reveal: `AAAAAAAA`.  Maybe :o)
+### Challenge 4 - COMPLETE
+Using the CCCryptorCreate API spec, we can see which arguments to read.
+```
+CCCryptorCreate(CCOperation op, CCAlgorithm alg, CCOptions options,
+         const void *key, size_t keyLength, const void *iv,
+         CCCryptorRef *cryptorRef);
+```
+With a pre-defined key 16 byte key (128 bits), I can read it with the following debugger commands.
+```
+(lldb) b CCCryptorCreate
+Breakpoint 1: where = libcommonCrypto.dylib`CCCryptorCreate, address = 0x000000010a6d51b7
+
+(lldb) reg read $arg4
+     rcx = 0x000060800003a590
+
+(lldb) mem read 0x000060800003a590
+0x60800003a590: 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41  AAAAAAAAAAAAAAAA
+
+(lldb) memory read -s16 -fC $arg4
+0x60800003a590: AAAAAAAAAAAAAAAA
+
+(lldb) memory read -s16 -fx -c1 $arg4
+0x60800003a590: 0x41414141414141414141414141414141
+```
+If you read the Initialization vector, lldb cannot display a lot of the characters.  That is because the code callinto into the API `SecRandomCopyBytes` which gives a lot of extended / non-Ascii characters.  You can still read it by forcing it to print in hex.
+```
+(lldb) mem read -s1 -fx $arg6
+0x6080002668c0: 0x46 0xbc 0x72 0xc9 0x04 0xfb 0xb5 0xd6
+```
 
 ### Useful references
 https://richardwarrender.com/2016/04/encrypt-data-using-aes-and-256-bit-keys/

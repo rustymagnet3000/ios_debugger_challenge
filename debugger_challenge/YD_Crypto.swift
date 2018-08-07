@@ -100,13 +100,12 @@ class YD_Crypto_Helper {
     static func funky() -> Void {
 
         let clearData = "clearData0123456".data(using:String.Encoding.utf8)!
-        let keyData   = "keyData890123456".data(using:String.Encoding.utf8)!
+        let keyData   = "AAAAAAAAAAAAAAAA".data(using:String.Encoding.utf8)!
         print("clearData:   \(clearData as NSData)")
         print("keyData:     \(keyData as NSData)")
         let a = YD_Crypto_Helper()
         var cryptData :Data?
         do {
-            
             cryptData = try a.aesCBCEncrypt(data:clearData, keyData:keyData)
             print("cryptData:   \(cryptData! as NSData)")
         }
