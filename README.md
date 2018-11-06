@@ -10,6 +10,8 @@
 
 - **Challenge 4: read encryption key and algorithm**
 
+- **Challenge 5: exception ports**
+
 ## Challenge 1: fake ptrace
 
 The header files for ptrace was not easily available on iOS, unlike macOS.  But you could still start a *deny_attach* on iOS.  
@@ -379,5 +381,30 @@ If you read the Initialization vector, lldb cannot display a lot of the characte
 ```
 
 ### Useful references
+```
 https://richardwarrender.com/2016/04/encrypt-data-using-aes-and-256-bit-keys/
 https://stackoverflow.com/questions/25754147/issue-using-cccrypt-commoncrypt-in-swift
+```
+## Challenge 5: exception ports
+Another anti-debug technique on macOS was to check if a debugger was attached by looking if any of the Ports used by a Debugger returned a valid response.  This relied on the C `task_get_exception_ports` API.  You passed in the Exception Port you wanted - in argument 2 (the RSI register).  
+
+### Challenge 5 - COMPLETE
+Thanks to: https://alexomara.com/blog/defeating-anti-debug-techniques-macos-mach-exception-ports/.  Set the Exception Ports to check to a null value.  
+```
+(lldb) b task_get_exception_ports
+Breakpoint 3: where = libsystem_kernel.dylib`task_get_exception_ports, address = 0x00007fff6a530675
+(lldb) c
+Process 48185 resuming
+(lldb) p $arg2
+(unsigned long) $0 = 66
+(lldb) reg w rsi 0
+(lldb) c
+Process 48185 resuming
+No debugger detected
+```
+### Useful references
+```
+http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_get_exception_ports.html
+https://zgcoder.net/ramblings/osx-debugger-detection.html
+https://github.com/apple/darwin-xnu/blob/master/osfmk/mach/exception_types.h
+```

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="avJ-R6-jEN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="avJ-R6-jEN">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,48 +19,55 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="6hh-mC-k8n">
-                                <rect key="frame" x="93.5" y="175.5" width="188" height="380"/>
+                                <rect key="frame" x="80" y="140.5" width="215" height="450"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="yCz-Th-X4B">
-                                        <rect key="frame" x="0.0" y="0.0" width="188" height="380"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="215" height="450"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7f0-vk-6d2">
-                                                <rect key="frame" x="16" y="0.0" width="156" height="30"/>
+                                                <rect key="frame" x="29.5" y="0.0" width="156" height="30"/>
                                                 <state key="normal" title="sysctl debugger check"/>
                                                 <connections>
                                                     <action selector="debug_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nqi-03-2bq"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="60Y-ut-pa8">
+                                                <rect key="frame" x="0.0" y="70" width="215" height="30"/>
+                                                <state key="normal" title="exception port debugger check"/>
+                                                <connections>
+                                                    <action selector="exception_port_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FT0-gZ-ulK"/>
+                                                </connections>
+                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH0-zF-jqs">
-                                                <rect key="frame" x="0.0" y="70" width="188" height="30"/>
+                                                <rect key="frame" x="13.5" y="140" width="188" height="30"/>
                                                 <state key="normal" title="start ptrace deny debugger"/>
                                                 <connections>
                                                     <action selector="ptrace_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WpV-tx-g09"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kga-FB-80a">
-                                                <rect key="frame" x="46" y="140" width="96" height="30"/>
+                                                <rect key="frame" x="59.5" y="210" width="96" height="30"/>
                                                 <state key="normal" title="random string"/>
                                                 <connections>
                                                     <action selector="random_string_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gYV-hH-REO"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zMB-45-iZM">
-                                                <rect key="frame" x="60" y="210" width="68" height="30"/>
+                                                <rect key="frame" x="73.5" y="280" width="68" height="30"/>
                                                 <state key="normal" title="crash app"/>
                                                 <connections>
                                                     <action selector="crash_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vJx-bS-qT8"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SXg-2K-6CZ">
-                                                <rect key="frame" x="40" y="280" width="108" height="30"/>
+                                                <rect key="frame" x="53.5" y="350" width="108" height="30"/>
                                                 <state key="normal" title="common crypto"/>
                                                 <connections>
                                                     <action selector="crypto_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XUC-83-UWS"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZJS-b2-VDg">
-                                                <rect key="frame" x="59" y="350" width="70" height="30"/>
+                                                <rect key="frame" x="72.5" y="420" width="70" height="30"/>
                                                 <state key="normal" title="get secret"/>
                                                 <connections>
                                                     <action selector="secret_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wqu-e4-SWC"/>

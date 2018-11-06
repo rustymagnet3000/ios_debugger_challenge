@@ -2,6 +2,13 @@ import UIKit
 
 class YD_Home_VC: UIViewController {
 
+    
+    @IBAction func exception_port_button(_ sender: Any) {
+        print("about to check Exception Ports")
+        let result = debugger_exception_ports()
+        present_alert_controller(user_message: feedback_string + " \(result)")
+    }
+    
     func secret_return_value(a: Int, b: Int) -> Int {
         return a * b
     }
