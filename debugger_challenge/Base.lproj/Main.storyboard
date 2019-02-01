@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="avJ-R6-jEN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="avJ-R6-jEN">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--HomeVC-->
+        <!--Home-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="YD_Home_VC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
@@ -19,10 +19,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="6hh-mC-k8n">
-                                <rect key="frame" x="80" y="140.5" width="215" height="450"/>
+                                <rect key="frame" x="80" y="140" width="215" height="402"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="yCz-Th-X4B">
-                                        <rect key="frame" x="0.0" y="0.0" width="215" height="450"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="yCz-Th-X4B">
+                                        <rect key="frame" x="0.0" y="0.0" width="215" height="402"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7f0-vk-6d2">
                                                 <rect key="frame" x="29.5" y="0.0" width="156" height="30"/>
@@ -32,42 +32,42 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="60Y-ut-pa8">
-                                                <rect key="frame" x="0.0" y="70" width="215" height="30"/>
+                                                <rect key="frame" x="0.0" y="62" width="215" height="30"/>
                                                 <state key="normal" title="exception port debugger check"/>
                                                 <connections>
                                                     <action selector="exception_port_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FT0-gZ-ulK"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH0-zF-jqs">
-                                                <rect key="frame" x="13.5" y="140" width="188" height="30"/>
+                                                <rect key="frame" x="13.5" y="124" width="188" height="30"/>
                                                 <state key="normal" title="start ptrace deny debugger"/>
                                                 <connections>
                                                     <action selector="ptrace_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WpV-tx-g09"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kga-FB-80a">
-                                                <rect key="frame" x="59.5" y="210" width="96" height="30"/>
+                                                <rect key="frame" x="59.5" y="186" width="96" height="30"/>
                                                 <state key="normal" title="random string"/>
                                                 <connections>
                                                     <action selector="random_string_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gYV-hH-REO"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zMB-45-iZM">
-                                                <rect key="frame" x="73.5" y="280" width="68" height="30"/>
-                                                <state key="normal" title="crash app"/>
+                                                <rect key="frame" x="7" y="248" width="201" height="30"/>
+                                                <state key="normal" title="Generate Secure Enclave Key"/>
                                                 <connections>
-                                                    <action selector="crash_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vJx-bS-qT8"/>
+                                                    <action selector="secure_enclave_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xEu-5L-j8F"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SXg-2K-6CZ">
-                                                <rect key="frame" x="53.5" y="350" width="108" height="30"/>
+                                                <rect key="frame" x="53.5" y="310" width="108" height="30"/>
                                                 <state key="normal" title="common crypto"/>
                                                 <connections>
                                                     <action selector="crypto_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XUC-83-UWS"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZJS-b2-VDg">
-                                                <rect key="frame" x="72.5" y="420" width="70" height="30"/>
+                                                <rect key="frame" x="72.5" y="372" width="70" height="30"/>
                                                 <state key="normal" title="get secret"/>
                                                 <connections>
                                                     <action selector="secret_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wqu-e4-SWC"/>
@@ -85,11 +85,84 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Home" id="zup-Zs-kjY"/>
                     <navigationItem key="navigationItem" id="UAJ-wL-HT1"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1068" y="33"/>
+            <point key="canvasLocation" x="1921" y="33"/>
+        </scene>
+        <!--Secure Enclave-->
+        <scene sceneID="tdB-nu-rLq">
+            <objects>
+                <viewController id="pcv-UJ-06d" customClass="YD_Enclave_VC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="kHA-pz-iiH">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rUf-yM-1z6">
+                                <rect key="frame" x="16" y="312" width="343" height="126"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.91928122889999997" green="1" blue="0.4222555771" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" spacing="31" translatesAutoresizingMaskIntoConstraints="NO" id="WJo-Od-hdH">
+                                <rect key="frame" x="50" y="148" width="253" height="81.5"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="21" translatesAutoresizingMaskIntoConstraints="NO" id="K9d-af-NRR">
+                                        <rect key="frame" x="0.0" y="0.0" width="253" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nxe-x5-nRu">
+                                                <rect key="frame" x="0.0" y="0.0" width="144" height="30"/>
+                                                <state key="normal" title="Generate EC key pair"/>
+                                                <connections>
+                                                    <action selector="exception_port_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YTY-Lm-tvW"/>
+                                                    <action selector="secure_enclave_btn:" destination="pcv-UJ-06d" eventType="touchUpInside" id="V5R-oX-BNO"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="anN-hI-2b2">
+                                                <rect key="frame" x="165" y="0.0" width="88" height="30"/>
+                                                <state key="normal" title="Encrypt data"/>
+                                                <connections>
+                                                    <action selector="secure_enclave_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="f6r-PH-Nrg"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="23" translatesAutoresizingMaskIntoConstraints="NO" id="Irb-Sc-CEO">
+                                        <rect key="frame" x="0.0" y="61" width="253" height="20.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Plaintext:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKw-40-dI9">
+                                                <rect key="frame" x="0.0" y="0.0" width="70.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The quick brown fox." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L5Z-55-PT8">
+                                                <rect key="frame" x="93.5" y="0.0" width="159.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="IoH-72-Olf"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Secure Enclave" id="XBw-JW-8bt"/>
+                    <connections>
+                        <outlet property="pubKeyLabel" destination="rUf-yM-1z6" id="97T-ml-1JX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L24-Dp-3kh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1920.8" y="800.14992503748135"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="6NN-gS-cCi">
@@ -102,12 +175,32 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="sMM-eW-qzf"/>
+                        <segue destination="RLF-N7-xV5" kind="relationship" relationship="rootViewController" id="sMM-eW-qzf"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7e7-jd-6Fy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="239" y="33"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="tLZ-VE-N3o">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="RLF-N7-xV5" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="q60-vK-HmM"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vid-Sc-gvx">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="5pj-TP-ZUR"/>
+                        <segue destination="pcv-UJ-06d" kind="relationship" relationship="viewControllers" id="Def-zI-S5L"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4mY-QG-Rxk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1068" y="32.833583208395808"/>
         </scene>
     </scenes>
 </document>

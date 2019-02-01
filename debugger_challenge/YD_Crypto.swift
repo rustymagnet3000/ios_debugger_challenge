@@ -113,7 +113,7 @@ class YD_Crypto_Helper {
             print("Error aesCBCEncrypt: \(status)")
         }
         
-        let decryptData :Data?
+        let _ :Data?
         do {
             let decryptData = try a.aesCBCDecrypt(data:cryptData!, keyData:keyData)
             print("decryptData: \(decryptData! as NSData)")
