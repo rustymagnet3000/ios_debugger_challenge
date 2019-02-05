@@ -2,6 +2,8 @@ import UIKit
 
 class YD_Enclave_VC: UIViewController {
     
+    @IBOutlet weak var signatureVerifyLbl: UILabel!
+    @IBOutlet weak var signatureLabel: UILabel!
     @IBOutlet weak var plaintextResult: UILabel!
     @IBOutlet weak var ctLbl: UILabel!
     var cipherText: Data = "default ciphertext".data(using: .utf8)!
@@ -11,6 +13,15 @@ class YD_Enclave_VC: UIViewController {
     
     let ptBytes: Data? = "The quick brown fox".data(using: .utf8)
     let ydHammer = YDHammertime(publicLabel: "com.hammer.publicKey", privateLabel: "com.hammer.privateKey", operationPrompt: "Authenticate to continue")
+    
+
+    @IBAction func sign_btn(_ sender: Any) {
+        signatureLabel.text = "sign time"
+    }
+    
+    @IBAction func verify_btn(_ sender: Any) {
+         signatureVerifyLbl.text = "verify time"
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +42,7 @@ class YD_Enclave_VC: UIViewController {
             }
         }
         catch {
-            ctLbl.text = "error in encrypt"
+            plaintextResult.text = "error in decrypt"
         }
     }
     
