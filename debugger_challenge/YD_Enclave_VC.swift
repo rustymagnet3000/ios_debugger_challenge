@@ -12,11 +12,24 @@ class YD_Enclave_VC: UIViewController {
     @IBOutlet weak var ptLbl: UILabel!
     
     let ptBytes: Data? = "The quick brown fox".data(using: .utf8)
-    let ydHammer = YDHammertime(publicLabel: "com.hammer.publicKey", privateLabel: "com.hammer.privateKey", operationPrompt: "Authenticate to continue")
-    
+    let ydHammer = YDHammertime(publicLabel: "com.hammer.publicKey", privateLabel: "com.hammer.privateKey", operationPrompt: "Please authenticate")
 
     @IBAction func sign_btn(_ sender: Any) {
-        signatureLabel.text = "sign time"
+        do {
+            let pkEnclaveKeyRef = try ydHammer.getPrivateKey()
+            print("Enclave Ref: \(pkEnclaveKeyRef.underlying.hashValue)")
+            
+            if #available(iOS 10.3, *) {
+                let signedPt = try ydHammer.sign(ptBytes!, privateKey: pkEnclaveKeyRef)
+                print("Signature: \(signedPt.base64EncodedString())")
+                signatureLabel.text = "Signature: " + signedPt.base64EncodedString()
+            } else {
+                signatureLabel.text = "pre iOS 10.3"
+            }
+        }
+        catch {
+            signatureLabel.text = "error in sign step"
+        }
     }
     
     @IBAction func verify_btn(_ sender: Any) {
@@ -48,11 +61,10 @@ class YD_Enclave_VC: UIViewController {
     
     @IBAction func encrypt_btn(_ sender: Any) {
         do {
-            let enclaveData = try ydHammer.getPublicKey()
-            print("Secure Enclave Reference: \(enclaveData.ref.underlying.hashValue)")
-            
+            let enclaveKeyData = try ydHammer.getPublicKey()
+
             if #available(iOS 10.3, *) {
-                cipherText = try ydHammer.encrypt(ptBytes!, publicKey: enclaveData.ref)
+                cipherText = try ydHammer.encrypt(ptBytes!, publicKey: enclaveKeyData.ref)
                 ctLbl.text = "Padded Cipertext: " + cipherText.base64EncodedString()
             } else {
                 ctLbl.text = "pre iOS 10.3"
@@ -69,8 +81,6 @@ class YD_Enclave_VC: UIViewController {
             let keypairResult = try ydHammer.generateKeyPair(accessControl: accessControl)
             try ydHammer.forceSavePublicKey(keypairResult.public)
             let enclaveData = try ydHammer.getPublicKey()
-            print(keypairResult.public.underlying)
-            print("Secure Enclave Reference: \(enclaveData.ref.underlying.hashValue)")
             pubKeyLabel.text = "Public Key: " + enclaveData.hex
         }
         catch {

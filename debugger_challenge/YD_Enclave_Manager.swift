@@ -49,7 +49,6 @@ final class SecureEnclaveKeyReference {
     let underlying: SecKey
     
     fileprivate init(_ underlying: SecKey) {
-        
         self.underlying = underlying
     }
 }
@@ -67,13 +66,14 @@ class YDHammertime {
         self.operationPrompt = operationPrompt
     }
 
-
     func generateKeyPair(accessControl: SecAccessControl) throws -> (`public`: SecureEnclaveKeyReference, `private`: SecureEnclaveKeyReference) {
         
         let privateKeyParams: [String: Any] = [
             kSecAttrLabel as String: privateLabel,
             kSecAttrIsPermanent as String: true,
             kSecAttrAccessControl as String: accessControl,
+            kSecAttrCanSign as String: true,
+            kSecAttrCanDecrypt as String: false
             ]
         let params: [String: Any] = [
             kSecAttrKeyType as String: kSecAttrKeyTypeEC,
@@ -89,7 +89,8 @@ class YDHammertime {
             
             throw SecureEnclaveHelperError(message: "Could not generate keypair", osStatus: status)
         }
-        
+
+
         return (public: SecureEnclaveKeyReference(publicKey!), private: SecureEnclaveKeyReference(privateKey!))
     }
     
@@ -120,6 +121,18 @@ class YDHammertime {
             ]
         
         let raw = try getSecKeyWithQuery(query)
+
+        guard let signProp = raw["sign"] as? Bool,
+                let encrProp = raw["encr"]  as? Bool,
+                    let vrfyProp = raw["vrfy"]  as? Bool,
+                        let permProp = raw["perm"] as? Bool,
+                            let uuidProp = raw["UUID"] as? String
+            else {
+            return SecureEnclaveKeyData(raw as! CFDictionary)
+        }
+        print("Public Key:\n\t[+]perm:\(permProp)\n\t[+]uuid:\(uuidProp)\n\t[+]sign:\(signProp)[of course!]\n\t[+]encr:\(encrProp)\n\t[+]vrfy:\(vrfyProp)")
+
+        
         return SecureEnclaveKeyData(raw as! CFDictionary)
     }
     
@@ -161,6 +174,16 @@ class YDHammertime {
             ]
         
         let raw = try getSecKeyWithQuery(query)
+
+        print("[+]private key: \(raw)")
+//        guard let signProp = raw["sign"] as? Bool,
+//                let encrProp = raw["decr"]  as? Bool,
+//                    let vrfyProp = raw["vrfy"]  as? Bool,
+//                        let permProp = raw["perm"] as? Bool else {
+//                                    return SecureEnclaveKeyReference(raw as! SecKey)
+//        }
+//        print("Private Key:\n\t[+]perm:\(permProp)\n\t[+]uuid:nada\n\t[+]sign:\(signProp)[of course!]\n\t[+]encr:\(encrProp)\n\t[+]vrfy:\(vrfyProp)")
+        
         return SecureEnclaveKeyReference(raw as! SecKey)
     }
     
@@ -192,6 +215,39 @@ class YDHammertime {
         }
         
         return result as! Data
+    }
+    
+    func sign(_ digest: Data, privateKey: SecureEnclaveKeyReference) throws -> Data {
+        
+        let blockSize = 256
+        let maxChunkSize = blockSize - 11
+        
+        guard digest.count / MemoryLayout<UInt8>.size <= maxChunkSize else {
+            
+            throw SecureEnclaveHelperError(message: "data length exceeds \(maxChunkSize)", osStatus: nil)
+        }
+        
+        var digestBytes = [UInt8](repeating: 0, count: digest.count / MemoryLayout<UInt8>.size)
+        digest.copyBytes(to: &digestBytes, count: digest.count)
+        
+        var signatureBytes = [UInt8](repeating: 0, count: blockSize)
+        var signatureLength = blockSize
+        
+        let status = SecKeyRawSign(privateKey.underlying, .PKCS1, digestBytes, digestBytes.count, &signatureBytes, &signatureLength)
+        
+        guard status == errSecSuccess else {
+            
+            if status == errSecParam {
+                
+                throw SecureEnclaveHelperError(message: "Could not create signature due to bad parameters", osStatus: status)
+            }
+            else {
+                
+                throw SecureEnclaveHelperError(message: "Could not create signature", osStatus: status)
+            }
+        }
+        
+        return Data(bytes: UnsafePointer<UInt8>(signatureBytes), count: signatureLength)
     }
     
     private var attrKeyTypeEllipticCurve: String {
