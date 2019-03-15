@@ -12,6 +12,8 @@
 
 - **Challenge 5: exception ports**
 
+- **Challenge 6: Secure Enclave key generation**
+-
 ## Challenge 1: fake ptrace
 
 The header files for ptrace was not easily available on iOS, unlike macOS.  But you could still start a *deny_attach* on iOS.  
@@ -402,7 +404,8 @@ Process 48185 resuming
 Process 48185 resuming
 No debugger detected
 ```
-### Useful references
+## Challenge 6: Secure Enclave key generation
+This is a work in progress.  I can generate a key, inside the Secure Enclave.  The Key can perform both `Encrypt` and `Sign` functionality.
 ```
 http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_get_exception_ports.html
 https://zgcoder.net/ramblings/osx-debugger-detection.html

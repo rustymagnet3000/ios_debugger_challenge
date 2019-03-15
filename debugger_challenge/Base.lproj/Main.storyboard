@@ -85,7 +85,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Home" id="zup-Zs-kjY"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="rocket" selectedImage="rocket" id="zup-Zs-kjY"/>
                     <navigationItem key="navigationItem" id="UAJ-wL-HT1"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -235,7 +235,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="IoH-72-Olf"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Secure Enclave" id="XBw-JW-8bt"/>
+                    <tabBarItem key="tabBarItem" title="Secure Enclave" image="key" selectedImage="key" id="XBw-JW-8bt"/>
                     <connections>
                         <outlet property="ctLbl" destination="Kjl-9I-Kkg" id="tTR-KX-LN9"/>
                         <outlet property="encrypt_btn_outlet" destination="anN-hI-2b2" id="YBC-WW-Mjs"/>
@@ -289,4 +289,8 @@
             <point key="canvasLocation" x="1068" y="32.833583208395808"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="key" width="30" height="30"/>
+        <image name="rocket" width="30" height="30"/>
+    </resources>
 </document>
