@@ -10,6 +10,7 @@
 		0F1565C62191CABB009D8033 /* debugger_exception_ports.c in Sources */ = {isa = PBXBuildFile; fileRef = 0F1565C52191CABB009D8033 /* debugger_exception_ports.c */; };
 		0F59981622046D62001D0DAF /* YD_Enclave_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */; };
 		0F68B5AA21B8519C00C0D35F /* YD_Enclave_Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */; };
+		0FE0A4712276F912005B9FF2 /* hello_framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE0A4702276F912005B9FF2 /* hello_framework.framework */; };
 		30D4BA0A2115E00700C31AE5 /* RNCryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA092115E00600C31AE5 /* RNCryptor.swift */; };
 		30D4BA0F2115E1C100C31AE5 /* YD_Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */; };
 		30D4E6E72080725700ABE7AA /* YD_App_Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4E6E62080725700ABE7AA /* YD_App_Delegate.swift */; };
@@ -28,6 +29,7 @@
 		0F1565C52191CABB009D8033 /* debugger_exception_ports.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = debugger_exception_ports.c; sourceTree = "<group>"; };
 		0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_VC.swift; sourceTree = "<group>"; };
 		0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_Manager.swift; sourceTree = "<group>"; };
+		0FE0A4702276F912005B9FF2 /* hello_framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = hello_framework.framework; sourceTree = "<group>"; };
 		30D4BA092115E00600C31AE5 /* RNCryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNCryptor.swift; sourceTree = "<group>"; };
 		30D4BA0C2115E03500C31AE5 /* RNCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCryptor.h; sourceTree = "<group>"; };
 		30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Crypto.swift; sourceTree = "<group>"; };
@@ -52,6 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FE0A4712276F912005B9FF2 /* hello_framework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +87,7 @@
 		30D4E6DA2080725700ABE7AA = {
 			isa = PBXGroup;
 			children = (
+				0FE0A4702276F912005B9FF2 /* hello_framework.framework */,
 				30D4BA082115E00600C31AE5 /* RNCryptor */,
 				30D4E6E52080725700ABE7AA /* debugger_challenge */,
 				30D4E6E42080725700ABE7AA /* Products */,
@@ -347,13 +351,17 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U8MSEX235L;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = debugger_challenge/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "funky-chicken.debugger-challeenge";
+				PRODUCT_BUNDLE_IDENTIFIER = "funky-chicken.debugger-challenge";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "debugger_challenge/debugger_challenge-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -369,13 +377,17 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U8MSEX235L;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = debugger_challenge/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "funky-chicken.debugger-challeenge";
+				PRODUCT_BUNDLE_IDENTIFIER = "funky-chicken.debugger-challenge";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "debugger_challenge/debugger_challenge-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;

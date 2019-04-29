@@ -1,4 +1,5 @@
 import UIKit
+import hello_framework
 
 class YD_Home_VC: UIViewController {
 
@@ -8,23 +9,19 @@ class YD_Home_VC: UIViewController {
         present_alert_controller(user_message: feedback_string + " \(result)")
     }
     
-    func secret_return_value(a: Int, b: Int) -> Int {
-        return a * b
-    }
-    
     @IBAction func crypto_button(_ sender: Any) {
         print("about to call common crypto API")
         YD_Crypto_Helper.funky()
     }
     
     @IBAction func random_string_btn(_ sender: Any) {
-        let randomString = NSUUID().uuidString
-        present_alert_controller(user_message: "Random string: \(randomString)")
+        let randomString = UUID()
+        print(randomString.uuidString)
+        present_alert_controller(user_message: "Random string: \(randomString.uuidString)")
     }
     @IBAction func secret_btn(_ sender: Any) {
-        
-        let result = secret_return_value(a: 6, b: 7)
-        present_alert_controller(user_message: "Secret: \(result)")
+        let answer = YDHelloClass().secret_objc_method()
+        present_alert_controller(user_message: "Secret method called: \(answer)")
     }
     
     private let feedback_string = "Debugger attached ="

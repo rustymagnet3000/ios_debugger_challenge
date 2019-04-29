@@ -19,56 +19,56 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="6hh-mC-k8n">
-                                <rect key="frame" x="80" y="140" width="215" height="402"/>
+                                <rect key="frame" x="74" y="140" width="227" height="402"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="yCz-Th-X4B">
-                                        <rect key="frame" x="0.0" y="0.0" width="215" height="402"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="227" height="402"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7f0-vk-6d2">
-                                                <rect key="frame" x="29.5" y="0.0" width="156" height="30"/>
+                                                <rect key="frame" x="35.5" y="0.0" width="156" height="30"/>
                                                 <state key="normal" title="sysctl debugger check"/>
                                                 <connections>
                                                     <action selector="debug_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nqi-03-2bq"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="60Y-ut-pa8">
-                                                <rect key="frame" x="0.0" y="62" width="215" height="30"/>
+                                                <rect key="frame" x="6" y="62" width="215" height="30"/>
                                                 <state key="normal" title="exception port debugger check"/>
                                                 <connections>
                                                     <action selector="exception_port_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FT0-gZ-ulK"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH0-zF-jqs">
-                                                <rect key="frame" x="13.5" y="124" width="188" height="30"/>
+                                                <rect key="frame" x="19.5" y="124" width="188" height="30"/>
                                                 <state key="normal" title="start ptrace deny debugger"/>
                                                 <connections>
                                                     <action selector="ptrace_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WpV-tx-g09"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kga-FB-80a">
-                                                <rect key="frame" x="59.5" y="186" width="96" height="30"/>
+                                                <rect key="frame" x="65.5" y="186" width="96" height="30"/>
                                                 <state key="normal" title="random string"/>
                                                 <connections>
                                                     <action selector="random_string_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gYV-hH-REO"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zMB-45-iZM">
-                                                <rect key="frame" x="7" y="248" width="201" height="30"/>
+                                                <rect key="frame" x="13" y="248" width="201" height="30"/>
                                                 <state key="normal" title="Generate Secure Enclave Key"/>
                                                 <connections>
                                                     <action selector="secure_enclave_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xEu-5L-j8F"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SXg-2K-6CZ">
-                                                <rect key="frame" x="53.5" y="310" width="108" height="30"/>
+                                                <rect key="frame" x="59.5" y="310" width="108" height="30"/>
                                                 <state key="normal" title="common crypto"/>
                                                 <connections>
                                                     <action selector="crypto_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XUC-83-UWS"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZJS-b2-VDg">
-                                                <rect key="frame" x="72.5" y="372" width="70" height="30"/>
-                                                <state key="normal" title="get secret"/>
+                                                <rect key="frame" x="0.0" y="372" width="227" height="30"/>
+                                                <state key="normal" title="Random number from framework"/>
                                                 <connections>
                                                     <action selector="secret_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wqu-e4-SWC"/>
                                                 </connections>

@@ -161,6 +161,7 @@ I started with some simple Swift code.  Could I whiten the UUID to a value I pre
 ##### Use lldb to find the API
 ```
 (lldb) image lookup -rn uuidString
+<nothing returned >
 
 (lldb) lookup NSUUID -m Foundation
 ****************************************************
@@ -171,11 +172,7 @@ I started with some simple Swift code.  Could I whiten the UUID to a value I pre
 +[NSUUID UUID]
 
 ```
-Although the API was called via Swift, it appeared to back to an Objective-C Class Member function. The + sign next to the bracket tells you can just invoke this command.  To confirm this theory, I  attached `frida-trace` while pressing my app button.
-```
-frida-trace -m "+[NSUUID UUID]" -U "Debug CrackMe"
-```
-You could invoke the class with Frida:
+Although the API was called via Swift, it was an Objective-C Class.I  attached `frida` to learn more.
 ```
 [iPhone::Debug CrackMe]-> ObjC.classes.NSUUID.UUID().toString();
 "6C402B55-6AFC-494A-B976-BCA781801A0A"
@@ -188,39 +185,46 @@ You could invoke the class with lldb:
 (lldb) po [NSUUID UUID]
 <__NSConcreteUUID 0x60400043fbc0> A41E59A5-C7C6-470F-88ED-48130BD85D1F
 ```
+This was interesting.  Every time you called that `static method` it would add the pointer to the heap.  They were not deallocated.   Perhaps this was a way to ensure a repeated GUID was never given?
+
 A disassemble revealed some interesting elements.
 ```
 (lldb) disassemble -n "+[NSUUID UUID]" -c10
 ```
 If you move to the init call - in the asm code, the 32-byte field was set to zeros.
 ```
-(lldb) b [NSUUID UUID]
-Breakpoint 1: where = Foundation`+[NSUUID UUID], address = 0x000000010d80cc12
-
 (lldb) po (char*) $rax
 <__NSConcreteUUID 0x6040006234a0> 00000000-0000-0000-0000-000000000000
 ```
-##### failed on first attempt....
-But then it appeared you can't trust the return register.  As it doesn't match what is given to Swift.
-if you next that a few step in assembler instruction...
+##### Failed on first attempt....
+It appeared you could not trust the return register.  As it did not match what Swift presented to the user.
+
+##### failed on 2nd, 3rd, 4th, n attempts
 ```
-(lldb) po (char*) $rax
-<__NSConcreteUUID 0x6040006234a0> B0E4D85E-CEE6-4DC0-B419-573C5538BEF2
+frida-trace -m "*[NSUUID **]" -U -f funky-chicken.debugger-challenge
+
+Instrumenting 27 functions.
 ```
-##### failed on second attempt....
-I prettied the Frida auto-generated script from `frida-trace -m "+[NSUUID UUID]" -U "Debug CrackMe"`. Still, I could not get the correct return value.
-
-![bypass](/debugger_challenge/readme_images/frida_trace_return_value_uuid.png)
-
-##### failed on third attempt....
-`frida-trace -i "*uuidString*" -U "Debug CrackMe"`
-
-The mangled swift name was found by Frida but it was never triggered.  I had the same experience with lldb not firing when trying to target the method `uuidString`.
-##### failed on fourth attempt....
-Changing the code to return a NSUUID type and not a string type, had the same results.
-`let randomString = NSUUID()`
+The 4 I cared about were as follows:
+```
++[NSUUID UUID]:
+-[NSUUID init]:
+-[NSUUID UUIDString]:
+-[__NSConcreteUUID UUIDString]:
+```
+`Frida-Trace` generated a javascript file template when the above command ran.  I changed the javascript code to:
+```
+  onLeave: function (log, retval, state) {
+     var message = ObjC.Object(retval);
+     log("[+][__NSConcreteUUID UUIDString] -->\n\"" + message.toString() + "\"");
+  }
+```
 ### Challenge 3 - FAILED
-Something was odd about this API.  It generated multiple UUID's every time you called the API.  But with Frida or lldb I could not yet find the correct return value.
+Something was odd about this API.  It generated multiple UUID's every time you called the API.  But with Frida or lldb I could never find the actual return value going back to the swift code which was simply:
+```
+let randomString = UUID()
+print(randomString.uuidString)
+```
 
 ## Challenge 4: read encryption key and algorithm
 I added a popular `RNCryptor` wrapper around Apple's CommonCrypto library.  I statically embedded this into the Debugger Challenge instead of adding as a CocoaPod.
@@ -404,10 +408,11 @@ Process 48185 resuming
 Process 48185 resuming
 No debugger detected
 ```
-## Challenge 6: Secure Enclave key generation
-This is a work in progress.  I can generate a key, inside the Secure Enclave.  The Key can perform both `Encrypt` and `Sign` functionality.
+### Useful references
 ```
 http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_get_exception_ports.html
 https://zgcoder.net/ramblings/osx-debugger-detection.html
 https://github.com/apple/darwin-xnu/blob/master/osfmk/mach/exception_types.h
 ```
+## Challenge 6: Secure Enclave key generation
+I generated a Elliptic Curve key pair, inside the Secure Enclave.  The Key was set to allow both `Encrypt` and `Sign` functionality. Naughty naughty 🦂.
