@@ -4,7 +4,7 @@
 
 - **Challenge 1: Bypass anti-debug (ptrace)**
 
-- **Challenge 2: Bypass anti-debug (sysctl) **
+- **Challenge 2: Bypass anti-debug (sysctl)**
 
 - **Challenge 3: hook Apple's Random String function**
 
@@ -12,13 +12,13 @@
 
 - **Challenge 5: Bypass anti-debug (exception ports)**
 
-- **Challenge 6: Method Swizzling **
+- **Challenge 6: Method Swizzling**
 
 - **Challenge 7: Secure Enclave key generation**
 
-## Challenge 1: fake ptrace
+## Challenge 1: Bypass anti-debug (ptrace)
 
-Using `ptrace` on `iOS` was a commonly discussed technique to stop a debugger attaching to an iOS app.  If you tried to attach a debugger AFTER  a *deny_attach* was issued, you would see something like this...
+Using `ptrace` on `iOS` was a commonly discussed technique to stop a debugger attaching to your iOS app.  If you tried to attach a debugger AFTER  a *deny_attach* was issued, you would see something like this...
 ```
 (lldb) process attach --pid 93791
 error: attach failed: lost connection
@@ -50,11 +50,12 @@ Return an integer 0, to sidestep the real `ptrace` result.
 ### Challenge 1 - COMPLETE
 ![bypass](/debugger_challenge/readme_images/ptrace_bypass.png)
 
-## Challenge 2: hook sysctl
-Sysctl was the Apple recommended way to check whether a debugger was attached to the running process.    Refer to: https://developer.apple.com/library/archive/qa/qa1361/index.html  
+## Challenge 2: Bypass anti-debug (sysctl)
+Sysctl was the [Apple_recommended_debug_detect][a3a00022] way to check if a debugger was attached to your app.
 
+  [a3a00022]: https://developer.apple.com/library/archive/qa/qa1361/index.html "apple_link"
 
-**The same trick from ptrace worked with sysctl.**  I wanted to be more creative.  I was inspired by https://github.com/DerekSelander/LLDB to create a new, empty Swift framework that loaded a C function API named - you guessed it -`sysctl`.  That was injected into my app's process image list.
+**The same trick for Challenge 1 (ptrace) worked with sysctl**. But I wanted to be more creative.  I was inspired by https://github.com/DerekSelander/LLDB to create a new, empty Swift framework that loaded a C function API named - you guessed it -`sysctl`.  That was injected into my app's process image list.
 
 ##### Create an empty Swift framework
 I created an empty Swift project.  I added the following C code.  You don't need a C header file.
@@ -459,7 +460,7 @@ in YDHelloClass:
 (lldb) exp $a.getRandomNumber()
 (Int) $R8 = 1614
 ```
-**Step 2**, Now I need to write my swizzle code, that would target the following information.
+**Step 2**, I needed to write my swizzle code that would target the following information:
 ```
 Class = YDHelloClass
 Instance Method = getRandomNumber
