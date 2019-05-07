@@ -8,8 +8,8 @@ class YD_Alert_Helper {
     convenience init(body_message: String) {
         let generic_title = "Result"
         let alert_template = UIAlertController(title: generic_title, message:
-            body_message, preferredStyle: UIAlertControllerStyle.alert)
-        alert_template.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.cancel,handler: nil))
+            body_message, preferredStyle: UIAlertController.Style.alert)
+        alert_template.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.cancel,handler: nil))
         
         self.init(alert_controller: alert_template, title_message: generic_title, body_message: body_message)
     }

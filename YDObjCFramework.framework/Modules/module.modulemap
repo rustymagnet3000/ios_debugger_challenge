@@ -1,0 +1,6 @@
+framework module YDObjCFramework {
+  umbrella header "YDObjCFramework.h"
+
+  export *
+  module * { export * }
+}

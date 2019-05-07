@@ -2,30 +2,35 @@
 # iOS Debugger Challenge
   This iOS app was written to practice the following techniques:
 
-- **Challenge 1: fake ptrace**
+- **Challenge 1: Bypass anti-debug (ptrace)**
 
-- **Challenge 2: hook sysctl**
+- **Challenge 2: Bypass anti-debug (sysctl) **
 
 - **Challenge 3: hook Apple's Random String function**
 
 - **Challenge 4: read encryption key and algorithm**
 
-- **Challenge 5: exception ports**
+- **Challenge 5: Bypass anti-debug (exception ports)**
 
-- **Challenge 6: Secure Enclave key generation**
--
+- **Challenge 6: Method Swizzling **
+
+- **Challenge 7: Secure Enclave key generation**
+
 ## Challenge 1: fake ptrace
 
-The header files for ptrace was not easily available on iOS, unlike macOS.  But you could still start a *deny_attach* on iOS.  
-
-Using ptrace on iOS was a common discussed technique to stop a debugger attaching to an iOS app.  If you tried to attach a debugger AFTER  a *deny_attach* was issued, you would see something like this...
+Using `ptrace` on `iOS` was a commonly discussed technique to stop a debugger attaching to an iOS app.  If you tried to attach a debugger AFTER  a *deny_attach* was issued, you would see something like this...
 ```
 (lldb) process attach --pid 93791
 error: attach failed: lost connection
 ```
 If you attached a debugger before ptrace *deny_attach*  was set, you would see a process crash.
 
+The header files for ptrace were not easily available on iOS, unlike macOS.  But you could still start a *deny_attach* on iOS.  
+
+
+
 ##### Bypass steps
+Get your debugger ready:
 ```
 process attach --pid 96441                // attach to process
 rb ptrace -s libsystem_kernel.dylib       // set a regex breakpoint for ptrace
@@ -37,10 +42,10 @@ NOTE - a "waitfor" instruction, is my preferred way to start a debugger
 ```
 Check where your breakpoint stopped:
 ![thread_list](/debugger_challenge/readme_images/thread_list_image_ptrace.png)
+
+Return an integer 0, to sidestep the real `ptrace` result.
 ```
-Check where your breakpoint stopped:
-thread list                               // validate you are in the ptrace call
-thread return 0                           // ptrace success sends a Int 0 response
+(lldb) thread return 0
 ```
 ### Challenge 1 - COMPLETE
 ![bypass](/debugger_challenge/readme_images/ptrace_bypass.png)
@@ -414,5 +419,104 @@ http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_get_exception_ports.htm
 https://zgcoder.net/ramblings/osx-debugger-detection.html
 https://github.com/apple/darwin-xnu/blob/master/osfmk/mach/exception_types.h
 ```
-## Challenge 6: Secure Enclave key generation
-I generated a Elliptic Curve key pair, inside the Secure Enclave.  The Key was set to allow both `Encrypt` and `Sign` functionality. Naughty naughty 🦂.
+## Challenge 6: Method Swizzling
+Why `Swizzle`? If you understand `swizzling` you understand part of `Objective-C's` beauty. Read this from [Apple][20e2b71f]
+:
+
+  [20e2b71f]: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008048-CH1-SW1 "apple_article"
+
+> The Objective-C language defers as many decisions as it can from compile time and link time to runtime. Whenever possible, it does things dynamically.
+
+My goal was to `method swizzle`.  I wanted to swap out a real `random` value with a value that I had chosen (`42`), as the below picture describes:
+
+![swizzle_overview](debugger_challenge/readme_images/SwizzleOverview.png)
+
+### Challenge 6 - COMPLETE
+**Step 1**, I used a debugger to find information on my target.
+```
+(lldb) dclass -m YDObjCFramework
+Dumping classes
+************************************************************
+YDHelloClass
+
+(lldb) methods YDHelloClass
+<YDHelloClass: 0x10ef63128>:
+in YDHelloClass:
+	Class Methods:
+		+ (void) sayStaticHello; (0x10ef62ec0)
+	Instance Methods:
+		- (long) getRandomNumber; (0x10ef62e90)
+(NSObject ...)
+
+(lldb) exp import YDObjCFramework
+
+(lldb) exp let $a = YDHelloClass()
+
+(lldb) exp $a.getRandomNumber()
+(Int) $R4 = 7981
+(lldb) exp $a.getRandomNumber()
+(Int) $R6 = 1021
+(lldb) exp $a.getRandomNumber()
+(Int) $R8 = 1614
+```
+**Step 2**, Now I need to write my swizzle code, that would target the following information.
+```
+Class = YDHelloClass
+Instance Method = getRandomNumber
+```
+I went back to `xCode` and selected `New\Project\iOS\Framework\Objective-C`.  Using Objective-C `runtime` APIs, I placed the hook:
+```
+#import <Foundation/Foundation.h>
+#import <objc/message.h>
+
+@interface YDGoodbyeClass: NSObject
+- (NSInteger)fakeRandomNumber;
+@end
+
+@implementation YDGoodbyeClass
+
+- (NSInteger)fakeRandomNumber
+{
+
+    if ([self respondsToSelector:@selector(fakeRandomNumber)]) {
+        NSInteger result = [self fakeRandomNumber];
+        NSLog(@"[+] 🍭 swizzled.Original return value: %ld", result);
+    }
+    else {
+        NSLog(@"[+] 🍭 swizzled.");
+    }
+
+    return 42;
+}
+
++ (void)load
+{
+    Class targetClass = objc_getClass("YDHelloClass");
+
+    if (targetClass != nil) {
+        NSLog(@"[+] 🎣 Found YDHelloClass\n");
+        NSLog(@"[+] 🎣 Placing hook on getRandomNumber\n");
+        Class orignalClass = objc_getClass("YDHelloClass");
+        Method original, swizzled;
+        original = class_getInstanceMethod(orignalClass, @selector(getRandomNumber));
+        swizzled = class_getInstanceMethod(self, @selector(fakeRandomNumber));
+        method_exchangeImplementations(original, swizzled);
+    }
+}
+
+@end
+```
+**Step 3**, as I didn't have my `jailbroken` iOS device handy, I could not use the `dynamic library loader` to invoke this code.  Instead, I used my trusty debugger:
+```
+lldb) process load /Users/.../swizzle_framework.framework/swizzle_framework
+[+] 🎣 Found YDHelloClass
+
+Loading "/Users/.../swizzle_framework.framework/swizzle_framework"...ok
+Image 0 loaded.
+```
+That was it.  
+![pre_swizzle](debugger_challenge/readme_images/pre_swizzle_resized.png)
+![success_swizzle](debugger_challenge/readme_images/swizzle_success_resized.png)
+
+## Challenge 7: Secure Enclave key generation
+I generated a Elliptic Curve key pair, inside the Secure Enclave.  The Key was set to allow both `Encrypt` and `Sign` functionality.

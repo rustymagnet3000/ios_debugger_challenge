@@ -1,5 +1,5 @@
 import UIKit
-import hello_framework
+import YDObjCFramework
 
 class YD_Home_VC: UIViewController {
 
@@ -20,8 +20,8 @@ class YD_Home_VC: UIViewController {
         present_alert_controller(user_message: "Random string: \(randomString.uuidString)")
     }
     @IBAction func secret_btn(_ sender: Any) {
-        let answer = YDHelloClass().secret_objc_method()
-        present_alert_controller(user_message: "Secret method called: \(answer)")
+        let answer = YDHelloClass().getRandomNumber()
+        present_alert_controller(user_message: "Random number: \(answer)")
     }
     
     private let feedback_string = "Debugger attached ="
