@@ -61,7 +61,7 @@ My goal was to `method swizzle`.  I wanted to swap out a real `random` value wit
 
 ![swizzle_overview](debugger_challenge/readme_images/SwizzleOverview.png)
 
-**Step 1**, I used a debugger to find information on my target.
+#### Step 1: Use a debugger to find information
 ```
 (lldb) dclass -m YDObjCFramework
 Dumping classes
@@ -88,67 +88,50 @@ in YDHelloClass:
 (lldb) exp $a.getRandomNumber()
 (Int) $R8 = 1614
 ```
-**Step 2**, I needed to write my swizzle code that would target the following information:
+
+#### Step 2: Write Swizzle code
+I needed to write the code that would target the following information:
 ```
 Class = YDHelloClass
 Instance Method = getRandomNumber
 ```
-I went back to `xCode` and selected `New\Project\iOS\Framework\Objective-C`.  Using Objective-C `runtime` APIs, I placed the hook:
+I went back to `xCode` and selected `New\Project\iOS\Framework\Objective-C`.  Using Objective-C `runtime` APIs, I wrote code that would target Alice's SDK.  
+
 ```
-#import <Foundation/Foundation.h>
-#import <objc/message.h>
-
-@interface YDGoodbyeClass: NSObject
-- (NSInteger)fakeRandomNumber;
-@end
-
-@implementation YDGoodbyeClass
-
-- (NSInteger)fakeRandomNumber
-{
-
-    if ([self respondsToSelector:@selector(fakeRandomNumber)]) {
-        NSInteger result = [self fakeRandomNumber];
-        NSLog(@"[+] 🍭 swizzled.Original return value: %ld", result);
-    }
-    else {
-        NSLog(@"[+] 🍭 swizzled.");
-    }
-
-    return 42;
-}
-
 + (void)load
 {
-    Class targetClass = objc_getClass("YDHelloClass");
+    Class orignalClass = objc_getClass("YDHelloClass");
 
-    if (targetClass != nil) {
-        NSLog(@"[+] 🎣 Found YDHelloClass\n");
-        NSLog(@"[+] 🎣 Placing hook on getRandomNumber\n");
-        Class orignalClass = objc_getClass("YDHelloClass");
+    if (orignalClass != nil) {
+        NSLog(@"\n[+] 🎣 Found YDHelloClass\n[+] 🎣 Placing hook on getRandomNumber\n");
         Method original, swizzled;
         original = class_getInstanceMethod(orignalClass, @selector(getRandomNumber));
         swizzled = class_getInstanceMethod(self, @selector(fakeRandomNumber));
-        method_exchangeImplementations(original, swizzled);
+        if(original != nil && swizzled != nil)
+            method_exchangeImplementations(original, swizzled);
     }
 }
 
 @end
 ```
-### COMPLETE ON IOS SIMULATOR
+To read the full code, go [here][70b2d1d9].
+#### Step 3: Place the Swizzle
 **Step 3**, before I did this on a physical iOS device, I wanted to complete it with a simulator.  I used my trusty debugger connected to the app running on an XCode simulator:
 ```
 lldb) process load /Users/.../swizzle_framework.framework/swizzle_framework
 [+] 🎣 Found YDHelloClass
 
+  [70b2d1d9]: https://github.com/rustymagnet3000/YDObjCFramework "YDObjCFramework"
+
 Loading "/Users/.../swizzle_framework.framework/swizzle_framework"...ok
 Image 0 loaded.
 ```
-Complete.  After applying the `method swizzle` you would always get a `42` value...
+### COMPLETE ON IOS SIMULATOR
+After applying the `method swizzle` you would always get a `42` value...
 
 ![success_swizzle](debugger_challenge/readme_images/swizzle_success_resized.png)
 
-### COMPLETE ON IOS DEVICE
+### Repackage app
 The way to solve this challenge on a real iOS device depended on whether you had a _jailed_ or _jailbroken_ device.  I had a clean, _jailed iOS12_ device.  I chose to **repackage** the _debuggerChallenge.ipa_ file. This involves taking it apart, adding the `dynamic framework` that contained the _Swizzle_ code and putting the app back together.  
 
 For more info on **repackaging apps**  read [here][5e75f6f0].
@@ -240,7 +223,8 @@ Triggered by Thread:  0
 ```
 I had forgotten to copy the actual framework!  So I had the _Load Command_ but no code to load!
 
-Repeat all the above.  FINALLY, it worked!..
+### COMPLETE
+Repeat all the above.  FINALLY, it worked! The Swizzle was placed and working on a `jailed` device.
 
 ![success_swizzle](debugger_challenge/readme_images/swizzled_jailed_device.png)
 
