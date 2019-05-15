@@ -2,21 +2,249 @@
 # iOS Debugger Challenge
   This iOS app was written to practice the following techniques:
 
-- **Challenge 1: Bypass anti-debug (ptrace)**
+<!-- TOC -->
+  - [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)
+    - [COMPLETE ON IOS SIMULATOR](#complete-on-ios-simulator)
+    - [COMPLETE ON IOS DEVICE](#complete-on-ios-device)
+      - [My approach](#my-approach)
+      - [Hiccup 1: OpTool](#hiccup-1-optool)
+      - [Hiccup 2: Load Command](#hiccup-2-load-command)
+      - [Hiccup 3: Code signatures](#hiccup-3-code-signatures)
+      - [Hiccup 3: Entitlements](#hiccup-3-entitlements)
+      - [Hiccup 4: White screen of death](#hiccup-4-white-screen-of-death)
+  - [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)
+    - [Bypass steps](#bypass-steps)
+    - [COMPLETE](#complete)
+  - [Challenge: Bypass anti-debug (sysctl)](#challenge-bypass-anti-debug-sysctl)
+    - [Create an empty Swift framework](#create-an-empty-swift-framework)
+    - [Write your fake sysctl API](#write-your-fake-sysctl-api)
+    - [Use LLDB to load your hooking framework](#use-lldb-to-load-your-hooking-framework)
+    - [Load dylib from Mac into device](#load-dylib-from-mac-into-device)
+    - [dlopen and dlsym](#dlopen-and-dlsym)
+    - [Find the load addresses for C API sysctl() in the symbol table](#find-the-load-addresses-for-c-api-sysctl-in-the-symbol-table)
+    - [Challenge - failed on first attempt....](#challenge---failed-on-first-attempt)
+      - [Symbol table to the rescue](#symbol-table-to-the-rescue)
+      - [Verify what you found, the easy way](#verify-what-you-found-the-easy-way)
+      - [Set a breakpoint](#set-a-breakpoint)
+      - [Whoop whoop](#whoop-whoop)
+      - [Change load address of API call](#change-load-address-of-api-call)
+    - [COMPLETE](#complete-1)
+      - [Bonus - use lldb to print when inside your fake sysctl API](#bonus---use-lldb-to-print-when-inside-your-fake-sysctl-api)
+  - [Challenge: Bypass anti-debug (Exception Ports)](#challenge-bypass-anti-debug-exception-ports)
+    - [COMPLETE](#complete-2)
+    - [Useful references](#useful-references)
+  - [Challenge: Hook Apple's Random String function](#challenge-hook-apples-random-string-function)
+    - [Use lldb to find the API](#use-lldb-to-find-the-api)
+    - [Failed on first attempt....](#failed-on-first-attempt)
+    - [failed on 2nd, 3rd, 4th, n attempts](#failed-on-2nd-3rd-4th-n-attempts)
+    - [FAILED](#failed)
+  - [Challenge: Find Encryption key](#challenge-find-encryption-key)
+    - [Leveraging Frida-Trace](#leveraging-frida-trace)
+    - [Watch the encryption key with a Frida-Script](#watch-the-encryption-key-with-a-frida-script)
+    - [Where is the plaintext about to be encrypted?](#where-is-the-plaintext-about-to-be-encrypted)
+    - [What is the decrypted plaintext?](#what-is-the-decrypted-plaintext)
+    - [Failed to get raw key](#failed-to-get-raw-key)
+    - [COMPLETE](#complete-3)
+    - [Useful references](#useful-references-1)
+  - [Challenge: Secure Enclave key generation](#challenge-secure-enclave-key-generation)
 
-- **Challenge 2: Bypass anti-debug (sysctl)**
+<!-- /TOC -->
+## Challenge: Method Swizzling on non-jailbroken device
+Why `Swizzle`? If you understand `swizzling` you understand part of `Objective-C's` beauty. Read this from [Apple][20e2b71f]
+:
 
-- **Challenge 3: hook Apple's Random String function**
+  [20e2b71f]: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008048-CH1-SW1 "apple_article"
 
-- **Challenge 4: read encryption key and algorithm**
+> The Objective-C language defers as many decisions as it can from compile time and link time to runtime. Whenever possible, it does things dynamically.
 
-- **Challenge 5: Bypass anti-debug (exception ports)**
+My goal was to `method swizzle`.  I wanted to swap out a real `random` value with a value that I had chosen (`42`), as the below picture describes:
 
-- **Challenge 6: Method Swizzling on non-jailbroken device **
+![swizzle_overview](debugger_challenge/readme_images/SwizzleOverview.png)
 
-- **Challenge 7: Secure Enclave key generation**
+**Step 1**, I used a debugger to find information on my target.
+```
+(lldb) dclass -m YDObjCFramework
+Dumping classes
+************************************************************
+YDHelloClass
 
-## Challenge 1: Bypass anti-debug (ptrace)
+(lldb) methods YDHelloClass
+<YDHelloClass: 0x10ef63128>:
+in YDHelloClass:
+	Class Methods:
+		+ (void) sayStaticHello; (0x10ef62ec0)
+	Instance Methods:
+		- (long) getRandomNumber; (0x10ef62e90)
+(NSObject ...)
+
+(lldb) exp import YDObjCFramework
+
+(lldb) exp let $a = YDHelloClass()
+
+(lldb) exp $a.getRandomNumber()
+(Int) $R4 = 7981
+(lldb) exp $a.getRandomNumber()
+(Int) $R6 = 1021
+(lldb) exp $a.getRandomNumber()
+(Int) $R8 = 1614
+```
+**Step 2**, I needed to write my swizzle code that would target the following information:
+```
+Class = YDHelloClass
+Instance Method = getRandomNumber
+```
+I went back to `xCode` and selected `New\Project\iOS\Framework\Objective-C`.  Using Objective-C `runtime` APIs, I placed the hook:
+```
+#import <Foundation/Foundation.h>
+#import <objc/message.h>
+
+@interface YDGoodbyeClass: NSObject
+- (NSInteger)fakeRandomNumber;
+@end
+
+@implementation YDGoodbyeClass
+
+- (NSInteger)fakeRandomNumber
+{
+
+    if ([self respondsToSelector:@selector(fakeRandomNumber)]) {
+        NSInteger result = [self fakeRandomNumber];
+        NSLog(@"[+] 🍭 swizzled.Original return value: %ld", result);
+    }
+    else {
+        NSLog(@"[+] 🍭 swizzled.");
+    }
+
+    return 42;
+}
+
++ (void)load
+{
+    Class targetClass = objc_getClass("YDHelloClass");
+
+    if (targetClass != nil) {
+        NSLog(@"[+] 🎣 Found YDHelloClass\n");
+        NSLog(@"[+] 🎣 Placing hook on getRandomNumber\n");
+        Class orignalClass = objc_getClass("YDHelloClass");
+        Method original, swizzled;
+        original = class_getInstanceMethod(orignalClass, @selector(getRandomNumber));
+        swizzled = class_getInstanceMethod(self, @selector(fakeRandomNumber));
+        method_exchangeImplementations(original, swizzled);
+    }
+}
+
+@end
+```
+### COMPLETE ON IOS SIMULATOR
+**Step 3**, before I did this on a physical iOS device, I wanted to complete it with a simulator.  I used my trusty debugger connected to the app running on an XCode simulator:
+```
+lldb) process load /Users/.../swizzle_framework.framework/swizzle_framework
+[+] 🎣 Found YDHelloClass
+
+Loading "/Users/.../swizzle_framework.framework/swizzle_framework"...ok
+Image 0 loaded.
+```
+Complete.  After applying the `method swizzle` you would always get a `42` value...
+
+![success_swizzle](debugger_challenge/readme_images/swizzle_success_resized.png)
+
+### COMPLETE ON IOS DEVICE
+The way to solve this challenge on a real iOS device depended on whether you had a _jailed_ or _jailbroken_ device.  I had a clean, _jailed iOS12_ device.  I chose to **repackage** the _debuggerChallenge.ipa_ file. This involves taking it apart, adding the `dynamic framework` that contained the _Swizzle_ code and putting the app back together.  
+
+For more info on **repackaging apps**  read [here][5e75f6f0].
+
+  [5e75f6f0]: https://github.com/OWASP/owasp-mstg/blob/master/Document/0x06c-Reverse-Engineering-and-Tampering.md "owasp"
+
+#### My approach
+- [x] Build and run Debugger Challenge within xCode.
+- [x] Copy the `Product` (which is a folder called `DebuggerChallenge.app` from Finder).
+- [x] Copy Bob's framework to the _DebuggerChallenge.app/Framework_ folder.
+- [x] Insert a _load command_ with _Optool_ to the app's binary.
+- [x] Put the DebuggerChallenge.app directory inside a new, empty folder named `Payload`.
+- [x] Compress the `Payload` folder to `unsigned.ipa`.
+- [x] Use `Applesign` to re-sign everything inside the IPA.
+- [x] Use `iOS-deploy` to get the freshly signed app onto the _Jailed_ device.
+
+It all sounded simple.  But I hit roadblocks:
+##### Hiccup: OpTool
+```
+// get a local copy of OpTool
+git clone https://github.com/alexzielenski/optool.git
+Make initialize optool’s submodules:
+cd optool/
+git submodule update --init --recursive   // this was the command I missed!
+```
+##### Hiccup: Load Command
+You have to tell the main app binary to load this new framework.
+```
+optool install -c load -p "@executable_path/Frameworks/YDBobSwizzle.framework/YDBobSwizzle" -t Payload/debugger_challenge.app/debugger_challenge
+```
+If it worked you would see..
+```
+Found FAT Header
+Found thin header...
+Found thin header...
+Inserting a LC_LOAD_DYLIB command for architecture: arm
+Successfully inserted a LC_LOAD_DYLIB command for arm
+Inserting a LC_LOAD_DYLIB command for architecture: arm64
+Successfully inserted a LC_LOAD_DYLIB command for arm64
+Writing executable to debugger_challenge.app/debugger_challenge...
+```
+Verify it...
+```
+jtool -arch arm64 -l Payload/debugger_challenge.app/debugger_challenge
+```
+##### Hiccup: Code signatures
+If you forgot to code sign anything, you could not deploy it the device.
+```
+applesign -7 -i <DEVELOPER CODE SIGNING ID> -m embedded.mobileprovision unsigned.ipa -o ready.ipa
+ios-deploy -b ready.ipa
+ios-deploy -b debugger_challenge.app
+No code signature found. AMDeviceSecureInstallApplication(0, device, url, options, install_callback, 0)
+```
+##### Hiccup: Entitlements
+```
+ios-deploy -b debugger_challenge.app
+The executable was signed with invalid entitlements.
+```
+What had gone wrong, when I code signed the IPA? Check the file the `provisioning file`  you passed to Applesign.
+
+`security cms -D -i embedded.mobileprovision`
+
+Expiry date, device ID were good. Had I chosen the wrong developer Code Signing ID?
+```
+<key>Entitlements</key>
+<key>ExpirationDate</key>
+	<date>2019-05-21T11:01:06Z</date>
+<key>ProvisionedDevices</key>
+	<string>0ec8227a5f623d0f4f6d257438730d79858a977f</string>
+<key>TeamName</key>
+	<string>Rusty Magnet</string>
+<key>TeamIdentifier</key>
+		<string>2N3CU4HVH8</string>
+```
+Let's try again with a new code signing ID!
+```
+security find-identity -v -p codesigning
+applesign -7 -i <NEW DEVELOPER CODE SIGNING ID> -m embedded.mobileprovision debugger_chall_unsigned.ipa -o ready.ipa
+```
+That worked.  I could install the app on the device.
+#### Hiccup 4: White screen of death
+Argh.  The app won't open but it generated a crash log [] which you could get from XCode ].
+```
+Exception Type:  EXC_CRASH (SIGABRT)
+Exception Codes: 0x0000000000000000, 0x0000000000000000
+Exception Note:  EXC_CORPSE_NOTIFY
+Termination Description: DYLD, Library not loaded: @executable_path/YDBobSwizzle.dylib | Referenced from: /var/containers/Bundle/Application/3F9EDE3F-7BCF-4F25-B438-9145FD3A21B7/debugger_challenge.app/debugger_challenge | Reason: image not found
+Triggered by Thread:  0
+```
+I had forgotten to copy the actual framework!  So I had the _Load Command_ but no code to load!
+
+Repeat all the above.  FINALLY, it worked!..
+
+![success_swizzle](debugger_challenge/readme_images/swizzled_jailed_device.png)
+
+## Challenge: Bypass anti-debug (ptrace)
 
 Using `ptrace` on `iOS` was a commonly discussed technique to stop a debugger attaching to your iOS app.  If you tried to attach a debugger AFTER  a *deny_attach* was issued, you would see something like this...
 ```
@@ -41,16 +269,18 @@ NOTE - a "waitfor" instruction, is my preferred way to start a debugger
 `(lldb) process attach --name "my_app" --waitfor`
 ```
 Check where your breakpoint stopped:
-![thread_list](/debugger_challenge/readme_images/thread_list_image_ptrace.png)
+
+![thread_list](debugger_challenge/readme_images/thread_list_image_ptrace.png)
 
 Return an integer 0, to sidestep the real `ptrace` result.
 ```
 (lldb) thread return 0
 ```
-### Challenge 1 - COMPLETE
-![bypass](/debugger_challenge/readme_images/ptrace_bypass.png)
+### COMPLETE
 
-## Challenge 2: Bypass anti-debug (sysctl)
+![bypass](debugger_challenge/readme_images/ptrace_bypass.png)
+
+## Challenge: Bypass anti-debug (sysctl)
 Sysctl was the [Apple_recommended_debug_detect][a3a00022] way to check if a debugger was attached to your app.
 
   [a3a00022]: https://developer.apple.com/library/archive/qa/qa1361/index.html "apple_link"
@@ -110,7 +340,7 @@ Ok, now check my address of my bypass...
 (lldb) expression (void*)dlsym($4,"sysctl")
 (void *) $5 = 0x000000012e292dc0
 ```
-##### Challenge 2 - failed on first attempt....
+#### Challenge - failed on first attempt....
 Now the `rusty_bypass` framework was loaded, I half expected it to work.  No.  the libsystem_kernel `sysctl` was called before my own code.
 ##### Symbol table to the rescue
 ```
@@ -143,7 +373,7 @@ General Purpose Registers:
 rip = 0x000000012e292dc0  rusty_bypass`sysctl at hook_debugger_check.c:5
 (lldb) continue
 ```
-### Challenge 2 - COMPLETE
+### COMPLETE
 
 ##### Bonus - use lldb to print when inside your fake sysctl API
 I wanted to check I was inside of my hooked-sysctl.  I could have added `syslog` statements to achieve the same.  But that missed the point of improving my lldb skills.  Here was a more fun way...
@@ -155,7 +385,31 @@ I wanted to check I was inside of my hooked-sysctl.  I could have added `syslog`
   DONE
 (lldb) continue
 ```
-## Challenge 3: hook Apple's Random String function
+## Challenge: Bypass anti-debug (Exception Ports)
+Another anti-debug technique on macOS was to check if a debugger was attached by looking if any of the Ports used by a Debugger returned a valid response.  This relied on the C `task_get_exception_ports` API.  You passed in the Exception Port you wanted - in argument 2 (the RSI register).  
+
+### COMPLETE
+Thanks to: https://alexomara.com/blog/defeating-anti-debug-techniques-macos-mach-exception-ports/.  Set the Exception Ports to check to a null value.  
+```
+(lldb) b task_get_exception_ports
+Breakpoint 3: where = libsystem_kernel.dylib`task_get_exception_ports, address = 0x00007fff6a530675
+(lldb) c
+Process 48185 resuming
+(lldb) p $arg2
+(unsigned long) $0 = 66
+(lldb) reg w rsi 0
+(lldb) c
+Process 48185 resuming
+No debugger detected
+```
+### Useful references
+```
+http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_get_exception_ports.html
+https://zgcoder.net/ramblings/osx-debugger-detection.html
+https://github.com/apple/darwin-xnu/blob/master/osfmk/mach/exception_types.h
+```
+
+## Challenge: Hook Apple's Random String function
 I started with some simple Swift code.  Could I whiten the UUID to a value I predefined?
 ```
 @IBAction func random_string_btn(_ sender: Any) {
@@ -225,14 +479,14 @@ The 4 I cared about were as follows:
      log("[+][__NSConcreteUUID UUIDString] -->\n\"" + message.toString() + "\"");
   }
 ```
-### Challenge 3 - FAILED
+### FAILED
 Something was odd about this API.  It generated multiple UUID's every time you called the API.  But with Frida or lldb I could never find the actual return value going back to the swift code which was simply:
 ```
 let randomString = UUID()
 print(randomString.uuidString)
 ```
 
-## Challenge 4: read encryption key and algorithm
+## Challenge: Find Encryption key
 I added a popular `RNCryptor` wrapper around Apple's CommonCrypto library.  I statically embedded this into the Debugger Challenge instead of adding as a CocoaPod.
 
 The CommonCrypto API `CCCryptorCreate init` was the target.  It was invoked behind this Swift code that called into the `RNCryptor.encrypt` API:
@@ -344,7 +598,7 @@ Note ->  RSI can be access via $arg2 in lldb
 (lldb) mem read 0x00006040000106a0 -c10
 ```
 Sometimes, the decrypted text was not together.  I had an assumption this related to the C `Malloc` API - that was used the hood by CommonCrypto.  `Malloc` was not always given sequential blocks of memory from the O/S.
-### Challenge 4 - failed to get raw key
+#### Failed to get raw key
 ```
 (lldb) rb CCCryptorCreateWithMode
 Breakpoint 1: where = libcommonCrypto.dylib`CCCryptorCreateWithMode, address = 0x00000001826c8474
@@ -362,7 +616,7 @@ To get the raw key...
 << never get an understandble key, in here. >>
 ```
 
-### Challenge 4 - COMPLETE
+### COMPLETE
 Using the CCCryptorCreate API spec, we can see which arguments to read.
 ```
 CCCryptorCreate(CCOperation op, CCAlgorithm alg, CCOptions options,
@@ -391,228 +645,10 @@ If you read the Initialization vector, lldb cannot display a lot of the characte
 (lldb) mem read -s1 -fx $arg6
 0x6080002668c0: 0x46 0xbc 0x72 0xc9 0x04 0xfb 0xb5 0xd6
 ```
-
 ### Useful references
 ```
 https://richardwarrender.com/2016/04/encrypt-data-using-aes-and-256-bit-keys/
 https://stackoverflow.com/questions/25754147/issue-using-cccrypt-commoncrypt-in-swift
 ```
-## Challenge 5: exception ports
-Another anti-debug technique on macOS was to check if a debugger was attached by looking if any of the Ports used by a Debugger returned a valid response.  This relied on the C `task_get_exception_ports` API.  You passed in the Exception Port you wanted - in argument 2 (the RSI register).  
-
-### Challenge 5 - COMPLETE
-Thanks to: https://alexomara.com/blog/defeating-anti-debug-techniques-macos-mach-exception-ports/.  Set the Exception Ports to check to a null value.  
-```
-(lldb) b task_get_exception_ports
-Breakpoint 3: where = libsystem_kernel.dylib`task_get_exception_ports, address = 0x00007fff6a530675
-(lldb) c
-Process 48185 resuming
-(lldb) p $arg2
-(unsigned long) $0 = 66
-(lldb) reg w rsi 0
-(lldb) c
-Process 48185 resuming
-No debugger detected
-```
-### Useful references
-```
-http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_get_exception_ports.html
-https://zgcoder.net/ramblings/osx-debugger-detection.html
-https://github.com/apple/darwin-xnu/blob/master/osfmk/mach/exception_types.h
-```
-## Challenge 6: Method Swizzling on non-jailbroken device
-Why `Swizzle`? If you understand `swizzling` you understand part of `Objective-C's` beauty. Read this from [Apple][20e2b71f]
-:
-
-  [20e2b71f]: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008048-CH1-SW1 "apple_article"
-
-> The Objective-C language defers as many decisions as it can from compile time and link time to runtime. Whenever possible, it does things dynamically.
-
-My goal was to `method swizzle`.  I wanted to swap out a real `random` value with a value that I had chosen (`42`), as the below picture describes:
-
-![swizzle_overview](debugger_challenge/readme_images/SwizzleOverview.png)
-
-**Step 1**, I used a debugger to find information on my target.
-```
-(lldb) dclass -m YDObjCFramework
-Dumping classes
-************************************************************
-YDHelloClass
-
-(lldb) methods YDHelloClass
-<YDHelloClass: 0x10ef63128>:
-in YDHelloClass:
-	Class Methods:
-		+ (void) sayStaticHello; (0x10ef62ec0)
-	Instance Methods:
-		- (long) getRandomNumber; (0x10ef62e90)
-(NSObject ...)
-
-(lldb) exp import YDObjCFramework
-
-(lldb) exp let $a = YDHelloClass()
-
-(lldb) exp $a.getRandomNumber()
-(Int) $R4 = 7981
-(lldb) exp $a.getRandomNumber()
-(Int) $R6 = 1021
-(lldb) exp $a.getRandomNumber()
-(Int) $R8 = 1614
-```
-**Step 2**, I needed to write my swizzle code that would target the following information:
-```
-Class = YDHelloClass
-Instance Method = getRandomNumber
-```
-I went back to `xCode` and selected `New\Project\iOS\Framework\Objective-C`.  Using Objective-C `runtime` APIs, I placed the hook:
-```
-#import <Foundation/Foundation.h>
-#import <objc/message.h>
-
-@interface YDGoodbyeClass: NSObject
-- (NSInteger)fakeRandomNumber;
-@end
-
-@implementation YDGoodbyeClass
-
-- (NSInteger)fakeRandomNumber
-{
-
-    if ([self respondsToSelector:@selector(fakeRandomNumber)]) {
-        NSInteger result = [self fakeRandomNumber];
-        NSLog(@"[+] 🍭 swizzled.Original return value: %ld", result);
-    }
-    else {
-        NSLog(@"[+] 🍭 swizzled.");
-    }
-
-    return 42;
-}
-
-+ (void)load
-{
-    Class targetClass = objc_getClass("YDHelloClass");
-
-    if (targetClass != nil) {
-        NSLog(@"[+] 🎣 Found YDHelloClass\n");
-        NSLog(@"[+] 🎣 Placing hook on getRandomNumber\n");
-        Class orignalClass = objc_getClass("YDHelloClass");
-        Method original, swizzled;
-        original = class_getInstanceMethod(orignalClass, @selector(getRandomNumber));
-        swizzled = class_getInstanceMethod(self, @selector(fakeRandomNumber));
-        method_exchangeImplementations(original, swizzled);
-    }
-}
-
-@end
-```
-### Challenge 6 - COMPLETE ON SIMULATOR
-**Step 3**, before I did this on a physical iOS device, I wanted to complete it with a simulator.  I used my trusty debugger connected to the app running on an XCode simulator:
-```
-lldb) process load /Users/.../swizzle_framework.framework/swizzle_framework
-[+] 🎣 Found YDHelloClass
-
-Loading "/Users/.../swizzle_framework.framework/swizzle_framework"...ok
-Image 0 loaded.
-```
-That was it.  
-![pre_swizzle](debugger_challenge/readme_images/pre_swizzle_resized.png)
-
-![success_swizzle](debugger_challenge/readme_images/swizzle_success_resized.png)
-
-### Challenge 6 - COMPLETE ON IOS DEVICE
-The way to solve this challenge on a real iOS device depended on whether you had a _jailed_ or _jailbroken_ device.  I had a clean, _jailed iOS12_.  I chose to to **repackage** the _debuggerChallenge.ipa_ file to add the _Swizzle_ code.  For more info on **repackaging apps**  read [here][5e75f6f0]:
-
-  [5e75f6f0]: https://github.com/OWASP/owasp-mstg/blob/master/Document/0x06c-Reverse-Engineering-and-Tampering.md "owasp"
-
-#### My approach
-- [x] Build and run Debugger Challenge with xCode.
-- [x] Copy the DebuggerChallenge.app file from Finder.
-- [x] Copy Bob's framework to the _DebuggerChallenge.app/Framework_ folder.
-- [x] Insert a _load command_ with _Optool_ to the app's binary.
-- [x] Put the DebuggerChallenge.app directory inside a new, empty folder named `Payload`.
-- [x] Compress the `Payload` folder to `unsigned.ipa`.
-- [x] Use `Applesign` to re-sign the IPA.
-- [x] Use `iOS-deploy` to get the freshly signed IPA onto the _Jailed_ device.
-
-It all sounded simple.  But I hit roadblocks.  Here were a few:
-#### Hiccup 1: OpTool
-```
-// get a local copy of OpTool
-git clone https://github.com/alexzielenski/optool.git
-Make initialize optool’s submodules:
-cd optool/
-git submodule update --init --recursive   // this was the command I missed!
-```
-#### Hiccup 2: Load Command
-You have to tell the main app binary to load this new framework.
-```
-optool install -c load -p "@executable_path/Frameworks/YDBobSwizzle.framework/YDBobSwizzle" -t Payload/debugger_challenge.app/debugger_challenge
-```
-If it worked you would see..
-```
-Found FAT Header
-Found thin header...
-Found thin header...
-Inserting a LC_LOAD_DYLIB command for architecture: arm
-Successfully inserted a LC_LOAD_DYLIB command for arm
-Inserting a LC_LOAD_DYLIB command for architecture: arm64
-Successfully inserted a LC_LOAD_DYLIB command for arm64
-Writing executable to debugger_challenge.app/debugger_challenge...
-```
-Verify it...
-```
-jtool -arch arm64 -l Payload/debugger_challenge.app/debugger_challenge
-```
-#### Hiccup 3: Code signatures
-If you forgot to code sign anything, you could not deploy it the device.
-```
-applesign -7 -i <DEVELOPER CODE SIGNING ID> -m embedded.mobileprovision unsigned.ipa -o ready.ipa
-ios-deploy -b ready.ipa
-ios-deploy -b debugger_challenge.app
-No code signature found. AMDeviceSecureInstallApplication(0, device, url, options, install_callback, 0)
-```
-#### Hiccup 3: Entitlements
-```
-ios-deploy -b debugger_challenge.app
-The executable was signed with invalid entitlements.
-```
-What had gone wrong, when I code signed the IPA? Check the file the `provisioning file`  you passed to Applesign.
-
-`security cms -D -i embedded.mobileprovision`
-
-Expiry date, device ID were good. Had I chosen the wrong developer Code Signing ID?
-```
-<key>Entitlements</key>
-<key>ExpirationDate</key>
-	<date>2019-05-21T11:01:06Z</date>
-<key>ProvisionedDevices</key>
-	<string>0ec8227a5f623d0f4f6d257438730d79858a977f</string>
-<key>TeamName</key>
-	<string>Rusty Magnet</string>
-<key>TeamIdentifier</key>
-		<string>2N3CU4HVH8</string>
-```
-Let's try again with a new code signing ID!
-```
-security find-identity -v -p codesigning
-applesign -7 -i <NEW DEVELOPER CODE SIGNING ID> -m embedded.mobileprovision debugger_chall_unsigned.ipa -o ready.ipa
-```
-That worked.
-#### Hiccup 4: White screen of death
-```
-Exception Type:  EXC_CRASH (SIGABRT)
-Exception Codes: 0x0000000000000000, 0x0000000000000000
-Exception Note:  EXC_CORPSE_NOTIFY
-Termination Description: DYLD, Library not loaded: @executable_path/YDBobSwizzle.dylib | Referenced from: /var/containers/Bundle/Application/3F9EDE3F-7BCF-4F25-B438-9145FD3A21B7/debugger_challenge.app/debugger_challenge | Reason: image not found
-Triggered by Thread:  0
-```
-I had forgotten to copy the actual framework!  So I had the _Load Command_ but no code to load!
-
-FINALLY, it worked!..
-
-
-![swizzled_on_jailed](debugger_challenge/debugger_challenge/readme_images/swizzled_jailed_device.pngM)
-
-## Challenge 7: Secure Enclave key generation
+## Challenge: Secure Enclave key generation
 I generated a Elliptic Curve key pair, inside the Secure Enclave.  The Key was set to allow both `Encrypt` and `Sign` functionality.
