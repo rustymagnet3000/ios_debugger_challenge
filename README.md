@@ -12,7 +12,7 @@
 
 - **Challenge 5: Bypass anti-debug (exception ports)**
 
-- **Challenge 6: Method Swizzling**
+- **Challenge 6: Method Swizzling on non-jailbroken device **
 
 - **Challenge 7: Secure Enclave key generation**
 
@@ -420,7 +420,7 @@ http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_get_exception_ports.htm
 https://zgcoder.net/ramblings/osx-debugger-detection.html
 https://github.com/apple/darwin-xnu/blob/master/osfmk/mach/exception_types.h
 ```
-## Challenge 6: Method Swizzling
+## Challenge 6: Method Swizzling on non-jailbroken device
 Why `Swizzle`? If you understand `swizzling` you understand part of `Objective-C's` beauty. Read this from [Apple][20e2b71f]
 :
 
@@ -432,7 +432,6 @@ My goal was to `method swizzle`.  I wanted to swap out a real `random` value wit
 
 ![swizzle_overview](debugger_challenge/readme_images/SwizzleOverview.png)
 
-### Challenge 6 - COMPLETE
 **Step 1**, I used a debugger to find information on my target.
 ```
 (lldb) dclass -m YDObjCFramework
@@ -507,7 +506,8 @@ I went back to `xCode` and selected `New\Project\iOS\Framework\Objective-C`.  Us
 
 @end
 ```
-**Step 3**, as I didn't have my `jailbroken` iOS device handy, I could not use the `dynamic library loader` to invoke this code.  Instead, I used my trusty debugger:
+### Challenge 6 - COMPLETE ON SIMULATOR
+**Step 3**, before I did this on a physical iOS device, I wanted to complete it with a simulator.  I used my trusty debugger connected to the app running on an XCode simulator:
 ```
 lldb) process load /Users/.../swizzle_framework.framework/swizzle_framework
 [+] 🎣 Found YDHelloClass
@@ -517,7 +517,102 @@ Image 0 loaded.
 ```
 That was it.  
 ![pre_swizzle](debugger_challenge/readme_images/pre_swizzle_resized.png)
+
 ![success_swizzle](debugger_challenge/readme_images/swizzle_success_resized.png)
+
+### Challenge 6 - COMPLETE ON IOS DEVICE
+The way to solve this challenge on a real iOS device depended on whether you had a _jailed_ or _jailbroken_ device.  I had a clean, _jailed iOS12_.  I chose to to **repackage** the _debuggerChallenge.ipa_ file to add the _Swizzle_ code.  For more info on **repackaging apps**  read [here][5e75f6f0]:
+
+  [5e75f6f0]: https://github.com/OWASP/owasp-mstg/blob/master/Document/0x06c-Reverse-Engineering-and-Tampering.md "owasp"
+
+#### My approach
+- [x] Build and run Debugger Challenge with xCode.
+- [x] Copy the DebuggerChallenge.app file from Finder.
+- [x] Copy Bob's framework to the _DebuggerChallenge.app/Framework_ folder.
+- [x] Insert a _load command_ with _Optool_ to the app's binary.
+- [x] Put the DebuggerChallenge.app directory inside a new, empty folder named `Payload`.
+- [x] Compress the `Payload` folder to `unsigned.ipa`.
+- [x] Use `Applesign` to re-sign the IPA.
+- [x] Use `iOS-deploy` to get the freshly signed IPA onto the _Jailed_ device.
+
+It all sounded simple.  But I hit roadblocks.  Here were a few:
+#### Hiccup 1: OpTool
+```
+// get a local copy of OpTool
+git clone https://github.com/alexzielenski/optool.git
+Make initialize optool’s submodules:
+cd optool/
+git submodule update --init --recursive   // this was the command I missed!
+```
+#### Hiccup 2: Load Command
+You have to tell the main app binary to load this new framework.
+```
+optool install -c load -p "@executable_path/Frameworks/YDBobSwizzle.framework/YDBobSwizzle" -t Payload/debugger_challenge.app/debugger_challenge
+```
+If it worked you would see..
+```
+Found FAT Header
+Found thin header...
+Found thin header...
+Inserting a LC_LOAD_DYLIB command for architecture: arm
+Successfully inserted a LC_LOAD_DYLIB command for arm
+Inserting a LC_LOAD_DYLIB command for architecture: arm64
+Successfully inserted a LC_LOAD_DYLIB command for arm64
+Writing executable to debugger_challenge.app/debugger_challenge...
+```
+Verify it...
+```
+jtool -arch arm64 -l Payload/debugger_challenge.app/debugger_challenge
+```
+#### Hiccup 3: Code signatures
+If you forgot to code sign anything, you could not deploy it the device.
+```
+applesign -7 -i <DEVELOPER CODE SIGNING ID> -m embedded.mobileprovision unsigned.ipa -o ready.ipa
+ios-deploy -b ready.ipa
+ios-deploy -b debugger_challenge.app
+No code signature found. AMDeviceSecureInstallApplication(0, device, url, options, install_callback, 0)
+```
+#### Hiccup 3: Entitlements
+```
+ios-deploy -b debugger_challenge.app
+The executable was signed with invalid entitlements.
+```
+What had gone wrong, when I code signed the IPA? Check the file the `provisioning file`  you passed to Applesign.
+
+`security cms -D -i embedded.mobileprovision`
+
+Expiry date, device ID were good. Had I chosen the wrong developer Code Signing ID?
+```
+<key>Entitlements</key>
+<key>ExpirationDate</key>
+	<date>2019-05-21T11:01:06Z</date>
+<key>ProvisionedDevices</key>
+	<string>0ec8227a5f623d0f4f6d257438730d79858a977f</string>
+<key>TeamName</key>
+	<string>Rusty Magnet</string>
+<key>TeamIdentifier</key>
+		<string>2N3CU4HVH8</string>
+```
+Let's try again with a new code signing ID!
+```
+security find-identity -v -p codesigning
+applesign -7 -i <NEW DEVELOPER CODE SIGNING ID> -m embedded.mobileprovision debugger_chall_unsigned.ipa -o ready.ipa
+```
+That worked.
+#### Hiccup 4: White screen of death
+```
+Exception Type:  EXC_CRASH (SIGABRT)
+Exception Codes: 0x0000000000000000, 0x0000000000000000
+Exception Note:  EXC_CORPSE_NOTIFY
+Termination Description: DYLD, Library not loaded: @executable_path/YDBobSwizzle.dylib | Referenced from: /var/containers/Bundle/Application/3F9EDE3F-7BCF-4F25-B438-9145FD3A21B7/debugger_challenge.app/debugger_challenge | Reason: image not found
+Triggered by Thread:  0
+```
+I had forgotten to copy the actual framework!  So I had the _Load Command_ but no code to load!
+
+FINALLY, it worked!..
+
+
+![swizzled_on_jailed](debugger_challenge/debugger_challenge/readme_images/swizzled_jailed_device.pngM)
 
 ## Challenge 7: Secure Enclave key generation
 I generated a Elliptic Curve key pair, inside the Secure Enclave.  The Key was set to allow both `Encrypt` and `Sign` functionality.
