@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		0F1565C62191CABB009D8033 /* debugger_exception_ports.c in Sources */ = {isa = PBXBuildFile; fileRef = 0F1565C52191CABB009D8033 /* debugger_exception_ports.c */; };
-		0F3A2FEB228AD011005EBBFF /* YDAliceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3A2FE9228ACFF4005EBBFF /* YDAliceSDK.framework */; };
-		0F3A2FEC228AD011005EBBFF /* YDAliceSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3A2FE9228ACFF4005EBBFF /* YDAliceSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0F59981622046D62001D0DAF /* YD_Enclave_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */; };
 		0F68B5AA21B8519C00C0D35F /* YD_Enclave_Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */; };
+		0F6C850D228C4CDD00EB06B7 /* YDAliceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F6C850B228C4CB000EB06B7 /* YDAliceSDK.framework */; };
+		0F6C850E228C4CDD00EB06B7 /* YDAliceSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0F6C850B228C4CB000EB06B7 /* YDAliceSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		30D4BA0A2115E00700C31AE5 /* RNCryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA092115E00600C31AE5 /* RNCryptor.swift */; };
 		30D4BA0F2115E1C100C31AE5 /* YD_Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */; };
 		30D4E6E72080725700ABE7AA /* YD_App_Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4E6E62080725700ABE7AA /* YD_App_Delegate.swift */; };
@@ -32,7 +32,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0F3A2FEC228AD011005EBBFF /* YDAliceSDK.framework in Embed Frameworks */,
+				0F6C850E228C4CDD00EB06B7 /* YDAliceSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -42,9 +42,9 @@
 /* Begin PBXFileReference section */
 		0F1565C42191CABB009D8033 /* debugger_exception_ports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = debugger_exception_ports.h; sourceTree = "<group>"; };
 		0F1565C52191CABB009D8033 /* debugger_exception_ports.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = debugger_exception_ports.c; sourceTree = "<group>"; };
-		0F3A2FE9228ACFF4005EBBFF /* YDAliceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YDAliceSDK.framework; sourceTree = "<group>"; };
 		0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_VC.swift; sourceTree = "<group>"; };
 		0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_Manager.swift; sourceTree = "<group>"; };
+		0F6C850B228C4CB000EB06B7 /* YDAliceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YDAliceSDK.framework; path = debugger_challenge/YDAliceSDK.framework; sourceTree = "<group>"; };
 		30D4BA092115E00600C31AE5 /* RNCryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNCryptor.swift; sourceTree = "<group>"; };
 		30D4BA0C2115E03500C31AE5 /* RNCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCryptor.h; sourceTree = "<group>"; };
 		30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Crypto.swift; sourceTree = "<group>"; };
@@ -69,7 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F3A2FEB228AD011005EBBFF /* YDAliceSDK.framework in Frameworks */,
+				0F6C850D228C4CDD00EB06B7 /* YDAliceSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,7 +102,7 @@
 		30D4E6DA2080725700ABE7AA = {
 			isa = PBXGroup;
 			children = (
-				0F3A2FE9228ACFF4005EBBFF /* YDAliceSDK.framework */,
+				0F6C850B228C4CB000EB06B7 /* YDAliceSDK.framework */,
 				30D4BA082115E00600C31AE5 /* RNCryptor */,
 				30D4E6E52080725700ABE7AA /* debugger_challenge */,
 				30D4E6E42080725700ABE7AA /* Products */,
@@ -283,6 +283,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -297,7 +298,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -343,6 +344,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -351,7 +353,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -369,7 +371,8 @@
 				DEVELOPMENT_TEAM = 2N3CU4HVH8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/**",
+					"$(PROJECT_DIR)/debugger_challenge",
 				);
 				INFOPLIST_FILE = debugger_challenge/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -396,7 +399,8 @@
 				DEVELOPMENT_TEAM = 2N3CU4HVH8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/**",
+					"$(PROJECT_DIR)/debugger_challenge",
 				);
 				INFOPLIST_FILE = debugger_challenge/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;

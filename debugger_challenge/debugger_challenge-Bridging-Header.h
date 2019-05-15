@@ -2,3 +2,4 @@
 #include "debugger_ptrace.h"
 #include "debugger_exception_ports.h"
 #import "RNCryptor.h"
+#import "YDAliceSDK.framework/Headers/YDHelloClass.h"
