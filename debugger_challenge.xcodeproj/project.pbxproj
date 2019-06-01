@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F01CA532293C3580029B52E /* thread_setup.c in Sources */ = {isa = PBXBuildFile; fileRef = 0F01CA522293C3580029B52E /* thread_setup.c */; };
 		0F1565C62191CABB009D8033 /* debugger_exception_ports.c in Sources */ = {isa = PBXBuildFile; fileRef = 0F1565C52191CABB009D8033 /* debugger_exception_ports.c */; };
+		0F25FC19228C6BE00041F80E /* YD_Thread_Chomper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F25FC18228C6BE00041F80E /* YD_Thread_Chomper.swift */; };
 		0F59981622046D62001D0DAF /* YD_Enclave_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */; };
 		0F68B5AA21B8519C00C0D35F /* YD_Enclave_Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */; };
-		0F6C850D228C4CDD00EB06B7 /* YDAliceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F6C850B228C4CB000EB06B7 /* YDAliceSDK.framework */; };
-		0F6C850E228C4CDD00EB06B7 /* YDAliceSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0F6C850B228C4CB000EB06B7 /* YDAliceSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0FF69547228EED8500D767C4 /* YDAliceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */; };
+		0FF69548228EED8500D767C4 /* YDAliceSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		30D4BA0A2115E00700C31AE5 /* RNCryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA092115E00600C31AE5 /* RNCryptor.swift */; };
 		30D4BA0F2115E1C100C31AE5 /* YD_Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */; };
 		30D4E6E72080725700ABE7AA /* YD_App_Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4E6E62080725700ABE7AA /* YD_App_Delegate.swift */; };
@@ -32,7 +34,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0F6C850E228C4CDD00EB06B7 /* YDAliceSDK.framework in Embed Frameworks */,
+				0FF69548228EED8500D767C4 /* YDAliceSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -40,11 +42,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0F01CA512293C3580029B52E /* thread_setup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = thread_setup.h; sourceTree = "<group>"; };
+		0F01CA522293C3580029B52E /* thread_setup.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = thread_setup.c; sourceTree = "<group>"; };
 		0F1565C42191CABB009D8033 /* debugger_exception_ports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = debugger_exception_ports.h; sourceTree = "<group>"; };
 		0F1565C52191CABB009D8033 /* debugger_exception_ports.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = debugger_exception_ports.c; sourceTree = "<group>"; };
+		0F25FC18228C6BE00041F80E /* YD_Thread_Chomper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = YD_Thread_Chomper.swift; path = debugger_challenge/swift_source/YD_Thread_Chomper.swift; sourceTree = SOURCE_ROOT; };
 		0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_VC.swift; sourceTree = "<group>"; };
 		0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_Manager.swift; sourceTree = "<group>"; };
-		0F6C850B228C4CB000EB06B7 /* YDAliceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YDAliceSDK.framework; path = debugger_challenge/YDAliceSDK.framework; sourceTree = "<group>"; };
+		0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YDAliceSDK.framework; sourceTree = "<group>"; };
 		30D4BA092115E00600C31AE5 /* RNCryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNCryptor.swift; sourceTree = "<group>"; };
 		30D4BA0C2115E03500C31AE5 /* RNCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCryptor.h; sourceTree = "<group>"; };
 		30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Crypto.swift; sourceTree = "<group>"; };
@@ -69,24 +74,41 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F6C850D228C4CDD00EB06B7 /* YDAliceSDK.framework in Frameworks */,
+				0FF69547228EED8500D767C4 /* YDAliceSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0F68B5A821B84F2000C0D35F /* c_api_calls */ = {
+		0F25FC17228C6B850041F80E /* swift_source */ = {
+			isa = PBXGroup;
+			children = (
+				30D4E6E82080725700ABE7AA /* YD_Home_VC.swift */,
+				0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */,
+				0F25FC18228C6BE00041F80E /* YD_Thread_Chomper.swift */,
+				0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */,
+				30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */,
+				30D4E6E62080725700ABE7AA /* YD_App_Delegate.swift */,
+				30D4E6FC208072CD00ABE7AA /* YD_Alert_Helper.swift */,
+				30D4E6FD208072CD00ABE7AA /* YD_Time_Helper.swift */,
+			);
+			path = swift_source;
+			sourceTree = "<group>";
+		};
+		0F68B5A821B84F2000C0D35F /* c_source */ = {
 			isa = PBXGroup;
 			children = (
 				30D4E6F92080729900ABE7AA /* debugger_sysctl.c */,
 				30D4E6FA2080729900ABE7AA /* debugger_sysctl.h */,
+				0F01CA512293C3580029B52E /* thread_setup.h */,
+				0F01CA522293C3580029B52E /* thread_setup.c */,
 				30E59AE1209C9EAF00CCFAE2 /* debugger_ptrace.c */,
 				30E59AE0209C9EAE00CCFAE2 /* debugger_ptrace.h */,
 				0F1565C42191CABB009D8033 /* debugger_exception_ports.h */,
 				0F1565C52191CABB009D8033 /* debugger_exception_ports.c */,
 			);
-			path = c_api_calls;
+			path = c_source;
 			sourceTree = "<group>";
 		};
 		30D4BA082115E00600C31AE5 /* RNCryptor */ = {
@@ -102,9 +124,8 @@
 		30D4E6DA2080725700ABE7AA = {
 			isa = PBXGroup;
 			children = (
-				0F6C850B228C4CB000EB06B7 /* YDAliceSDK.framework */,
-				30D4BA082115E00600C31AE5 /* RNCryptor */,
 				30D4E6E52080725700ABE7AA /* debugger_challenge */,
+				30D4BA082115E00600C31AE5 /* RNCryptor */,
 				30D4E6E42080725700ABE7AA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -120,14 +141,9 @@
 		30D4E6E52080725700ABE7AA /* debugger_challenge */ = {
 			isa = PBXGroup;
 			children = (
-				30D4E6E82080725700ABE7AA /* YD_Home_VC.swift */,
-				0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */,
-				0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */,
-				30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */,
-				30D4E6E62080725700ABE7AA /* YD_App_Delegate.swift */,
-				30D4E6FC208072CD00ABE7AA /* YD_Alert_Helper.swift */,
-				30D4E6FD208072CD00ABE7AA /* YD_Time_Helper.swift */,
-				0F68B5A821B84F2000C0D35F /* c_api_calls */,
+				0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */,
+				0F25FC17228C6B850041F80E /* swift_source */,
+				0F68B5A821B84F2000C0D35F /* c_source */,
 				30D4E6ED2080725900ABE7AA /* Assets.xcassets */,
 				30D4E6EA2080725700ABE7AA /* Main.storyboard */,
 				30D4E6EF2080725900ABE7AA /* LaunchScreen.storyboard */,
@@ -210,9 +226,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F01CA532293C3580029B52E /* thread_setup.c in Sources */,
 				30D4E6E92080725700ABE7AA /* YD_Home_VC.swift in Sources */,
 				30D4E6FB2080729900ABE7AA /* debugger_sysctl.c in Sources */,
 				30D4E6FF208072CD00ABE7AA /* YD_Time_Helper.swift in Sources */,
+				0F25FC19228C6BE00041F80E /* YD_Thread_Chomper.swift in Sources */,
 				30D4BA0A2115E00700C31AE5 /* RNCryptor.swift in Sources */,
 				0F1565C62191CABB009D8033 /* debugger_exception_ports.c in Sources */,
 				0F68B5AA21B8519C00C0D35F /* YD_Enclave_Manager.swift in Sources */,

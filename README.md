@@ -237,12 +237,17 @@ error: attach failed: lost connection
 ```
 If you attached a debugger before ptrace *deny_attach*  was set, you would see a process crash.
 
-The header files for ptrace were not easily available on iOS, unlike macOS.  But you could still start a *deny_attach* on iOS.  
-
-
+##### Use dtrace to observe the ptrace call
+The header files for `ptrace` were not easily available on iOS, unlike macOS.  That said, you could still start issue a *deny_attach* on iOS.  
+To see this call call on an iOS Simulator, run `DebuggerChallenge` and hit the `ptrace` button, after writing this command:
+```
+sudo dtrace -qn 'syscall::ptrace:entry { printf("%s(%d, %d, %d, %d) from %s\n", probefunc, arg0, arg1, arg2, arg3, execname); }'
+// ptrace(31, 0, 0, 0) from debugger_challen
+```
+This won't crash your app if you are running the app on the simulator WITHOUT XCode.
 
 ##### Bypass steps
-Get your debugger ready:
+Type the following into your debugger:
 ```
 process attach --pid 96441                // attach to process
 rb ptrace -s libsystem_kernel.dylib       // set a regex breakpoint for ptrace

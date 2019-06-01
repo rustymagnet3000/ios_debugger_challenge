@@ -2,7 +2,7 @@
 
 bool debugger_sysctl(void)
 {
-        printf("Apple's recommended sysctl debugger check. Hook about to kick-in\n");
+        printf("Apple's recommended sysctl debugger check\n");
         int                 junk;
         int                 mib[4];
         struct kinfo_proc   info;

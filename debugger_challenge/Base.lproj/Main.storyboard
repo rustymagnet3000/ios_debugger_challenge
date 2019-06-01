@@ -10,6 +10,36 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Thread Chomp-->
+        <scene sceneID="C9i-fP-FKi">
+            <objects>
+                <viewController id="XvS-BG-Fit" customClass="YD_Thread_Chomper_VC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Uai-6d-FAl">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YkO-xb-rdG">
+                                <rect key="frame" x="142.5" y="326" width="90" height="30"/>
+                                <state key="normal" title="Start threads"/>
+                                <connections>
+                                    <action selector="start_thread_btn:" destination="XvS-BG-Fit" eventType="touchUpInside" id="Yd9-MW-GdE"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="YkO-xb-rdG" firstAttribute="centerY" secondItem="Nu8-P0-5wu" secondAttribute="centerY" id="49w-SF-28Z"/>
+                            <constraint firstItem="YkO-xb-rdG" firstAttribute="centerX" secondItem="Nu8-P0-5wu" secondAttribute="centerX" id="Zno-Tf-zBf"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Nu8-P0-5wu"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Thread Chomp" image="link" selectedImage="link" id="XtA-k7-ImD"/>
+                    <navigationItem key="navigationItem" id="rPT-wI-uWz"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GY6-Gv-O6I" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1921" y="-625"/>
+        </scene>
         <!--Home-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -282,6 +312,7 @@
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="5pj-TP-ZUR"/>
                         <segue destination="pcv-UJ-06d" kind="relationship" relationship="viewControllers" id="Def-zI-S5L"/>
+                        <segue destination="XvS-BG-Fit" kind="relationship" relationship="viewControllers" id="saF-xy-9v2"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4mY-QG-Rxk" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -291,6 +322,7 @@
     </scenes>
     <resources>
         <image name="key" width="30" height="30"/>
+        <image name="link" width="30" height="30"/>
         <image name="rocket" width="30" height="30"/>
     </resources>
 </document>

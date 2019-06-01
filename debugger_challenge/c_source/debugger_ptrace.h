@@ -4,5 +4,6 @@
 #import <stdio.h>
 #include <unistd.h>
 #include <strings.h>
-#include <mach-o/dyld.h> // required to read dynamically loaded libraries
+#include <mach-o/dyld.h> // read dynamically loaded libraries
+
 bool debugger_ptrace(void);
