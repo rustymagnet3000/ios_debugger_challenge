@@ -2,21 +2,20 @@ import UIKit
 
 class YD_Thread_Chomper_CVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
-    // MARK: - Properties
     private let reuseIdentifier = "fishCell"
-    
+    private var caughtFish: NSMutableArray = []
+    var bgImage: UIImageView = UIImageView()
     private let sectionInsets = UIEdgeInsets(top: 50.0,
                                              left: 20.0,
                                              bottom: 50.0,
                                              right: 20.0)
     
-    // MARK: - create an Observer, and wait for property to complete
-    @IBAction func start_thread_btn(_ sender: Any) {
-        start_and_stop_threads();
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        super.tabBarController?.title = "boo"
+        
+        caughtFish = yd_start_chomper()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,7 +34,7 @@ class YD_Thread_Chomper_CVC: UIViewController, UICollectionViewDataSource, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 100
+        return caughtFish.count
     }
 
     
@@ -46,7 +45,27 @@ class YD_Thread_Chomper_CVC: UIViewController, UICollectionViewDataSource, UICol
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let myCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-        myCell.backgroundColor = UIColor.blue
+        
+
+        guard let fish: String = caughtFish[indexPath.item] as? String else {
+            print("Bug 🦂 ")
+            exit(88)
+        }
+        
+        switch fish {
+        case "Lemon Shark":
+            if let image: UIImage = UIImage(named: "airplane_mode_on"){
+                bgImage = UIImageView(image: image)
+            }
+        default:
+            if let image: UIImage = UIImage(named: "car"){
+                bgImage = UIImageView(image: image)
+            }
+        }
+        
+        myCell.backgroundColor = UIColor.yellow
+        bgImage.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        myCell.contentView.addSubview(bgImage)
         return myCell
     }
     
