@@ -2,6 +2,9 @@ import UIKit
 
 class YD_Home_VC: UIViewController {
 
+    @IBOutlet var  buttons: [UIButton] = []
+    
+    
     @IBAction func exception_port_button(_ sender: Any) {
         print("about to check Exception Ports")
         let result = debugger_exception_ports()
@@ -50,6 +53,9 @@ class YD_Home_VC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        buttons.forEach {
+            $0.YDButtonStyle(ydColor: UIColor.blue)
+        }
     }
 
     func present_alert_controller(user_message: String) {
