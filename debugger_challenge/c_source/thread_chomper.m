@@ -70,7 +70,8 @@ NSMutableArray* _Nonnull yd_start_chomper(void) {
         dispatch_semaphore_signal(semaphore);
     });
     
-    // Wait for the above block execution.
+    // Wait for the above block execution. The wait instructions need to be colocated, to ensure requests overlap.
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 
     return fishyArray;

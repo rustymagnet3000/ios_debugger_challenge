@@ -3,18 +3,25 @@
   This iOS app was written to practice the following techniques:
 
 <!-- TOC -->
+
+- [iOS Debugger Challenge](#ios-debugger-challenge)
   - [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)
+    - [Step 1: Use a debugger to find information](#step-1-use-a-debugger-to-find-information)
+    - [Step 2: Write Swizzle code](#step-2-write-swizzle-code)
+    - [Step 3: Place the Swizzle](#step-3-place-the-swizzle)
     - [COMPLETE ON IOS SIMULATOR](#complete-on-ios-simulator)
-    - [COMPLETE ON IOS DEVICE](#complete-on-ios-device)
+    - [Repackage app](#repackage-app)
       - [My approach](#my-approach)
-      - [Hiccup 1: OpTool](#hiccup-1-optool)
-      - [Hiccup 2: Load Command](#hiccup-2-load-command)
-      - [Hiccup 3: Code signatures](#hiccup-3-code-signatures)
-      - [Hiccup 3: Entitlements](#hiccup-3-entitlements)
+        - [Hiccup: OpTool](#hiccup-optool)
+        - [Hiccup: Load Command](#hiccup-load-command)
+        - [Hiccup: Code signatures](#hiccup-code-signatures)
+        - [Hiccup: Entitlements](#hiccup-entitlements)
       - [Hiccup 4: White screen of death](#hiccup-4-white-screen-of-death)
-  - [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)
-    - [Bypass steps](#bypass-steps)
     - [COMPLETE](#complete)
+  - [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)
+    - [Use dtrace to observe the ptrace call](#use-dtrace-to-observe-the-ptrace-call)
+    - [Bypass steps](#bypass-steps)
+    - [COMPLETE](#complete-1)
   - [Challenge: Bypass anti-debug (sysctl)](#challenge-bypass-anti-debug-sysctl)
     - [Create an empty Swift framework](#create-an-empty-swift-framework)
     - [Write your fake sysctl API](#write-your-fake-sysctl-api)
@@ -28,10 +35,10 @@
       - [Set a breakpoint](#set-a-breakpoint)
       - [Whoop whoop](#whoop-whoop)
       - [Change load address of API call](#change-load-address-of-api-call)
-    - [COMPLETE](#complete-1)
+    - [COMPLETE](#complete-2)
       - [Bonus - use lldb to print when inside your fake sysctl API](#bonus---use-lldb-to-print-when-inside-your-fake-sysctl-api)
   - [Challenge: Bypass anti-debug (Exception Ports)](#challenge-bypass-anti-debug-exception-ports)
-    - [COMPLETE](#complete-2)
+    - [COMPLETE](#complete-3)
     - [Useful references](#useful-references)
   - [Challenge: Hook Apple's Random String function](#challenge-hook-apples-random-string-function)
     - [Use lldb to find the API](#use-lldb-to-find-the-api)
@@ -44,11 +51,18 @@
     - [Where is the plaintext about to be encrypted?](#where-is-the-plaintext-about-to-be-encrypted)
     - [What is the decrypted plaintext?](#what-is-the-decrypted-plaintext)
     - [Failed to get raw key](#failed-to-get-raw-key)
-    - [COMPLETE](#complete-3)
+    - [COMPLETE](#complete-4)
     - [Useful references](#useful-references-1)
+  - [Challenge: Dancing with Threads](#challenge-dancing-with-threads)
+    - [Place a breakpoint](#place-a-breakpoint)
+    - [Attempt 1 - NSThread sleepForTimeInterval](#attempt-1---nsthread-sleepfortimeinterval)
+    - [Bypass steps](#bypass-steps-1)
+    - [COMPLETE](#complete-5)
+    - [Attempt 2 - A trick on Release apps](#attempt-2---a-trick-on-release-apps)
   - [Challenge: Secure Enclave key generation](#challenge-secure-enclave-key-generation)
 
 <!-- /TOC -->
+
 ## Challenge: Method Swizzling on non-jailbroken device
 Why `Swizzle`? If you understand `swizzling` you understand part of `Objective-C's` beauty. Read this from [Apple][20e2b71f]
 :
@@ -639,5 +653,42 @@ If you read the Initialization vector, lldb cannot display a lot of the characte
 https://richardwarrender.com/2016/04/encrypt-data-using-aes-and-256-bit-keys/
 https://stackoverflow.com/questions/25754147/issue-using-cccrypt-commoncrypt-in-swift
 ```
+## Challenge: Dancing with Threads
+The idea of this challenge was to focus on Threads rather the U.I. of the app.  There were two background threads that were each adding to an array.
+![Dancing with Threads](/debugger_challenge/debugger_challenge/readme_images/thread_chomper.png)
+
+
+##### Place a breakpoint
+TBC
+##### Attempt 1 - NSThread sleepForTimeInterval
+Set a good breakpoint and make sure you are on the correct thread:
+```
+ (lldb) exp NSTimeInterval $blockThreadTimer = 0.5;
+ (lldb) exp [NSThread sleepForTimeInterval:$blockThreadTimer];
+  ```
+![thread_chomper_attempt_1](/debugger_challenge/debugger_challenge/readme_images/thread_chomper_attempt_1.png)
+
+Something was wrong, with my first attempt.  What happened to the Airplanes?  Well, it was a bug in the code.  The line of code that block the main thread from returning from the `Thread Chomper` code only waited for a single background thread.   After adding:
+```
+dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+```
+##### Bypass steps
+Breakpoints are better when set to a specific Thread.  Type the following into your debugger:
+```
+breakpoint set after one of the dispatch_async calls
+breakpoint set  --file thread_chomper.m --line 34 thread 5
+(lldb) expression
+NSTimeInterval $blockThreadTimer = 2;
+[NSThread sleepForTimeInterval:$blockThreadTimer];
+// ENTER to finish expression
+```
+##### COMPLETE
+![thread_chomp_complete](/debugger_challenge/debugger_challenge/readme_images/thread_chomper_complete.png)
+
+##### Attempt 2 - A trick on Release apps
+I was not satisfied with attempt 1.  It was only available on debug builds, where you could set simple `breakpoints`.  Attempt 2 looked to abuse Apple's `Grand Central Dispatch` _Quality_of_service_ level that was set when coding " I want a background thread, please ".
+```
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+```
 ## Challenge: Secure Enclave key generation
-I generated a Elliptic Curve key pair, inside the Secure Enclave.  The Key was set to allow both `Encrypt` and `Sign` functionality.
+I generated an Elliptic Curve key pair, inside the Secure Enclave.  The Key was set to allow both `Encrypt` and `Sign` functionality.
