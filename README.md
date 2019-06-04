@@ -655,18 +655,17 @@ https://stackoverflow.com/questions/25754147/issue-using-cccrypt-commoncrypt-in-
 ```
 ## Challenge: Dancing with Threads
 The idea of this challenge was to focus on Threads rather the U.I. of the app.  There were two background threads that were each adding to an array.
-![Dancing with Threads](/debugger_challenge/debugger_challenge/readme_images/thread_chomper.png)
+
+![Dancing with Threads](debugger_challenge/readme_images/thread_chomper.png)
 
 
-##### Place a breakpoint
-TBC
 ##### Attempt 1 - NSThread sleepForTimeInterval
 Set a good breakpoint and make sure you are on the correct thread:
 ```
  (lldb) exp NSTimeInterval $blockThreadTimer = 0.5;
  (lldb) exp [NSThread sleepForTimeInterval:$blockThreadTimer];
   ```
-![thread_chomper_attempt_1](/debugger_challenge/debugger_challenge/readme_images/thread_chomper_attempt_1.png)
+![thread_chomper_attempt_1](debugger_challenge/readme_images/thread_chomper_attempt_1.png)
 
 Something was wrong, with my first attempt.  What happened to the Airplanes?  Well, it was a bug in the code.  The line of code that block the main thread from returning from the `Thread Chomper` code only waited for a single background thread.   After adding:
 ```
@@ -682,11 +681,11 @@ NSTimeInterval $blockThreadTimer = 2;
 [NSThread sleepForTimeInterval:$blockThreadTimer];
 // ENTER to finish expression
 ```
-##### COMPLETE
-![thread_chomp_complete](/debugger_challenge/debugger_challenge/readme_images/thread_chomper_complete.png)
+### COMPLETE
+![thread_chomp_complete](debugger_challenge/readme_images/thread_chomper_complete.png)
 
 ##### Attempt 2 - A trick on Release apps
-I was not satisfied with attempt 1.  It was only available on debug builds, where you could set simple `breakpoints`.  Attempt 2 looked to abuse Apple's `Grand Central Dispatch` _Quality_of_service_ level that was set when coding " I want a background thread, please ".
+I was not satisfied with attempt 1.  It was only available on debug builds, where you could set simple `breakpoints`.  Attempt 2 looked to abuse Apple's `Grand Central Dispatch` _Quality of Service_ level that was set when coding " I want a background thread, please ".
 ```
 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 ```
