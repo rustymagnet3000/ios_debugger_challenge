@@ -8,16 +8,16 @@ extension UIButton {
     }
     
     func YDButtonStyle(ydColor:UIColor) {
-        
         self.layer.cornerRadius = 8
-        self.layer.borderWidth = 2
+        self.layer.borderWidth = 1
         self.setTitleColor(UIColor.white, for: .normal)
         self.setTitleColor(UIColor.black, for: .selected)
         self.backgroundColor = ydColor
         
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.widthAnchor.constraint(greaterThanOrEqualToConstant: 240)
+            self.widthAnchor.constraint(greaterThanOrEqualToConstant: 220),
+            self.heightAnchor.constraint(greaterThanOrEqualToConstant: 60)
             ])
     }
 }

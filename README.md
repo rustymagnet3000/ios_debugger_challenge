@@ -654,20 +654,20 @@ https://richardwarrender.com/2016/04/encrypt-data-using-aes-and-256-bit-keys/
 https://stackoverflow.com/questions/25754147/issue-using-cccrypt-commoncrypt-in-swift
 ```
 ## Challenge: Dancing with Threads
-The idea of this challenge was to focus on Threads rather the U.I. of the app.  There were two background threads that were each adding to an array.
+The idea of this challenge was to manipulate an iOS that used multiple background Threads to achieve a task.  For this, I wanted to re-order the Cars and Airplanes.  
 
 ![Dancing with Threads](debugger_challenge/readme_images/thread_chomper.png)
 
 
 ##### Attempt 1 - NSThread sleepForTimeInterval
-Set a good breakpoint and make sure you are on the correct thread:
+As there were two background threads - each adding to a single array - I had to set a good breakpoint on a specific thread:
 ```
  (lldb) exp NSTimeInterval $blockThreadTimer = 0.5;
  (lldb) exp [NSThread sleepForTimeInterval:$blockThreadTimer];
   ```
 ![thread_chomper_attempt_1](debugger_challenge/readme_images/thread_chomper_attempt_1.png)
 
-Something was wrong, with my first attempt.  What happened to the Airplanes?  Well, it was a bug in the code.  The line of code that block the main thread from returning from the `Thread Chomper` code only waited for a single background thread.   After adding:
+Something was wrong, with my first attempt.  What happened to the Airplanes?  Well, it was a bug in the code.  The line of code that blocked the main thread from returning from the `Thread Chomper` code only waited for a single background thread.   After adding:
 ```
 dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 ```

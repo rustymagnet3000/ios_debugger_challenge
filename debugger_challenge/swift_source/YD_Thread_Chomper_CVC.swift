@@ -12,7 +12,6 @@ class YD_Thread_Chomper_CVC: UIViewController, UICollectionViewDataSource, UICol
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         super.tabBarController?.title = "Dancing with Threads"
         
         caughtFish = yd_start_chomper()
