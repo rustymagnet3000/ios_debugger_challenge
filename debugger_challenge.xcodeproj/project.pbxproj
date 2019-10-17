@@ -16,6 +16,7 @@
 		0F328B5522A532BB00594085 /* thread_chomper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F328B5422A532BB00594085 /* thread_chomper.m */; };
 		0F59981622046D62001D0DAF /* YD_Enclave_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */; };
 		0F68B5AA21B8519C00C0D35F /* YD_Enclave_Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */; };
+		0F82A83D23585ECC00728710 /* YDSwizzleNSURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F82A83C23585ECC00728710 /* YDSwizzleNSURLSession.m */; };
 		0FF69547228EED8500D767C4 /* YDAliceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */; };
 		0FF69548228EED8500D767C4 /* YDAliceSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		30D4BA0A2115E00700C31AE5 /* RNCryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA092115E00600C31AE5 /* RNCryptor.swift */; };
@@ -57,6 +58,7 @@
 		0F328B5622A5338A00594085 /* thread_chomper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = thread_chomper.h; sourceTree = "<group>"; };
 		0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_VC.swift; sourceTree = "<group>"; };
 		0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_Manager.swift; sourceTree = "<group>"; };
+		0F82A83C23585ECC00728710 /* YDSwizzleNSURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YDSwizzleNSURLSession.m; sourceTree = "<group>"; };
 		0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YDAliceSDK.framework; sourceTree = "<group>"; };
 		30D4BA092115E00600C31AE5 /* RNCryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNCryptor.swift; sourceTree = "<group>"; };
 		30D4BA0C2115E03500C31AE5 /* RNCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCryptor.h; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 		0F68B5A821B84F2000C0D35F /* c_source */ = {
 			isa = PBXGroup;
 			children = (
+				0F82A83C23585ECC00728710 /* YDSwizzleNSURLSession.m */,
 				30D4E6F92080729900ABE7AA /* debugger_sysctl.c */,
 				30D4E6FA2080729900ABE7AA /* debugger_sysctl.h */,
 				0F328B5622A5338A00594085 /* thread_chomper.h */,
@@ -238,6 +241,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F82A83D23585ECC00728710 /* YDSwizzleNSURLSession.m in Sources */,
 				30D4E6E92080725700ABE7AA /* YD_Home_VC.swift in Sources */,
 				0F2E46E42356F18100E8C57D /* YD_URL_Session.swift in Sources */,
 				0F328B5522A532BB00594085 /* thread_chomper.m in Sources */,

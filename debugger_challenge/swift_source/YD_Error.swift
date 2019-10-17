@@ -50,7 +50,7 @@ extension YDNetworkError: LocalizedError {
             case .certIssue:
                 return "cert issue"
             case .cancelledURLSession:
-                return "Did you cancelled the URLSession request?"
+                return "Did you cancel the URLSession request?"
             case .badServerResponse:
                 return "bad server response"
             case .certChainIssue:

@@ -10,16 +10,10 @@ class YD_Thread_Chomper_CVC: UIViewController, UICollectionViewDataSource, UICol
                                              bottom: 50.0,
                                              right: 20.0)
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        super.tabBarController?.title = "Dancing with Threads"
-        
-        caughtFish = yd_start_chomper()
-    }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        caughtFish = yd_start_chomper()     // called on each Tab open
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = sectionInsets
         layout.itemSize = CGSize(width: 60, height: 60)

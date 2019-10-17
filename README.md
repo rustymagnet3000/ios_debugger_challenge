@@ -689,5 +689,37 @@ I was not satisfied with attempt 1.  It was only available on debug builds, wher
 ```
 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 ```
+
+## Challenge: Certificate Pinning bypass (NSURLSession)
+With iOS you often see URLSession code to send network requests. Examples of Classes that implement this code look like the following line:
+```
+class YDURLSession: URLSession, URLSessionDelegate {
+```
+To keep things tidy, with Swift, it is common to use a `completionHandler` with URLSession to send network requests.  The handler gives a tidy way to deal with data, errors or server responses.  All while dealing with the `asynchronous` nature of networking.  
+```
+        dataTask = session.dataTask(with: url) { [weak self] data, response, error in
+```
+
+What is `URLSessionDelegate`? It is a prewritten `Protocol`. It was written to make a developers life simpler.
+
+For example, if you want to send traffic via `https` you will almost always see this `URLSessionDelegate` method:
+
+```
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+```
+This is where the Cert Pinning bypass comes in.  If somebody is Pinning against their own pinlist and NOT the iOS Truststore ( the latter is managed by the Settings app on iOS ), this is where you find the code to check the `Certificate Chain`.
+
+If all looks like, there will be a call to:
+```
+completionHandler(.performDefaultHandling, nil)
+```
+If the app code cannot verify the Cert Chain, it will probably call:
+```
+completionHandler(.cancelAuthenticationChallenge, nil)
+```
+The game with this challenge choosing the state for the completion Handler.
+#### Step 1: Use a debugger to find information
+
+
 ## Challenge: Secure Enclave key generation
 I generated an Elliptic Curve key pair, inside the Secure Enclave.  The Key was set to allow both `Encrypt` and `Sign` functionality.

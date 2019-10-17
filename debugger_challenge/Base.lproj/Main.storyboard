@@ -49,7 +49,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="3x8-IV-Yni"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="URL Session" image="arrowshape.turn.up.right" catalog="system" selectedImage="arrowshape.turn.up.right" id="hZ5-vb-ivf"/>
+                    <tabBarItem key="tabBarItem" title="URL Session" image="cloud" selectedImage="cloud" id="hZ5-vb-ivf"/>
                     <navigationItem key="navigationItem" id="uHG-bf-tNz"/>
                     <connections>
                         <outlet property="btn_outlet" destination="9ef-tl-hcX" id="PrC-hp-Z1a"/>
@@ -68,10 +68,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="6hh-mC-k8n">
-                                <rect key="frame" x="74" y="130" width="227" height="402"/>
+                                <rect key="frame" x="74" y="161" width="227" height="340"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="yCz-Th-X4B">
-                                        <rect key="frame" x="0.0" y="0.0" width="227" height="402"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="227" height="340"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7f0-vk-6d2">
                                                 <rect key="frame" x="35.5" y="0.0" width="156" height="30"/>
@@ -101,22 +101,15 @@
                                                     <action selector="random_string_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gYV-hH-REO"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zMB-45-iZM">
-                                                <rect key="frame" x="13" y="248" width="201" height="30"/>
-                                                <state key="normal" title="Generate Secure Enclave Key"/>
-                                                <connections>
-                                                    <action selector="secure_enclave_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xEu-5L-j8F"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SXg-2K-6CZ">
-                                                <rect key="frame" x="59.5" y="310" width="108" height="30"/>
+                                                <rect key="frame" x="59.5" y="248" width="108" height="30"/>
                                                 <state key="normal" title="common crypto"/>
                                                 <connections>
                                                     <action selector="crypto_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XUC-83-UWS"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZJS-b2-VDg">
-                                                <rect key="frame" x="0.0" y="372" width="227" height="30"/>
+                                                <rect key="frame" x="0.0" y="310" width="227" height="30"/>
                                                 <state key="normal" title="Random number from framework"/>
                                                 <connections>
                                                     <action selector="secret_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wqu-e4-SWC"/>
@@ -141,7 +134,6 @@
                         <outletCollection property="buttons" destination="60Y-ut-pa8" collectionClass="NSMutableArray" id="9nE-Wb-Ykc"/>
                         <outletCollection property="buttons" destination="gH0-zF-jqs" collectionClass="NSMutableArray" id="Svo-db-ana"/>
                         <outletCollection property="buttons" destination="Kga-FB-80a" collectionClass="NSMutableArray" id="rlv-Ad-GD1"/>
-                        <outletCollection property="buttons" destination="zMB-45-iZM" collectionClass="NSMutableArray" id="j4I-uc-ePq"/>
                         <outletCollection property="buttons" destination="SXg-2K-6CZ" collectionClass="NSMutableArray" id="EQS-jV-co0"/>
                         <outletCollection property="buttons" destination="ZJS-b2-VDg" collectionClass="NSMutableArray" id="sBm-kq-H3U"/>
                     </connections>
@@ -350,7 +342,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrowshape.turn.up.right" catalog="system" width="64" height="52"/>
+        <image name="cloud" width="30" height="30"/>
         <image name="key" width="30" height="30"/>
         <image name="link" catalog="system" width="64" height="58"/>
         <image name="rocket" width="30" height="30"/>

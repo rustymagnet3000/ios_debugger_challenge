@@ -4,7 +4,7 @@ class YD_Alert_Helper {
     var alert_controller: UIAlertController
     var title_message: String
     var body_message: String
-       
+
     convenience init(body_message: String) {
         let generic_title = "Result"
         self.init(title: generic_title, message: body_message)

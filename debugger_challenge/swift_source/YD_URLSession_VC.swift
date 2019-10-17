@@ -17,7 +17,7 @@ class YD_URLSession_VC: UIViewController {
     func nsUrlSessionTapped() {
         let a = YDURLSession()
         
-        guard let url = URL(string: "https://httpbin.org/get") else {
+        guard let url = URL(string: "https://9006113.local") else {
             return
         }
         

@@ -16,7 +16,7 @@ extension UIButton {
         
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.widthAnchor.constraint(greaterThanOrEqualToConstant: 220),
+            self.widthAnchor.constraint(greaterThanOrEqualToConstant: 230),
             self.heightAnchor.constraint(greaterThanOrEqualToConstant: 60)
             ])
     }

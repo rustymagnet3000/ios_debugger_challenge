@@ -27,18 +27,6 @@ class YD_Home_VC: UIViewController {
     
     private let feedback_string = "Debugger attached ="
     
-    @IBAction func secure_enclave_btn(_ sender: Any) {
-        let a = "About to generate a Crypto Key"
-        let kpGetResult = YDHammertime(publicLabel: "no.agens.demo.publicKey", privateLabel: "no.agens.demo.privateKey", operationPrompt: "Authenticate to continue")
-        do{
-            let accessControl = try kpGetResult.accessControl(with: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly)
-            let keypairResult = try kpGetResult.generateKeyPair(accessControl: accessControl)
-            print(keypairResult.public.underlying)
-            present_alert_controller(user_message: a)
-        } catch {
-            present_alert_controller(user_message: "error in key generation")
-        }
-    }
     
     @IBAction func ptrace_chk_btn(_ sender: Any) {
         let result = debugger_ptrace()

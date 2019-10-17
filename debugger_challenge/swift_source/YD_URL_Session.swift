@@ -47,7 +47,19 @@ class YDURLSession: URLSession, URLSessionDelegate {
         guard let trust: SecTrust = challenge.protectionSpace.serverTrust else {
             return
         }
-        completionHandler(.cancelAuthenticationChallenge, nil)
+        
+        var secResult = SecTrustResultType.invalid
+        SecTrustEvaluate(trust, &secResult)
+        switch secResult {
+            case .proceed:
+                print("🕵🏼‍♂️ SecTrustEvaluate ✅")
+            case .recoverableTrustFailure:
+                print("🕵🏼‍♂️ SecTrustEvaluate ❌ check Root CA and Int CA trusted on IOS device")
+            default:
+                print("🕵🏼‍♂️ SecTrustEvaluate ❌ default error")
+        }
+
+        completionHandler(.performDefaultHandling, nil)
     }
 }
 
