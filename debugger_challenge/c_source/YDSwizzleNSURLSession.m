@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-
+#define targetClassToSwizzle "debugger_challenge.YDURLSession"
 
 @implementation NSURLSession (YDSwizzleNSURLSession)
 
@@ -10,14 +10,13 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        Class class = [self class];
-        
+        Class class = objc_getClass(targetClassToSwizzle);
         if (class == NULL) {
             NSLog(@"🍭\tStopped swizzle or couldn't find %@ instance \n", class);
             return;
         }
         SEL originalSelector = @selector(URLSession:didReceiveChallenge:completionHandler:);
-        SEL swizzledSelector = @selector(YDHappyChallenge);
+        SEL swizzledSelector = @selector(YDHappyChallenge:didReceiveChallenge:completionHandler:);
         
         Class mySuperClass = class_getSuperclass(class);
         NSLog(@"🍭\tStarted swizzle: %@ && superclass: %@", NSStringFromClass(class), NSStringFromClass(mySuperClass));
@@ -36,9 +35,10 @@
     });
 }
 
-- (void)YDHappyChallenge {
+- (void)YDHappyChallenge:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler{
 
-    NSLog(@"🍭\t Swizzled executed. Method ignored 🧪");
+    NSLog(@"🍭\t NSURLSession on: %@", [[challenge protectionSpace] host ]);
+    completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, NULL);
 }
 
 @end

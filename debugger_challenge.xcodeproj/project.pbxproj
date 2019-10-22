@@ -16,7 +16,7 @@
 		0F328B5522A532BB00594085 /* thread_chomper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F328B5422A532BB00594085 /* thread_chomper.m */; };
 		0F59981622046D62001D0DAF /* YD_Enclave_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */; };
 		0F68B5AA21B8519C00C0D35F /* YD_Enclave_Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */; };
-		0F82A83D23585ECC00728710 /* YDSwizzleNSURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F82A83C23585ECC00728710 /* YDSwizzleNSURLSession.m */; };
+		0FDA564F235EB58E00BD0077 /* YDSwizzleNSURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F82A83C23585ECC00728710 /* YDSwizzleNSURLSession.m */; };
 		0FF69547228EED8500D767C4 /* YDAliceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */; };
 		0FF69548228EED8500D767C4 /* YDAliceSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		30D4BA0A2115E00700C31AE5 /* RNCryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA092115E00600C31AE5 /* RNCryptor.swift */; };
@@ -241,7 +241,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F82A83D23585ECC00728710 /* YDSwizzleNSURLSession.m in Sources */,
 				30D4E6E92080725700ABE7AA /* YD_Home_VC.swift in Sources */,
 				0F2E46E42356F18100E8C57D /* YD_URL_Session.swift in Sources */,
 				0F328B5522A532BB00594085 /* thread_chomper.m in Sources */,
@@ -255,6 +254,7 @@
 				0F68B5AA21B8519C00C0D35F /* YD_Enclave_Manager.swift in Sources */,
 				30E59AE2209C9EAF00CCFAE2 /* debugger_ptrace.c in Sources */,
 				30D4E6E72080725700ABE7AA /* YD_App_Delegate.swift in Sources */,
+				0FDA564F235EB58E00BD0077 /* YDSwizzleNSURLSession.m in Sources */,
 				30D4E6FE208072CD00ABE7AA /* YD_Alert_Helper.swift in Sources */,
 				0F59981622046D62001D0DAF /* YD_Enclave_VC.swift in Sources */,
 				30D4BA0F2115E1C100C31AE5 /* YD_Crypto.swift in Sources */,

@@ -1,6 +1,6 @@
 
 # iOS Debugger Challenge
-  This iOS app was written to practice the following techniques:
+This iOS app was written to practice the following techniques:
 
 <!-- TOC -->
 
@@ -44,7 +44,67 @@
     - [Use lldb to find the API](#use-lldb-to-find-the-api)
     - [Failed on first attempt....](#failed-on-first-attempt)
     - [failed on 2nd, 3rd, 4th, n attempts](#failed-on-2nd-3rd-4th-n-attempts)
+    - [FAILED](#failed)<!-- TOC -->
+
+- [iOS Debugger Challenge](#ios-debugger-challenge)
+  - [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)
+    - [Step 1: Use a debugger to find information](#step-1-use-a-debugger-to-find-information)
+    - [Step 2: Write Swizzle code](#step-2-write-swizzle-code)
+    - [Step 3: Place the Swizzle](#step-3-place-the-swizzle)
+    - [COMPLETE ON IOS SIMULATOR](#complete-on-ios-simulator)
+    - [Repackage app](#repackage-app)
+      - [My approach](#my-approach)
+        - [Hiccup: OpTool](#hiccup-optool)
+        - [Hiccup: Load Command](#hiccup-load-command)
+        - [Hiccup: Code signatures](#hiccup-code-signatures)
+        - [Hiccup: Entitlements](#hiccup-entitlements)
+      - [Hiccup 4: White screen of death](#hiccup-4-white-screen-of-death)
+    - [COMPLETE](#complete)
+  - [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)
+    - [Use dtrace to observe the ptrace call](#use-dtrace-to-observe-the-ptrace-call)
+    - [Bypass steps](#bypass-steps)
+    - [COMPLETE](#complete-1)
+  - [Challenge: Bypass anti-debug (sysctl)](#challenge-bypass-anti-debug-sysctl)
+    - [Create an empty Swift framework](#create-an-empty-swift-framework)
+    - [Write your fake sysctl API](#write-your-fake-sysctl-api)
+    - [Use LLDB to load your hooking framework](#use-lldb-to-load-your-hooking-framework)
+    - [Load dylib from Mac into device](#load-dylib-from-mac-into-device)
+    - [dlopen and dlsym](#dlopen-and-dlsym)
+    - [Find the load addresses for C API sysctl() in the symbol table](#find-the-load-addresses-for-c-api-sysctl-in-the-symbol-table)
+    - [Challenge - failed on first attempt....](#challenge---failed-on-first-attempt)
+      - [Symbol table to the rescue](#symbol-table-to-the-rescue)
+      - [Verify what you found, the easy way](#verify-what-you-found-the-easy-way)
+      - [Set a breakpoint](#set-a-breakpoint)
+      - [Whoop whoop](#whoop-whoop)
+      - [Change load address of API call](#change-load-address-of-api-call)
+    - [COMPLETE](#complete-2)
+      - [Bonus - use lldb to print when inside your fake sysctl API](#bonus---use-lldb-to-print-when-inside-your-fake-sysctl-api)
+  - [Challenge: Bypass anti-debug (Exception Ports)](#challenge-bypass-anti-debug-exception-ports)
+    - [COMPLETE](#complete-3)
+    - [Useful references](#useful-references)
+  - [Challenge: Hook Apple's Random String function](#challenge-hook-apples-random-string-function)
+    - [Use lldb to find the API](#use-lldb-to-find-the-api)
+    - [Failed on first attempt....](#failed-on-first-attempt)
+    - [failed on 2nd, 3rd, 4th, n attempts](#failed-on-2nd-3rd-4th-n-attempts)
     - [FAILED](#failed)
+  - [Challenge: Find Encryption key](#challenge-find-encryption-key)
+    - [Leveraging Frida-Trace](#leveraging-frida-trace)
+    - [Watch the encryption key with a Frida-Script](#watch-the-encryption-key-with-a-frida-script)
+    - [Where is the plaintext about to be encrypted?](#where-is-the-plaintext-about-to-be-encrypted)
+    - [What is the decrypted plaintext?](#what-is-the-decrypted-plaintext)
+    - [Failed to get raw key](#failed-to-get-raw-key)
+    - [COMPLETE](#complete-4)
+    - [Useful references](#useful-references-1)
+  - [Challenge: Dancing with Threads](#challenge-dancing-with-threads)
+    - [Attempt 1 - NSThread sleepForTimeInterval](#attempt-1---nsthread-sleepfortimeinterval)
+    - [Bypass steps](#bypass-steps-1)
+    - [COMPLETE](#complete-5)
+      - [Attempt 2 - A trick on Release apps](#attempt-2---a-trick-on-release-apps)
+  - [Challenge: Certificate Pinning bypass (NSURLSession)](#challenge-certificate-pinning-bypass-nsurlsession)
+    - [Step 1: Use a debugger to find information](#step-1-use-a-debugger-to-find-information-1)
+  - [Challenge: Secure Enclave key generation](#challenge-secure-enclave-key-generation)
+
+<!-- /TOC -->
   - [Challenge: Find Encryption key](#challenge-find-encryption-key)
     - [Leveraging Frida-Trace](#leveraging-frida-trace)
     - [Watch the encryption key with a Frida-Script](#watch-the-encryption-key-with-a-frida-script)
@@ -689,37 +749,49 @@ I was not satisfied with attempt 1.  It was only available on debug builds, wher
 ```
 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 ```
-
 ## Challenge: Certificate Pinning bypass (NSURLSession)
-With iOS you often see URLSession code to send network requests. Examples of Classes that implement this code look like the following line:
+`NSURLSession` is used within iOS apps to send network requests. An example of a Class that implement `NSURLSession (ObjC)` or `URLSession (Swift)` is below:
 ```
 class YDURLSession: URLSession, URLSessionDelegate {
 ```
-To keep things tidy, with Swift, it is common to use a `completionHandler` with URLSession to send network requests.  The handler gives a tidy way to deal with data, errors or server responses.  All while dealing with the `asynchronous` nature of networking.  
+It is common to use a `completionHandler` to send network requests.  A `completionHandler` gives a concise way to deal with data, errors or server responses; while dealing with the delays and errors from  `asynchronous` networking.  
 ```
         dataTask = session.dataTask(with: url) { [weak self] data, response, error in
 ```
-
-What is `URLSessionDelegate`? It is a prewritten `Protocol`. It was written to make a developers life simpler.
-
-For example, if you want to send traffic via `https` you will almost always see this `URLSessionDelegate` method:
+If you send traffic via `https` ( the default since iOS 9 ) the `URLSessionDelegate` will invoke the below method:
 
 ```
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 ```
-This is where the Cert Pinning bypass comes in.  If somebody is Pinning against their own pinlist and NOT the iOS Truststore ( the latter is managed by the Settings app on iOS ), this is where you find the code to check the `Certificate Chain`.
 
-If all looks like, there will be a call to:
-```
-completionHandler(.performDefaultHandling, nil)
-```
-If the app code cannot verify the Cert Chain, it will probably call:
-```
-completionHandler(.cancelAuthenticationChallenge, nil)
-```
-The game with this challenge choosing the state for the completion Handler.
-#### Step 1: Use a debugger to find information
+This is where the `Cert Pinning` checks happen.  If an app is `Pinning` against the `iOS Truststore` you would see code like this:
 
+```
+guard let trust: SecTrust = challenge.protectionSpace.serverTrust else {
+    return
+}
+var secResult = SecTrustResultType.invalid
+SecTrustEvaluate(trust, &secResult)
+```
+The `iOS Truststore` allows a user to add `Self-Signed Certificates` via the Settings app on iOS ).
 
+If the app code cannot verify the `Certificate Chain` the `secResult` can be set to negative value.  Afterwards, the app will probably call `completionHandler(.cancelAuthenticationChallenge, nil)` to cancel the attempted TLS connection.
+##### Attempt 1 - Bypass iOS TrustStore pinning
+Using `Frida` I used a script that would write over the `secResult` variable.  This was written to with this call `SecTrustEvaluate(trust, &secResult)`.  I would effectively be changing a `DENY` to a `PROCEED`.
+
+To do that I found some great tips and new Frida APIs..
+```
+// Find the function to target
+var SecTrustEvaluatePtr = Module.findExportByName ("Security" , "SecTrustEvaluate");
+
+// Use Interceptor.replace
+Interceptor.replace(SecTrustEvaluatePtr,new NativeCallback(function(trust,result) {
+
+// Write the "Proceed" value to the unsigned integer variable
+Memory.writeU8(result,1); // 1 == Proceed 3 = Deny
+```
+### COMPLETE
+This worked perfectly my example code. 
+![secTrustHook](debugger_challenge/readme_images/secTrustEvalulateHook.png)
 ## Challenge: Secure Enclave key generation
 I generated an Elliptic Curve key pair, inside the Secure Enclave.  The Key was set to allow both `Encrypt` and `Sign` functionality.

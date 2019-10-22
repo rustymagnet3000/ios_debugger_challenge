@@ -48,18 +48,16 @@ class YDURLSession: URLSession, URLSessionDelegate {
             return
         }
         
-        var secResult = SecTrustResultType.invalid
+        var secResult = SecTrustResultType.deny
         SecTrustEvaluate(trust, &secResult)
         switch secResult {
             case .proceed:
-                print("🕵🏼‍♂️ SecTrustEvaluate ✅")
-            case .recoverableTrustFailure:
-                print("🕵🏼‍♂️ SecTrustEvaluate ❌ check Root CA and Int CA trusted on IOS device")
+                NSLog("🕵🏼‍♂️ SecTrustEvaluate ✅")
+                completionHandler(.performDefaultHandling, nil)
             default:
-                print("🕵🏼‍♂️ SecTrustEvaluate ❌ default error")
+                NSLog("🕵🏼‍♂️ SecTrustEvaluate ❌ default error \(secResult.rawValue)")
+                completionHandler(.cancelAuthenticationChallenge, nil)
         }
-
-        completionHandler(.performDefaultHandling, nil)
     }
 }
 
