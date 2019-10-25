@@ -1,9 +1,8 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-#define targetClassToSwizzle "debugger_challenge.YDURLSession"
+#define targetClassToSwizzle "NSURL" // note no Module name
 
-@implementation NSObject (YDSwizzleNSURLSession)
-
+@implementation NSURL (YDSwizzleNSURL)
 + (void)load
 {
     NSLog(@"🍭\tConstructor called %@",  NSStringFromClass([self class]));
@@ -12,11 +11,12 @@
         
         Class class = objc_getClass(targetClassToSwizzle);
         if (class == NULL) {
-            NSLog(@"🍭\tStopped swizzle or couldn't find %@ instance \n", class);
+            NSLog(@"🍭\tStopped swizzle. Could not find %@ instance \n", class);
             return;
         }
-        SEL originalSelector = @selector(URLSession:didReceiveChallenge:completionHandler:);
-        SEL swizzledSelector = @selector(YDHappyChallenge:didReceiveChallenge:completionHandler:);
+        
+        SEL originalSelector = @selector(initWithString:);
+        SEL swizzledSelector = @selector(YDHappyURLInspector:);
         
         Class mySuperClass = class_getSuperclass(class);
         NSLog(@"🍭\tStarted swizzle: %@ && superclass: %@", NSStringFromClass(class), NSStringFromClass(mySuperClass));
@@ -24,21 +24,19 @@
         
         Method originalMethod = class_getInstanceMethod(class, originalSelector);
         Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
-        NSLog(@"🍭\toriginalMethod:  %p swizzledMethod: %p \n", originalMethod, swizzledMethod);
+        
         if (originalMethod == NULL || swizzledMethod == NULL) {
-            NSLog(@"🍭\tStopped swizzle ❌");
+            NSLog(@"🍭\tStopped swizzle. originalMethod:  %p swizzledMethod: %p \n", originalMethod, swizzledMethod);
             return;
         } else {
-            NSLog(@"🍭\tmethod_exchangeImplementations ✅");
+            NSLog(@"🍭\tmethod_exchangeImplementations");
             method_exchangeImplementations(originalMethod, swizzledMethod);
         }
     });
 }
 
-- (void)YDHappyChallenge:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler{
-
-    NSLog(@"🍭\t NSURLSession on: %@", [[challenge protectionSpace] host]);
-    completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, NULL);
+- (instancetype)YDHappyURLInspector:(NSString *)string{
+    NSLog(@"🍭\t url request: %@", string);
+    return [self YDHappyURLInspector: string];
 }
-
 @end

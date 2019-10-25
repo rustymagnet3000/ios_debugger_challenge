@@ -1,50 +1,7 @@
-
-# iOS Debugger Challenge
+Certificate# iOS Debugger Challenge
 This iOS app was written to practice the following techniques:
 
 <!-- TOC -->
-
-- [iOS Debugger Challenge](#ios-debugger-challenge)
-  - [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)
-    - [Step 1: Use a debugger to find information](#step-1-use-a-debugger-to-find-information)
-    - [Step 2: Write Swizzle code](#step-2-write-swizzle-code)
-    - [Step 3: Place the Swizzle](#step-3-place-the-swizzle)
-    - [COMPLETE ON IOS SIMULATOR](#complete-on-ios-simulator)
-    - [Repackage app](#repackage-app)
-      - [My approach](#my-approach)
-        - [Hiccup: OpTool](#hiccup-optool)
-        - [Hiccup: Load Command](#hiccup-load-command)
-        - [Hiccup: Code signatures](#hiccup-code-signatures)
-        - [Hiccup: Entitlements](#hiccup-entitlements)
-      - [Hiccup 4: White screen of death](#hiccup-4-white-screen-of-death)
-    - [COMPLETE](#complete)
-  - [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)
-    - [Use dtrace to observe the ptrace call](#use-dtrace-to-observe-the-ptrace-call)
-    - [Bypass steps](#bypass-steps)
-    - [COMPLETE](#complete-1)
-  - [Challenge: Bypass anti-debug (sysctl)](#challenge-bypass-anti-debug-sysctl)
-    - [Create an empty Swift framework](#create-an-empty-swift-framework)
-    - [Write your fake sysctl API](#write-your-fake-sysctl-api)
-    - [Use LLDB to load your hooking framework](#use-lldb-to-load-your-hooking-framework)
-    - [Load dylib from Mac into device](#load-dylib-from-mac-into-device)
-    - [dlopen and dlsym](#dlopen-and-dlsym)
-    - [Find the load addresses for C API sysctl() in the symbol table](#find-the-load-addresses-for-c-api-sysctl-in-the-symbol-table)
-    - [Challenge - failed on first attempt....](#challenge---failed-on-first-attempt)
-      - [Symbol table to the rescue](#symbol-table-to-the-rescue)
-      - [Verify what you found, the easy way](#verify-what-you-found-the-easy-way)
-      - [Set a breakpoint](#set-a-breakpoint)
-      - [Whoop whoop](#whoop-whoop)
-      - [Change load address of API call](#change-load-address-of-api-call)
-    - [COMPLETE](#complete-2)
-      - [Bonus - use lldb to print when inside your fake sysctl API](#bonus---use-lldb-to-print-when-inside-your-fake-sysctl-api)
-  - [Challenge: Bypass anti-debug (Exception Ports)](#challenge-bypass-anti-debug-exception-ports)
-    - [COMPLETE](#complete-3)
-    - [Useful references](#useful-references)
-  - [Challenge: Hook Apple's Random String function](#challenge-hook-apples-random-string-function)
-    - [Use lldb to find the API](#use-lldb-to-find-the-api)
-    - [Failed on first attempt....](#failed-on-first-attempt)
-    - [failed on 2nd, 3rd, 4th, n attempts](#failed-on-2nd-3rd-4th-n-attempts)
-    - [FAILED](#failed)<!-- TOC -->
 
 - [iOS Debugger Challenge](#ios-debugger-challenge)
   - [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)
@@ -101,28 +58,11 @@ This iOS app was written to practice the following techniques:
     - [COMPLETE](#complete-5)
       - [Attempt 2 - A trick on Release apps](#attempt-2---a-trick-on-release-apps)
   - [Challenge: Certificate Pinning bypass (NSURLSession)](#challenge-certificate-pinning-bypass-nsurlsession)
-    - [Step 1: Use a debugger to find information](#step-1-use-a-debugger-to-find-information-1)
-  - [Challenge: Secure Enclave key generation](#challenge-secure-enclave-key-generation)
+    - [Attempt 1 - Frida bypass for iOS Truststore pinning](#attempt-1---frida-bypass-for-ios-truststore-pinning)
+    - [Attempt 2 - Swizzle NSURLSession Delegate Method](#attempt-2---swizzle-nsurlsession-delegate-method)
+    - [COMPLETE](#complete-6)
 
 <!-- /TOC -->
-  - [Challenge: Find Encryption key](#challenge-find-encryption-key)
-    - [Leveraging Frida-Trace](#leveraging-frida-trace)
-    - [Watch the encryption key with a Frida-Script](#watch-the-encryption-key-with-a-frida-script)
-    - [Where is the plaintext about to be encrypted?](#where-is-the-plaintext-about-to-be-encrypted)
-    - [What is the decrypted plaintext?](#what-is-the-decrypted-plaintext)
-    - [Failed to get raw key](#failed-to-get-raw-key)
-    - [COMPLETE](#complete-4)
-    - [Useful references](#useful-references-1)
-  - [Challenge: Dancing with Threads](#challenge-dancing-with-threads)
-    - [Place a breakpoint](#place-a-breakpoint)
-    - [Attempt 1 - NSThread sleepForTimeInterval](#attempt-1---nsthread-sleepfortimeinterval)
-    - [Bypass steps](#bypass-steps-1)
-    - [COMPLETE](#complete-5)
-    - [Attempt 2 - A trick on Release apps](#attempt-2---a-trick-on-release-apps)
-  - [Challenge: Secure Enclave key generation](#challenge-secure-enclave-key-generation)
-
-<!-- /TOC -->
-
 ## Challenge: Method Swizzling on non-jailbroken device
 Why `Swizzle`? If you understand `swizzling` you understand part of `Objective-C's` beauty. Read this from [Apple][20e2b71f]
 :
@@ -750,48 +690,97 @@ I was not satisfied with attempt 1.  It was only available on debug builds, wher
 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 ```
 ## Challenge: Certificate Pinning bypass (NSURLSession)
-`NSURLSession` is used within iOS apps to send network requests. An example of a Class that implement `NSURLSession (ObjC)` or `URLSession (Swift)` is below:
-```
-class YDURLSession: URLSession, URLSessionDelegate {
-```
-It is common to use a `completionHandler` to send network requests.  A `completionHandler` gives a concise way to deal with data, errors or server responses; while dealing with the delays and errors from  `asynchronous` networking.  
-```
-        dataTask = session.dataTask(with: url) { [weak self] data, response, error in
-```
+The challenge is to get around checks performed when sending a network request with Apple's NSURLSession class and delegates.  All of these defence build up an app's `Certificate Pinning` setup.
+
+![secTrustHook](debugger_challenge/readme_images/defaultNSURLSession.png)
+
 If you send traffic via `https` ( the default since iOS 9 ) the `URLSessionDelegate` will invoke the below method:
 
 ```
-    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 ```
 
-This is where the `Cert Pinning` checks happen.  If an app is `Pinning` against the `iOS Truststore` you would see code like this:
+This is where the `Cert Pinning` checks are likely to happen.  If an app is `Pinning` against the `iOS Truststore` you would see code like this:
 
 ```
 guard let trust: SecTrust = challenge.protectionSpace.serverTrust else {
     return
 }
 var secResult = SecTrustResultType.invalid
-SecTrustEvaluate(trust, &secResult)
+var osStatus = SecTrustEvaluate(trust, &secResult)
 ```
-The `iOS Truststore` allows a user to add `Self-Signed Certificates` via the Settings app on iOS ).
+The `iOS Truststore` allows a user to add `Self-Signed Certificates` via the Settings app on iOS.  Hence, hardened iOS app's use their own, smaller list of list of Root and Intermediary Certiciate Authorities. This is called a `pinlist`.
 
 If the app code cannot verify the `Certificate Chain` the `secResult` can be set to negative value.  Afterwards, the app will probably call `completionHandler(.cancelAuthenticationChallenge, nil)` to cancel the attempted TLS connection.
-##### Attempt 1 - Bypass iOS TrustStore pinning
+
+##### Attempt 1 - Frida bypass for iOS Truststore pinning
 Using `Frida` I used a script that would write over the `secResult` variable.  This was written to with this call `SecTrustEvaluate(trust, &secResult)`.  I would effectively be changing a `DENY` to a `PROCEED`.
 
-To do that I found some great tips and new Frida APIs..
 ```
-// Find the function to target
-var SecTrustEvaluatePtr = Module.findExportByName ("Security" , "SecTrustEvaluate");
+const moduleName = 'Security';
+const functionName = 'SecTrustEvaluate';
+const SecTrustEvaluatePtr = Module.findExportByName(moduleName, functionName);
 
-// Use Interceptor.replace
-Interceptor.replace(SecTrustEvaluatePtr,new NativeCallback(function(trust,result) {
+try {
+    if (SecTrustEvaluatePtr == null) {
+        throw '[*] %s not found', moduleName, functionName;
+    }
+    console.log('[*] Script loaded. ' + moduleName + '.' + functionName + '\tpointer: '+ SecTrustEvaluatePtr);
 
-// Write the "Proceed" value to the unsigned integer variable
-Memory.writeU8(result,1); // 1 == Proceed 3 = Deny
+    Interceptor.replace(SecTrustEvaluatePtr,new NativeCallback(function(trust,result) {
+
+        console.log('[*]SecTrustEvaluate called');
+        console.log('\tDefault SecTrustResultType: ', Memory.readU32(result));
+        Memory.writeU32(result,1);
+        console.log('\tnew SecTrustResultType: ', Memory.readU32(result));
+        return 0;   // Return errSecSuccess to OSStatus call
+    } ,'int',['pointer','pointer']));
+}
+catch(err){
+    console.log('[!] Exception: ' + err.message);
+}
+```
+
+Success!
+```
+[*]SecTrustEvaluate called
+	Default SecTrustResultType:  3
+	new SecTrustResultType:  1
+[*]SecTrustEvaluate called
+	Default SecTrustResultType:  0
+	new SecTrustResultType:  1
+```
+![secTrustHook](debugger_challenge/readme_images/bypassedNSURLSession.png)
+
+##### Attempt 2 - Swizzle NSURLSession
+The Frida bypass worked well for trivial iOS Truststore pinning. But what happens if the app checked a locally held Public Key against the Public Key it received during the TLS setup negotiation?
+
+I liked this guy's example code:
+https://www.bugsee.com/blog/ssl-certificate-pinning-in-mobile-applications/
+```
+// Public key pinning
+let serverPublicKey = SecCertificateCopyPublicKey(serverCertificate)
+let serverPublicKeyData:NSData = SecKeyCopyExternalRepresentation(serverPublicKey!, nil )!
+let keyHash = sha256(data: serverPublicKeyData as Data)
+if (keyHash == pinnedPublicKeyHash) {
+    // Success! This is our server
+    completionHandler(.useCredential, URLCredential(trust:serverTrust))
+    return
+}
+```
+I can use Frida trace to get me so far. I can also statically patch out the code. But the latter is hard and takes a lot of analysis.  How about we just ever call that code and we set the code to only `completionHandler(.cancelAuthenticationChallenge, nil)`?
+
+Well, you can write a `Method Swizzle` to achieve the same.
+```
+- (void)YDHappyChallenge:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler{
+
+    NSLog(@"🍭\t NSURLSession on: %@", [[challenge protectionSpace] host]);
+    completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, NULL);
+}
 ```
 ### COMPLETE
-This worked perfectly my example code. 
+Success!  The swizzle was a lot more effective, given how much scope was given to developers to implement code inside the delegate.
+
 ![secTrustHook](debugger_challenge/readme_images/secTrustEvalulateHook.png)
-## Challenge: Secure Enclave key generation
-I generated an Elliptic Curve key pair, inside the Secure Enclave.  The Key was set to allow both `Encrypt` and `Sign` functionality.
+
+Not all Cert Pinning checks were not bypassed using these methods.

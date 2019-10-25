@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("HOME env: \(homeEnv)")
         }
         
+        let _ = NSURL(string: "www.foo.com")
+        let _ = NSURL(string: "www.bar.com")
         return true
     }
 }

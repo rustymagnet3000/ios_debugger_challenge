@@ -49,7 +49,9 @@ class YDURLSession: URLSession, URLSessionDelegate {
         }
         
         var secResult = SecTrustResultType.deny
-        SecTrustEvaluate(trust, &secResult)
+        let osStatus = SecTrustEvaluate(trust, &secResult)
+        
+        NSLog("🕵🏼‍♂️ Not used OSStatus = \(osStatus)")
         switch secResult {
             case .proceed:
                 NSLog("🕵🏼‍♂️ SecTrustEvaluate ✅")
