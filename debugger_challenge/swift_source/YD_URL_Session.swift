@@ -42,16 +42,15 @@ class YDURLSession: URLSession, URLSessionDelegate {
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 
-        print("🕵🏼‍♂️ challanged by: \(challenge.protectionSpace.host)")
+        NSLog("🕵🏼‍♂️ challanged by: \(challenge.protectionSpace.host)")
 
         guard let trust: SecTrust = challenge.protectionSpace.serverTrust else {
             return
         }
         
         var secResult = SecTrustResultType.deny
-        let osStatus = SecTrustEvaluate(trust, &secResult)
+        let _ = SecTrustEvaluate(trust, &secResult)
         
-        NSLog("🕵🏼‍♂️ Not used OSStatus = \(osStatus)")
         switch secResult {
             case .proceed:
                 NSLog("🕵🏼‍♂️ SecTrustEvaluate ✅")

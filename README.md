@@ -132,7 +132,7 @@ I went back to `xCode` and selected `New\Project\iOS\Framework\Objective-C`.  Us
 ```
 To read the full code, go [here][70b2d1d9].
 #### Step 3: Place the Swizzle
-**Step 3**, before I did this on a physical iOS device, I wanted to complete it with a simulator.  I used my trusty debugger connected to the app running on an XCode simulator:
+Let's start on an iOS Simulator.  I used my trusty debugger connected to the app running on an XCode simulator:
 ```
 lldb) process load /Users/.../swizzle_framework.framework/swizzle_framework
 [+] 🎣 Found YDHelloClass
@@ -166,15 +166,16 @@ For more info on **repackaging apps**  read [here][5e75f6f0].
 
 It all sounded simple.  But I hit roadblocks:
 ##### Hiccup: OpTool
+`OpTool` is a small repo that allows you to insert or remove `Load Commands`.  These commands fire when your app opens and decides what dynamically linked files to load into the process.
+
+First, you need a local copy of `OpTool`.  You also need to ensure that you added `submodules`.  This last step tripped me up.
 ```
-// get a local copy of OpTool
 git clone https://github.com/alexzielenski/optool.git
 Make initialize optool’s submodules:
 cd optool/
-git submodule update --init --recursive   // this was the command I missed!
+git submodule update --init --recursive   
 ```
-##### Hiccup: Load Command
-You have to tell the main app binary to load this new framework.
+You tell the main app binary to load this new framework.
 ```
 optool install -c load -p "@executable_path/Frameworks/YDBobSwizzle.framework/YDBobSwizzle" -t Payload/debugger_challenge.app/debugger_challenge
 ```
@@ -190,13 +191,11 @@ Successfully inserted a LC_LOAD_DYLIB command for arm64
 Writing executable to debugger_challenge.app/debugger_challenge...
 ```
 Verify it..
-
-
 ```
 jtool -arch arm64 -l Payload/debugger_challenge.app/debugger_challenge
 ```
 ##### Hiccup: Code signatures
-If you forgot to code sign anything, you could not deploy it the device.
+If you forgot to `code sign` anything, you would hit obscure Apple errors when you tried to install the app on the iPhone.
 ```
 applesign -7 -i <DEVELOPER CODE SIGNING ID> -m embedded.mobileprovision unsigned.ipa -o ready.ipa
 ios-deploy -b ready.ipa
@@ -256,13 +255,14 @@ error: attach failed: lost connection
 If you attached a debugger before ptrace *deny_attach*  was set, you would see a process crash.
 
 ##### Use dtrace to observe the ptrace call
-The header files for `ptrace` were not easily available on iOS, unlike macOS.  That said, you could still start issue a *deny_attach* on iOS.  
-To see this call call on an iOS Simulator, run `DebuggerChallenge` and hit the `ptrace` button, after writing this command:
+The header files for `ptrace` were not easily available on iOS, unlike macOS.  That said, you could still issue a *deny_attach* on iOS.  
+
+To see this call on an iOS Simulator, run `DebuggerChallenge` and hit the `ptrace` button, after writing this command:
 ```
 sudo dtrace -qn 'syscall::ptrace:entry { printf("%s(%d, %d, %d, %d) from %s\n", probefunc, arg0, arg1, arg2, arg3, execname); }'
 // ptrace(31, 0, 0, 0) from debugger_challen
 ```
-This won't crash your app if you are running the app on the simulator WITHOUT XCode.
+This won't crash your app if you are running the app on the simulator **WITHOUT** XCode.
 
 ##### Bypass steps
 Type the following into your debugger:
@@ -288,15 +288,17 @@ Return an integer 0, to sidestep the real `ptrace` result.
 ![bypass](debugger_challenge/readme_images/ptrace_bypass.png)
 
 ## Challenge: Bypass anti-debug (sysctl)
-Sysctl was the [Apple_recommended_debug_detect][a3a00022] way to check if a debugger was attached to your app.
+The C API, `Sysctl` was the [Apple][a3a00022] recommended way to check if a debugger was attached to your app.
 
   [a3a00022]: https://developer.apple.com/library/archive/qa/qa1361/index.html "apple_link"
 
-**The same trick for Challenge 1 (ptrace) worked with sysctl**. But I wanted to be more creative.  I was inspired by https://github.com/DerekSelander/LLDB to create a new, empty Swift framework that loaded a C function API named - you guessed it -`sysctl`.  That was injected into my app's process image list.
+> The same trick for Challenge 1 (ptrace) worked with sysctl
+
+I wanted to be more creative.  I was inspired by https://github.com/DerekSelander/LLDB to create a new, empty Swift framework that loaded a C function API named - you guessed it -`sysctl`.  This new piece of code would be injected into my app's `image list`.
 
 ##### Create an empty Swift framework
 I created an empty Swift project.  I added the following C code.  You don't need a C header file.
-![framework_settings](/debugger_challenge/readme_images/framework_creation.png)
+![framework_settings](debugger_challenge/readme_images/framework_creation.png)
 ##### Write your fake sysctl API
 ```
 int sysctl(int * mib, u_int byte_size, void *info, size_t *size, void *temp, size_t(f)){
@@ -383,7 +385,7 @@ rip = 0x000000012e292dc0  rusty_bypass`sysctl at hook_debugger_check.c:5
 ### COMPLETE
 
 ##### Bonus - use lldb to print when inside your fake sysctl API
-I wanted to check I was inside of my hooked-sysctl.  I could have added `syslog` statements to achieve the same.  But that missed the point of improving my lldb skills.  Here was a more fun way...
+I wanted to check I was inside of my hooked-sysctl.  I could have added `syslog` statements to achieve the same.  But that missed the point of improving `lldb` skills.  Here was a more fun way...
 ```
 (lldb) breakpoint set -p "return" -f hook_debugger_check.c
 (lldb) breakpoint modify --auto-continue 1
@@ -393,7 +395,9 @@ I wanted to check I was inside of my hooked-sysctl.  I could have added `syslog`
 (lldb) continue
 ```
 ## Challenge: Bypass anti-debug (Exception Ports)
-Another anti-debug technique on macOS was to check if a debugger was attached by looking if any of the Ports used by a Debugger returned a valid response.  This relied on the C `task_get_exception_ports` API.  You passed in the Exception Port you wanted - in argument 2 (the RSI register).  
+Another anti-debug technique on macOS / iOS was to check if a debugger was attached by looking if any of the `Ports` used by a Debugger returned a valid response.  
+
+This relied on the C `task_get_exception_ports` API.  You passed in the `Exception Port` you wanted  to check.  This was always argument 2 to the function.  This was the `RSI register` on `ARM` devices).  
 
 ### COMPLETE
 Thanks to: https://alexomara.com/blog/defeating-anti-debug-techniques-macos-mach-exception-ports/.  Set the Exception Ports to check to a null value.  
@@ -424,7 +428,7 @@ I started with some simple Swift code.  Could I whiten the UUID to a value I pre
     present_alert_controller(user_message: "Random string: \(randomString)")
 }
 ```
-![bypass](/debugger_challenge/readme_images/random_number.png)
+![bypass](debugger_challenge/readme_images/random_number.png)
 ##### Use lldb to find the API
 ```
 (lldb) image lookup -rn uuidString
@@ -698,9 +702,9 @@ Do I trust this server, before establishing a connection to this server?
 
 That question is what `Certificate Pinning` adds to a mobile app.  It derives the answer by comparing Public Keys it has stored locally against Public Keys sent by the Server during a secured network setup.  
 
-Hardened iOS app's often ignored the default `iOS Truststore` and addrf their own, smaller list of Root and Intermediary Certificate Authorities. This smaller list was called a `pinlist`.  
+Hardened iOS app's often ignore the default `iOS Truststore` and add their own, smaller list of Root and Intermediary Certificate Authorities. This smaller list was called a `pinlist`.  
 
-Why ignore the `iOS Truststore`?  It contained a lot of Certificate Authorities.  Refer to https://en.wikipedia.org/wiki/DigiNotar if you want details of why this is a bad thing.  More relevant for this Challenge, a user could add an all powerful `Self-Signed Certificate` via the Settings app on iOS. This would be "trusted" by iOS.
+Why ignore the `iOS Truststore`?  It contains a lot of Certificate Authorities.  Refer to https://en.wikipedia.org/wiki/DigiNotar if you want details of why this is a bad thing.  More relevant for this Challenge, a user could add an all powerful `Self-Signed Certificate` via the Settings app on iOS. This would be "trusted" by iOS.
 
 This challenge was written to show how to get around checks performed when sending a network request with Apple's `NSURLSession` class.
 
