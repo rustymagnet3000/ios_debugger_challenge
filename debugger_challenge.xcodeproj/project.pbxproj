@@ -15,6 +15,7 @@
 		0F328B5322A4E00F00594085 /* YD_Button_Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F328B5222A4E00F00594085 /* YD_Button_Ext.swift */; };
 		0F328B5522A532BB00594085 /* thread_chomper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F328B5422A532BB00594085 /* thread_chomper.m */; };
 		0F358CE32525C10F00804C44 /* YD_Random_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F358CE22525C10F00804C44 /* YD_Random_VC.swift */; };
+		0F358CE52525C9FF00804C44 /* debugger_ptrace_asm.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F358CE42525C9FF00804C44 /* debugger_ptrace_asm.m */; };
 		0F59981622046D62001D0DAF /* YD_Enclave_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */; };
 		0F68B5AA21B8519C00C0D35F /* YD_Enclave_Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */; };
 		0FF69547228EED8500D767C4 /* YDAliceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */; };
@@ -57,11 +58,12 @@
 		0F328B5422A532BB00594085 /* thread_chomper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = thread_chomper.m; sourceTree = "<group>"; };
 		0F328B5622A5338A00594085 /* thread_chomper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = thread_chomper.h; sourceTree = "<group>"; };
 		0F358CE22525C10F00804C44 /* YD_Random_VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Random_VC.swift; sourceTree = "<group>"; };
+		0F358CE42525C9FF00804C44 /* debugger_ptrace_asm.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = debugger_ptrace_asm.m; sourceTree = "<group>"; };
+		0F358CE62525CA1E00804C44 /* debugger_ptrace_asm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = debugger_ptrace_asm.h; sourceTree = "<group>"; };
 		0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_VC.swift; sourceTree = "<group>"; };
 		0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_Manager.swift; sourceTree = "<group>"; };
 		0F82A83C23585ECC00728710 /* YDSwizzleNSURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YDSwizzleNSURLSession.m; sourceTree = "<group>"; };
 		0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YDAliceSDK.framework; sourceTree = "<group>"; };
-		0FDA5653235EBEBA00BD0077 /* YDSwizzleNSURL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YDSwizzleNSURL.m; sourceTree = "<group>"; };
 		30D4BA092115E00600C31AE5 /* RNCryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNCryptor.swift; sourceTree = "<group>"; };
 		30D4BA0C2115E03500C31AE5 /* RNCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCryptor.h; sourceTree = "<group>"; };
 		30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Crypto.swift; sourceTree = "<group>"; };
@@ -117,11 +119,12 @@
 			isa = PBXGroup;
 			children = (
 				0F82A83C23585ECC00728710 /* YDSwizzleNSURLSession.m */,
-				0FDA5653235EBEBA00BD0077 /* YDSwizzleNSURL.m */,
 				30D4E6F92080729900ABE7AA /* debugger_sysctl.c */,
 				30D4E6FA2080729900ABE7AA /* debugger_sysctl.h */,
 				0F328B5622A5338A00594085 /* thread_chomper.h */,
 				0F328B5422A532BB00594085 /* thread_chomper.m */,
+				0F358CE62525CA1E00804C44 /* debugger_ptrace_asm.h */,
+				0F358CE42525C9FF00804C44 /* debugger_ptrace_asm.m */,
 				30E59AE1209C9EAF00CCFAE2 /* debugger_ptrace.c */,
 				30E59AE0209C9EAE00CCFAE2 /* debugger_ptrace.h */,
 				0F1565C42191CABB009D8033 /* debugger_exception_ports.h */,
@@ -258,6 +261,7 @@
 				0F68B5AA21B8519C00C0D35F /* YD_Enclave_Manager.swift in Sources */,
 				30E59AE2209C9EAF00CCFAE2 /* debugger_ptrace.c in Sources */,
 				30D4E6E72080725700ABE7AA /* YD_App_Delegate.swift in Sources */,
+				0F358CE52525C9FF00804C44 /* debugger_ptrace_asm.m in Sources */,
 				30D4E6FE208072CD00ABE7AA /* YD_Alert_Helper.swift in Sources */,
 				0F358CE32525C10F00804C44 /* YD_Random_VC.swift in Sources */,
 				0F59981622046D62001D0DAF /* YD_Enclave_VC.swift in Sources */,

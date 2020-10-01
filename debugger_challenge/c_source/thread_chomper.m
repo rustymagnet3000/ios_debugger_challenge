@@ -1,11 +1,5 @@
 #include "thread_chomper.h"
 
-#ifdef DEBUG
-#define NSLog(FORMAT, ...) fprintf(stderr,"%s\n", [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);
-#else
-#define NSLog(...) {}
-#endif
-
 NSMutableArray *fishyArray;
 NSLock *arrayLock;
 
@@ -19,6 +13,7 @@ NSLock *arrayLock;
 @end
 
 @implementation YDFishClass
+
 @synthesize caught = _caught;
 @synthesize name = _name;
 

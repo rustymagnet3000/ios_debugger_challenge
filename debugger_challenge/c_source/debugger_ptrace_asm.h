@@ -1,5 +1,5 @@
-#ifndef thread_chomper_h
-#define thread_chomper_h
+#ifndef debugger_ptrace_asm_h
+#define debugger_ptrace_asm_h
 
 #ifdef DEBUG
 #define NSLog(FORMAT, ...) fprintf(stderr,"%s\n", [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);
@@ -13,6 +13,11 @@
 #include <assert.h>
 #include <pthread.h>
 
-NSMutableArray* _Nonnull yd_start_chomper(void);
+@interface YDDebuggerPtrace: NSObject
 
-#endif /* thread_chomper_h */
++(void)invokePtrace;
+
+@end
+
+
+#endif /* debugger_ptrace_asm_h */

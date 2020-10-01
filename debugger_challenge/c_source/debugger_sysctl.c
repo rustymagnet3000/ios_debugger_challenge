@@ -29,5 +29,8 @@ bool debugger_sysctl(void)
         
         // We're being debugged if the P_TRACED flag is set.
         int x = (info.kp_proc.p_flag & P_TRACED);
-        return ( x != 0 );  //0 == no debugger 2048 == debugger
+    if (x > 0)
+        printf("DEBUGGER DETECTED!\n");
+    
+    return ( x != 0 );  //0 == no debugger 2048 == debugger
 }

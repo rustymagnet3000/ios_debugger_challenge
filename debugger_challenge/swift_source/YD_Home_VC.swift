@@ -6,7 +6,7 @@ class YD_Home_VC: UIViewController {
     private let feedback_string = "Debugger attached ="
     
     @IBAction func ptrace_asm_button(_ sender: Any) {
-            print("ptrace with assembly code")
+        YDDebuggerPtrace.invokePtrace()
     }
     
     @IBAction func exception_port_button(_ sender: Any) {
