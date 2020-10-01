@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="avJ-R6-jEN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="avJ-R6-jEN">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -68,51 +68,37 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="6hh-mC-k8n">
-                                <rect key="frame" x="74" y="161" width="227" height="340"/>
+                                <rect key="frame" x="119" y="223" width="137" height="216"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="yCz-Th-X4B">
-                                        <rect key="frame" x="0.0" y="0.0" width="227" height="340"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="137" height="216"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7f0-vk-6d2">
-                                                <rect key="frame" x="35.5" y="0.0" width="156" height="30"/>
-                                                <state key="normal" title="sysctl debugger check"/>
+                                                <rect key="frame" x="48.5" y="0.0" width="40" height="30"/>
+                                                <state key="normal" title="sysctl"/>
                                                 <connections>
                                                     <action selector="debug_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nqi-03-2bq"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="60Y-ut-pa8">
-                                                <rect key="frame" x="6" y="62" width="215" height="30"/>
-                                                <state key="normal" title="exception port debugger check"/>
+                                                <rect key="frame" x="14.5" y="62" width="108" height="30"/>
+                                                <state key="normal" title="Exception Ports"/>
                                                 <connections>
                                                     <action selector="exception_port_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FT0-gZ-ulK"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH0-zF-jqs">
-                                                <rect key="frame" x="19.5" y="124" width="188" height="30"/>
-                                                <state key="normal" title="start ptrace deny debugger"/>
+                                                <rect key="frame" x="0.5" y="124" width="136" height="30"/>
+                                                <state key="normal" title="PTrace Deny Attach"/>
                                                 <connections>
                                                     <action selector="ptrace_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WpV-tx-g09"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kga-FB-80a">
-                                                <rect key="frame" x="65.5" y="186" width="96" height="30"/>
-                                                <state key="normal" title="random string"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LXN-f2-Vcs">
+                                                <rect key="frame" x="0.0" y="186" width="137" height="30"/>
+                                                <state key="normal" title="ptrace call with asm"/>
                                                 <connections>
-                                                    <action selector="random_string_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gYV-hH-REO"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SXg-2K-6CZ">
-                                                <rect key="frame" x="59.5" y="248" width="108" height="30"/>
-                                                <state key="normal" title="common crypto"/>
-                                                <connections>
-                                                    <action selector="crypto_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XUC-83-UWS"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZJS-b2-VDg">
-                                                <rect key="frame" x="0.0" y="310" width="227" height="30"/>
-                                                <state key="normal" title="Random number from framework"/>
-                                                <connections>
-                                                    <action selector="secret_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wqu-e4-SWC"/>
+                                                    <action selector="ptrace_asm_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XGL-VQ-Avs"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -133,9 +119,7 @@
                         <outletCollection property="buttons" destination="7f0-vk-6d2" collectionClass="NSMutableArray" id="H8t-PJ-Hts"/>
                         <outletCollection property="buttons" destination="60Y-ut-pa8" collectionClass="NSMutableArray" id="9nE-Wb-Ykc"/>
                         <outletCollection property="buttons" destination="gH0-zF-jqs" collectionClass="NSMutableArray" id="Svo-db-ana"/>
-                        <outletCollection property="buttons" destination="Kga-FB-80a" collectionClass="NSMutableArray" id="rlv-Ad-GD1"/>
-                        <outletCollection property="buttons" destination="SXg-2K-6CZ" collectionClass="NSMutableArray" id="EQS-jV-co0"/>
-                        <outletCollection property="buttons" destination="ZJS-b2-VDg" collectionClass="NSMutableArray" id="sBm-kq-H3U"/>
+                        <outletCollection property="buttons" destination="LXN-f2-Vcs" collectionClass="NSMutableArray" id="4di-ET-vmk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -334,17 +318,76 @@
                         <segue destination="pcv-UJ-06d" kind="relationship" relationship="viewControllers" id="Def-zI-S5L"/>
                         <segue destination="sAQ-o7-ZpC" kind="relationship" relationship="viewControllers" id="H1g-YM-Rgj"/>
                         <segue destination="AKY-oq-JqH" kind="relationship" relationship="viewControllers" id="be5-AJ-S3I"/>
+                        <segue destination="R1f-PG-7qg" kind="relationship" relationship="viewControllers" id="yym-Ml-jET"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4mY-QG-Rxk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="910" y="-690"/>
         </scene>
+        <!--Random-->
+        <scene sceneID="eCG-eq-IHk">
+            <objects>
+                <viewController id="R1f-PG-7qg" customClass="YD_Random_VC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="IOR-HP-QnR">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="PTo-9L-qEB">
+                                <rect key="frame" x="74" y="254" width="227" height="154"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="C8h-CF-4ZV">
+                                        <rect key="frame" x="0.0" y="0.0" width="227" height="154"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xmX-oH-A2a">
+                                                <rect key="frame" x="65.5" y="0.0" width="96" height="30"/>
+                                                <state key="normal" title="random string"/>
+                                                <connections>
+                                                    <action selector="random_string_btn:" destination="R1f-PG-7qg" eventType="touchUpInside" id="wtW-L8-V0o"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SKs-Si-zSB">
+                                                <rect key="frame" x="59.5" y="62" width="108" height="30"/>
+                                                <state key="normal" title="common crypto"/>
+                                                <connections>
+                                                    <action selector="crypto_button:" destination="R1f-PG-7qg" eventType="touchUpInside" id="GmJ-Wg-eHP"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="50s-XJ-2vy">
+                                                <rect key="frame" x="0.0" y="124" width="227" height="30"/>
+                                                <state key="normal" title="Random number from framework"/>
+                                                <connections>
+                                                    <action selector="get_random_number_btn:" destination="R1f-PG-7qg" eventType="touchUpInside" id="pZr-lT-Zew"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="PTo-9L-qEB" firstAttribute="centerY" secondItem="uMz-G3-YEO" secondAttribute="centerY" id="2v6-ix-acB"/>
+                            <constraint firstItem="PTo-9L-qEB" firstAttribute="centerX" secondItem="uMz-G3-YEO" secondAttribute="centerX" id="mf8-Ix-m8A"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="uMz-G3-YEO"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Random" id="SA8-1m-LBl"/>
+                    <connections>
+                        <outletCollection property="buttons" destination="xmX-oH-A2a" collectionClass="NSMutableArray" id="iMP-P4-4MJ"/>
+                        <outletCollection property="buttons" destination="SKs-Si-zSB" collectionClass="NSMutableArray" id="VE9-uv-XUn"/>
+                        <outletCollection property="buttons" destination="50s-XJ-2vy" collectionClass="NSMutableArray" id="pRe-ar-UUo"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="STk-Ie-7qd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-537" y="-690"/>
+        </scene>
     </scenes>
     <resources>
         <image name="cloud" width="30" height="30"/>
         <image name="key" width="30" height="30"/>
-        <image name="link" catalog="system" width="64" height="58"/>
+        <image name="link" catalog="system" width="128" height="116"/>
         <image name="rocket" width="30" height="30"/>
     </resources>
 </document>

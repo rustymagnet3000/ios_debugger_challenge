@@ -3,30 +3,17 @@ import UIKit
 class YD_Home_VC: UIViewController {
 
     @IBOutlet var  buttons: [UIButton] = []
+    private let feedback_string = "Debugger attached ="
+    
+    @IBAction func ptrace_asm_button(_ sender: Any) {
+            print("ptrace with assembly code")
+    }
     
     @IBAction func exception_port_button(_ sender: Any) {
         print("about to check Exception Ports")
         let result = debugger_exception_ports()
         present_alert_controller(user_message: feedback_string + " \(result)")
     }
-    
-    @IBAction func crypto_button(_ sender: Any) {
-        print("about to call common crypto API")
-        YD_Crypto_Helper.funky()
-    }
-    
-    @IBAction func random_string_btn(_ sender: Any) {
-        let randomString = UUID()
-        print(randomString.uuidString)
-        present_alert_controller(user_message: "Random string: \(randomString.uuidString)")
-    }
-    @IBAction func secret_btn(_ sender: Any) {
-        let answer = YDHelloClass().getRandomNumber()
-        present_alert_controller(user_message: "Random number: \(answer)")
-    }
-    
-    private let feedback_string = "Debugger attached ="
-    
     
     @IBAction func ptrace_chk_btn(_ sender: Any) {
         let result = debugger_ptrace()
@@ -40,7 +27,7 @@ class YD_Home_VC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.tabBarController?.title = "Press a button"
+        super.tabBarController?.title = "Debugger detections"
         buttons.forEach {
             $0.YDButtonStyle(ydColor: UIColor.blue)
         }
