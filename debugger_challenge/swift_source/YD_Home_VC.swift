@@ -6,7 +6,7 @@ class YD_Home_VC: UIViewController {
     private let feedback_string = "Debugger attached ="
     
     @IBAction func ptrace_asm_button(_ sender: Any) {
-        YDDebuggerPtrace.invokePtrace()
+        YDDebuggerPtrace.setPtraceWithASM()
     }
     
     @IBAction func exception_port_button(_ sender: Any) {
@@ -16,7 +16,7 @@ class YD_Home_VC: UIViewController {
     }
     
     @IBAction func ptrace_chk_btn(_ sender: Any) {
-        let result = debugger_ptrace()
+        let result = YDDebuggerPtrace.setPtraceDenyAttach()
         present_alert_controller(user_message: feedback_string + " \(result)")
     }
     

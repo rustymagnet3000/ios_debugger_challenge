@@ -1,9 +1,26 @@
-#include <stdbool.h>
-#import <dlfcn.h>
-#import <sys/types.h>
-#import <stdio.h>
-#include <unistd.h>
-#include <strings.h>
-#include <mach-o/dyld.h> // read dynamically loaded libraries
+#ifndef debugger_ptrace_h
+#define debugger_ptrace_h
 
-bool debugger_ptrace(void);
+#import <Foundation/Foundation.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <pthread.h>
+#include <sys/syscall.h>
+#include <mach-o/dyld.h> // read dynamically loaded libraries
+#import <sys/types.h>
+#import <dlfcn.h>           // required for dlsym
+#define PTRACE_NAME "ptrace"
+typedef int (*ptrace_ptr_t)(int _request, pid_t _pid, caddr_t _addr, int _data);
+
+
+@interface YDDebuggerPtrace: NSObject
+
+
++(void)setPtraceWithASM;
++(BOOL)setPtraceDenyAttach;
+
+@end
+
+
+#endif /* debugger_ptrace_h */
