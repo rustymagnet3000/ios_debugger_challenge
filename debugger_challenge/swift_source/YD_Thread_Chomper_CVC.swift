@@ -26,6 +26,12 @@ class YD_Thread_Chomper_CVC: UIViewController, UICollectionViewDataSource, UICol
         self.view.addSubview(myCollectionView)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        super.tabBarController?.title = "Threads racing..."
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return caughtFish.count
     }

@@ -3,6 +3,7 @@ import UIKit
 class YD_URLSession_VC: UIViewController {
 
     @IBOutlet weak var btn_outlet: UIButton!
+    fileprivate let urlstr = "https://www.httpbin.org/get"
     
     @IBAction func send_request_btn(_ sender: Any) {
         nsUrlSessionTapped()
@@ -14,10 +15,14 @@ class YD_URLSession_VC: UIViewController {
         btn_outlet.YDButtonStyle(ydColor: btnClr)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        super.tabBarController?.title = "Try and bypass URLAuthenticationChallenge"
+    }
+    
     func nsUrlSessionTapped() {
         let a = YDURLSession()
-        
-        guard let url = URL(string: "https://www.httpbin.org/get") else {
+        guard let url = URL(string: urlstr) else {
             return
         }
         

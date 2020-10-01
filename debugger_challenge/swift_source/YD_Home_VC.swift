@@ -27,12 +27,16 @@ class YD_Home_VC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.tabBarController?.title = "Debugger detections"
         buttons.forEach {
             $0.YDButtonStyle(ydColor: UIColor.blue)
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        super.tabBarController?.title = "Debugger detections"
+    }
+    
     func present_alert_controller(user_message: String) {
         let time = YD_Time_Helper(raw_date: Date())
         let alert = YD_Alert_Helper(body_message: user_message + "\n\n\(time.readable_date)")

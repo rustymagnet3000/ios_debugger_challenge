@@ -19,7 +19,7 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <tabBarItem key="tabBarItem" title="Thread Chomper" image="link" catalog="system" selectedImage="link" id="B3J-lG-g8w"/>
+                    <tabBarItem key="tabBarItem" title="Thread Chomper" image="link" selectedImage="link" id="B3J-lG-g8w"/>
                     <navigationItem key="navigationItem" id="5bF-m3-0Pr"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1xY-SZ-fbF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -59,7 +59,7 @@
             </objects>
             <point key="canvasLocation" x="2044" y="-1508"/>
         </scene>
-        <!--Home-->
+        <!--Debuggers-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="YD_Home_VC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
@@ -113,7 +113,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Home" image="rocket" selectedImage="rocket" id="zup-Zs-kjY"/>
+                    <tabBarItem key="tabBarItem" title="Debuggers" image="rocket" selectedImage="rocket" id="zup-Zs-kjY"/>
                     <navigationItem key="navigationItem" id="UAJ-wL-HT1"/>
                     <connections>
                         <outletCollection property="buttons" destination="7f0-vk-6d2" collectionClass="NSMutableArray" id="H8t-PJ-Hts"/>
@@ -372,7 +372,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="uMz-G3-YEO"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Random" id="SA8-1m-LBl"/>
+                    <tabBarItem key="tabBarItem" title="Random" image="about" selectedImage="about" id="SA8-1m-LBl"/>
                     <connections>
                         <outletCollection property="buttons" destination="xmX-oH-A2a" collectionClass="NSMutableArray" id="iMP-P4-4MJ"/>
                         <outletCollection property="buttons" destination="SKs-Si-zSB" collectionClass="NSMutableArray" id="VE9-uv-XUn"/>
@@ -385,9 +385,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="about" width="30" height="30"/>
         <image name="cloud" width="30" height="30"/>
         <image name="key" width="30" height="30"/>
-        <image name="link" catalog="system" width="128" height="116"/>
+        <image name="link" width="30" height="30"/>
         <image name="rocket" width="30" height="30"/>
     </resources>
 </document>

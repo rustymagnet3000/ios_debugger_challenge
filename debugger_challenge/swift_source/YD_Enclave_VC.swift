@@ -40,6 +40,12 @@ class YD_Enclave_VC: UIViewController {
         super.viewDidLoad()
         ptLbl.text = String(data: ptBytes!, encoding: .utf8)
     }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        super.tabBarController?.title = "Secure Enclave fun"
+    }
 
     @IBAction func decrypt_btn(_ sender: Any) {
         do {

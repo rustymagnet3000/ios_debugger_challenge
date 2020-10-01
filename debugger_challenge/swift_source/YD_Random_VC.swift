@@ -21,9 +21,13 @@ class YD_Random_VC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.tabBarController?.title = "Press a button"
         buttons.forEach {
-            $0.YDButtonStyle(ydColor: UIColor.blue)
+            $0.YDButtonStyle(ydColor: UIColor.lightGray)
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        super.tabBarController?.title = "Press a button"
     }
 }
