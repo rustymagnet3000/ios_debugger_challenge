@@ -10,14 +10,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().barTintColor = UIColor.green
         UINavigationBar.appearance().tintColor = UIColor.black
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        
-        if let cString = getenv("HOME") {
-            let homeEnv = String(cString: cString)
-            print("HOME env: \(homeEnv)")
-        }
-        
-        let _ = NSURL(string: "www.foo.com")
-        let _ = NSURL(string: "www.bar.com")
+               
         return true
     }
 }

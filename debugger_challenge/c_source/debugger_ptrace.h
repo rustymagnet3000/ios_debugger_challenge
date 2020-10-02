@@ -11,14 +11,15 @@
 #import <sys/types.h>
 #import <dlfcn.h>           // required for dlsym
 #define PTRACE_NAME "ptrace"
+#define PTRACE_DENY_ATTACH 31
+
 typedef int (*ptrace_ptr_t)(int _request, pid_t _pid, caddr_t _addr, int _data);
 
 
 @interface YDDebuggerPtrace: NSObject
 
-
-+(void)setPtraceWithASM;
-+(BOOL)setPtraceDenyAttach;
++(BOOL)setPtraceWithASM;
++(BOOL)setPtraceWithSymbol;
 
 @end
 

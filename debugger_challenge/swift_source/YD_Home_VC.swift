@@ -3,20 +3,21 @@ import UIKit
 class YD_Home_VC: UIViewController {
 
     @IBOutlet var  buttons: [UIButton] = []
-    private let feedback_string = "Debugger attached ="
+    fileprivate let feedback_string = "Debugger attached ="
+    fileprivate let tab_title = "Debugger detections"
     
     @IBAction func ptrace_asm_button(_ sender: Any) {
-        YDDebuggerPtrace.setPtraceWithASM()
+        let result = YDDebuggerPtrace.setPtraceWithASM()
+        present_alert_controller(user_message: feedback_string + " \(result)")
     }
     
     @IBAction func exception_port_button(_ sender: Any) {
-        print("about to check Exception Ports")
         let result = debugger_exception_ports()
         present_alert_controller(user_message: feedback_string + " \(result)")
     }
     
     @IBAction func ptrace_chk_btn(_ sender: Any) {
-        let result = YDDebuggerPtrace.setPtraceDenyAttach()
+        let result = YDDebuggerPtrace.setPtraceWithSymbol()
         present_alert_controller(user_message: feedback_string + " \(result)")
     }
     
@@ -34,7 +35,7 @@ class YD_Home_VC: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        super.tabBarController?.title = "Debugger detections"
+        super.tabBarController?.title = tab_title
     }
     
     func present_alert_controller(user_message: String) {
