@@ -68,35 +68,35 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="6hh-mC-k8n">
-                                <rect key="frame" x="119" y="223" width="137" height="216"/>
+                                <rect key="frame" x="103" y="223" width="169" height="216"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="yCz-Th-X4B">
-                                        <rect key="frame" x="0.0" y="0.0" width="137" height="216"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="169" height="216"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7f0-vk-6d2">
-                                                <rect key="frame" x="48.5" y="0.0" width="40" height="30"/>
+                                                <rect key="frame" x="64.5" y="0.0" width="40" height="30"/>
                                                 <state key="normal" title="sysctl"/>
                                                 <connections>
                                                     <action selector="debug_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nqi-03-2bq"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="60Y-ut-pa8">
-                                                <rect key="frame" x="14.5" y="62" width="108" height="30"/>
+                                                <rect key="frame" x="30.5" y="62" width="108" height="30"/>
                                                 <state key="normal" title="Exception Ports"/>
                                                 <connections>
                                                     <action selector="exception_port_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FT0-gZ-ulK"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH0-zF-jqs">
-                                                <rect key="frame" x="0.5" y="124" width="136" height="30"/>
-                                                <state key="normal" title="PTrace Deny Attach"/>
+                                                <rect key="frame" x="19" y="124" width="131" height="30"/>
+                                                <state key="normal" title="ptrace with symbol"/>
                                                 <connections>
                                                     <action selector="ptrace_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WpV-tx-g09"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LXN-f2-Vcs">
-                                                <rect key="frame" x="0.0" y="186" width="137" height="30"/>
-                                                <state key="normal" title="ptrace call with asm"/>
+                                                <rect key="frame" x="0.0" y="186" width="169" height="30"/>
+                                                <state key="normal" title="ptrace with asm / syscall"/>
                                                 <connections>
                                                     <action selector="ptrace_asm_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XGL-VQ-Avs"/>
                                                 </connections>
@@ -314,11 +314,11 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
+                        <segue destination="R1f-PG-7qg" kind="relationship" relationship="viewControllers" id="yym-Ml-jET"/>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="5pj-TP-ZUR"/>
                         <segue destination="pcv-UJ-06d" kind="relationship" relationship="viewControllers" id="Def-zI-S5L"/>
                         <segue destination="sAQ-o7-ZpC" kind="relationship" relationship="viewControllers" id="H1g-YM-Rgj"/>
                         <segue destination="AKY-oq-JqH" kind="relationship" relationship="viewControllers" id="be5-AJ-S3I"/>
-                        <segue destination="R1f-PG-7qg" kind="relationship" relationship="viewControllers" id="yym-Ml-jET"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4mY-QG-Rxk" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -334,10 +334,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="PTo-9L-qEB">
-                                <rect key="frame" x="74" y="254" width="227" height="154"/>
+                                <rect key="frame" x="74" y="223" width="227" height="216"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="C8h-CF-4ZV">
-                                        <rect key="frame" x="0.0" y="0.0" width="227" height="154"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="227" height="216"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xmX-oH-A2a">
                                                 <rect key="frame" x="65.5" y="0.0" width="96" height="30"/>
@@ -360,6 +360,13 @@
                                                     <action selector="get_random_number_btn:" destination="R1f-PG-7qg" eventType="touchUpInside" id="pZr-lT-Zew"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sC7-Te-ZbQ">
+                                                <rect key="frame" x="55.5" y="186" width="116" height="30"/>
+                                                <state key="normal" title="File check - exist"/>
+                                                <connections>
+                                                    <action selector="file_check:" destination="R1f-PG-7qg" eventType="touchUpInside" id="w2p-o5-mOC"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                     </stackView>
                                 </subviews>
@@ -377,6 +384,7 @@
                         <outletCollection property="buttons" destination="xmX-oH-A2a" collectionClass="NSMutableArray" id="iMP-P4-4MJ"/>
                         <outletCollection property="buttons" destination="SKs-Si-zSB" collectionClass="NSMutableArray" id="VE9-uv-XUn"/>
                         <outletCollection property="buttons" destination="50s-XJ-2vy" collectionClass="NSMutableArray" id="pRe-ar-UUo"/>
+                        <outletCollection property="buttons" destination="sC7-Te-ZbQ" collectionClass="NSMutableArray" id="KYv-sZ-teA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="STk-Ie-7qd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

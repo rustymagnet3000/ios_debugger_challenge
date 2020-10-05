@@ -15,11 +15,11 @@
         message = @"ptrace for __arm64__";
         __asm(
             "mov x0, #26\n" // ptrace
-            "mov x1, PTRACE_DENY_ATTACH\n" // PT_DENY_ATTACH
+            "mov x1, #31\n" // PT_DENY_ATTACH
             "mov x2, #0\n"
             "mov x3, #0\n"
             "mov x16, #0\n"
-            "svc #128\n"
+            "svc #26\n"
         );
     #elif defined(__x86_64__)
         message = @"ptrace for __x86_64__";

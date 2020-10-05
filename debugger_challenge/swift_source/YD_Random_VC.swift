@@ -18,7 +18,14 @@ class YD_Random_VC: UIViewController {
         let answer = YDHelloClass().getRandomNumber()
         self.YDAlertController(user_message: "Random number: \(answer)")
     }
-
+    
+    @IBAction func file_check(_ sender: Any) {
+        let result = YDFileChecker.checkFileExists()
+            self.YDAlertController(user_message: "Checking for file: \(result)")
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         buttons.forEach {
