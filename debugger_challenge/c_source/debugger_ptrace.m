@@ -14,12 +14,12 @@
     #if defined(__arm64__)
         message = @"ptrace for __arm64__";
         __asm(
-            "mov x0, #26\n" // ptrace
-            "mov x1, #31\n" // PT_DENY_ATTACH
+            "mov x0, #26\n"             // ptrace
+            "mov x1, #31\n"             // PT_DENY_ATTACH
             "mov x2, #0\n"
             "mov x3, #0\n"
             "mov x16, #0\n"
-            "svc #26\n"
+            "svc #128\n"
         );
     #elif defined(__x86_64__)
         message = @"ptrace for __x86_64__";
@@ -43,6 +43,7 @@
     [self warning];
     BOOL ptrace_detected = false;
     
+    /* dynamically link the ptrace symbol at runtime on iOS */
     ptrace_ptr_t ptrace_ptr = (ptrace_ptr_t)dlsym(RTLD_SELF, PTRACE_NAME);
     int x = ptrace_ptr(31, 0, 0, 0); // PTRACE_DENY_ATTACH = 31
 

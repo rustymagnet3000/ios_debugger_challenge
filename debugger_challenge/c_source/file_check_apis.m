@@ -3,14 +3,12 @@
 
 @implementation YDFileChecker
 
-//// int result = access(fp, F_OK);
-
- +(uint64_t) asmSyscallFunction:(const char *) fp{
-    int64_t res = 99;
+ +(int64_t) asmSyscallFunction:(const char *) fp{
+    int64_t res = 99;                   // signed 64 bit wide int, as api can return -1
     __asm (
-           "mov x0, #33\n" // access
-           "mov x1, %[input_path]\n" // copy char* to x1
-           "mov x2, #0\n"
+           "mov x0, #33\n"              // access syscall number on arm
+           "mov x1, %[input_path]\n"    // copy char* to x1
+           "mov x2, #0\n"               // File exist check == 0
            "mov x16, #0\n"
            "svc #33\n"
            "mov %[result], x0 \n"
@@ -33,13 +31,11 @@
         int64_t result = [self asmSyscallFunction:fp];
         NSLog(@"Result:%lld", result);
         file_exists = YES;
-    
     #elif defined(__x86_64__)
         NSLog(@"access for __x86_64__");
         int result = access(fp, F_OK);
         printf("[*] result: %d\n", result);
         file_exists == 0 ? YES: NO;
-    
     #else
         NSLog(@"Unknown target.");
         file_exists = NO;

@@ -130,7 +130,6 @@ I went back to `xCode` and selected `New\Project\iOS\Framework\Objective-C`.  Us
 
 @end
 ```
-To read the full code, go [here][70b2d1d9].
 #### Step 3: Place the Swizzle
 Let's start on an iOS Simulator.  I used my trusty debugger connected to the app running on an XCode simulator:
 ```
@@ -154,7 +153,7 @@ For more info on **repackaging apps**  read [here][5e75f6f0].
 
   [5e75f6f0]: https://github.com/OWASP/owasp-mstg/blob/master/Document/0x06c-Reverse-Engineering-and-Tampering.md "owasp"
 
-#### My approach
+#### Approach
 - [x] Build and run Debugger Challenge within xCode.
 - [x] Copy the `Product` (which is a folder called `DebuggerChallenge.app` from Finder).
 - [x] Copy Bob's framework to the _DebuggerChallenge.app/Framework_ folder.
@@ -241,28 +240,28 @@ Triggered by Thread:  0
 I had forgotten to copy the actual framework!  So I had the _Load Command_ but no code to load!
 
 ### COMPLETE ( real device )
-Repeat all the above.  FINALLY, it worked! The Swizzle was placed and working on a `jailed` device.
+Repeat all the above.  It worked! The Swizzle was placed and working on a `jailed` device.
 
 ![success_swizzle](debugger_challenge/readme_images/swizzled_jailed_device.png)
 
 ## Challenge: Bypass anti-debug (ptrace)
 
-Using `ptrace` on `iOS` was a commonly discussed technique to stop a debugger attaching to your iOS app.  If you tried to attach a debugger AFTER  a *deny_attach* was issued, you would see something like this...
+Using `ptrace` on `iOS` is still a common technique to stop a debugger attaching to an iOS app.  If you tried to attach a debugger after `PT_DENY_ATTACH` was issued, you would see something like this...
 ```
 (lldb) process attach --pid 93791
 error: attach failed: lost connection
 ```
-If you attached a debugger before ptrace *deny_attach*  was set, you would see a process crash.
+If you attached a debugger before ptrace `PT_DENY_ATTACH` was set, you would see a process crash.
 
 ##### Use dtrace to observe the ptrace call
-The header files for `ptrace` were not easily available on iOS, unlike macOS.  That said, you could still issue a *deny_attach* on iOS.  
+Unlike macOS, the header files for `ptrace` were not available on iOS.  But You could still `dynamically link` to the ptrace symbol at runtime on iOS.
 
 To see this call on an iOS Simulator, run `DebuggerChallenge` and hit the `ptrace` button, after writing this command:
 ```
 sudo dtrace -qn 'syscall::ptrace:entry { printf("%s(%d, %d, %d, %d) from %s\n", probefunc, arg0, arg1, arg2, arg3, execname); }'
 // ptrace(31, 0, 0, 0) from debugger_challen
 ```
-This won't crash your app if you are running the app on the simulator **WITHOUT** XCode.
+This will **crash** your app, if XCode is attached.
 
 ##### Bypass steps
 Type the following into your debugger:
@@ -272,8 +271,6 @@ rb ptrace -s libsystem_kernel.dylib       // set a regex breakpoint for ptrace
 continue                                  // continue after breakpoint
 dis                                       // look for the syscall
 
-NOTE - a "waitfor" instruction, is my preferred way to start a debugger
-`(lldb) process attach --name "my_app" --waitfor`
 ```
 Check where your breakpoint stopped:
 
@@ -286,6 +283,50 @@ Return an integer 0, to sidestep the real `ptrace` result.
 ### COMPLETE
 
 ![bypass](debugger_challenge/readme_images/ptrace_bypass.png)
+
+## Challenge: Bypass ptrace (asm Syscall)
+
+If you want to make it harder to stop `ptrace` being sidestepped, you could write `inline assembly code`.  `Extended inline assembly` allows `C` language `Symbols` within the `asm` code.  
+
+##### Bypass steps ( manual method )
+```
+(lldb) image lookup -r -n Ptrace
+****************************************************
+1 hits in: debugger_challenge
+****************************************************
++[YDDebuggerPtrace setPtraceWithASM]
+```
+Now `disassemble` that function:
+```
+(lldb) disas -n "+[YDDebuggerPtrace setPtraceWithASM]"
+    .....
+    0x104539dac <+80>:  mov    x0, #0x1a          
+    0x104539db0 <+84>:  mov    x1, #0x1f
+    0x104539db4 <+88>:  mov    x2, #0x0
+    0x104539db8 <+92>:  mov    x3, #0x0
+    0x104539dbc <+96>:  mov    x16, #0x0
+    0x104539dc0 <+100>: svc    #0x1a
+    .....
+    ....
+    ...
+    ..
+    .
+    0x104539e0c <+176>: ret    
+```
+Check the value of the registers:
+```
+(lldb) p/d 0x1a
+(int) $5 = 26         // syscall for ptrace on arm
+
+(lldb) p/d 0x1f
+(int) $6 = 31         // PT_DENY_ATTACH == 31
+```
+
+Set breakpoint on the `svc` call: `(lldb) b *0x104539dc0`.
+
+### COMPLETE
+When the breakpoint fires, you set the `(lldb) po $x1 = 0`.  Depending on how the code is written, that may provide an effective bypass.  That set the `x1` register to the value `PTRACE_TRACEME`.
+
 
 ## Challenge: Bypass anti-debug (sysctl)
 The C API, `Sysctl` was the [Apple][a3a00022] recommended way to check if a debugger was attached to your app.
