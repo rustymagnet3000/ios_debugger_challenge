@@ -1,8 +1,10 @@
 #import <Foundation/Foundation.h>
 #include "file_check_apis.h"
-BOOL file_exists = NO;
+
 
 @implementation YDFileChecker
+
+ BOOL file_exists = NO;                  // global variable ( available to watchpoint )
 
  +(int64_t) asmSyscallFunction:(const char *) fp{
 
@@ -23,27 +25,24 @@ BOOL file_exists = NO;
     return res;
 }
 
+
 +(BOOL)checkFileExists{
-    
-    
+    int64_t result = -10;
     NSBundle *appbundle = [NSBundle mainBundle];
     NSString *filepath = [appbundle pathForResource:@"Info" ofType:@"plist"];
     const char *fp = filepath.fileSystemRepresentation;
     
     #if defined(__arm64__)
         NSLog(@"[*]access() call with __arm64__ ASM instructions");
-        int64_t result = [self asmSyscallFunction:fp];
-        NSLog(@"Result:%lld", result);
-        file_exists = YES;
+        result = [self asmSyscallFunction:fp];
     #elif defined(__x86_64__)
-        NSLog(@"[*]access() regular C call:__x86_64__");
-        int result = access(fp, F_OK);
-        printf("[*]result: %d\n", result);
-        file_exists = (result == 0) ? YES : NO;
+        NSLog(@"[*]syscall(SYS_access) __x86_64__");
+        result = syscall(SYS_access, fp, F_OK);
     #else
         NSLog(@"[*]Unknown target.");
-        file_exists = NO;
     #endif
+    file_exists = (result == 0) ? YES : NO;
+    NSLog(@"Result:%lld", result);
     return file_exists;
 }
 @end

@@ -7,6 +7,7 @@
 #endif
 
 #include <unistd.h>
+#include <sys/syscall.h>
 
 @interface YDFileChecker: NSObject
 
