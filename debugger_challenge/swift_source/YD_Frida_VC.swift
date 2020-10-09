@@ -13,7 +13,7 @@ class YD_Frida_VC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        buttons.forEach { $0.YDButtonStyle(ydColor: UIColor.red) }
+        buttons.forEach { $0.YDButtonStyle(ydColor: UIColor.darkGray) }
     }
 
     override func viewDidAppear(_ animated: Bool) {

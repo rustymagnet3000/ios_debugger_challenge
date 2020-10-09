@@ -8,9 +8,11 @@
    It was declared as immutable (const).
    It is wasteful, in terms of space.
    3 (MAX_ARRAYS) * 15 (MAX_STR_LEN) = 35 bytes.
-   Only about 29 bytes + 5 NULL terminator (0x00) are actually used.
-   The unused by are set to NULL.
+   Only about 22 bytes in chars + 3 NULL terminator (0x00) are actually used.
+   The unused bytes are set to NULL.
 */
+
+@implementation YDFridaDetection
 
 const char byteArrays[MAX_ARRAYS][MAX_STR_LEN] = {
         { 0x66, 0x72, 0x69, 0x64, 0x61 },// frida
@@ -21,16 +23,17 @@ const char byteArrays[MAX_ARRAYS][MAX_STR_LEN] = {
 
 typedef int (*funcptr)( void );
 
-@implementation YDFridaDetection
-
 +(BOOL)checkLoadAddress{
      
-    funcptr funk = NULL;
-    const char* fridaSymbol = "FRIDA";
-    funk = (funcptr)dlsym( RTLD_DEFAULT, fridaSymbol );
+    funcptr ptr = NULL;
 
-    if( funk != NULL )
-        return YES;
+    for (int i=0; i<MAX_ARRAYS; i++) {
+        NSLog(@"[*]🐝Checking: %s", byteArrays[i]);
+        ptr = (funcptr)dlsym( RTLD_DEFAULT, byteArrays[i] );
+
+        if( ptr != NULL )
+            return YES;
+    }
 
     return NO;
 }
