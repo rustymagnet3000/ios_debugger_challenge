@@ -25,7 +25,6 @@ class YD_Random_VC: UIViewController {
     }
     
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         buttons.forEach {

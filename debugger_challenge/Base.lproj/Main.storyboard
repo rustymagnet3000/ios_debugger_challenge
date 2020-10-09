@@ -302,6 +302,58 @@
             </objects>
             <point key="canvasLocation" x="239" y="33"/>
         </scene>
+        <!--Frida-->
+        <scene sceneID="0Qx-VT-iWJ">
+            <objects>
+                <viewController id="x4H-Cl-EEH" customClass="YD_Frida_VC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pOT-Zb-N2e">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="OjY-lL-V24">
+                                <rect key="frame" x="86" y="213" width="122" height="154"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="ImL-YN-IBq">
+                                        <rect key="frame" x="0.0" y="0.0" width="122" height="154"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRG-Ih-Zcz">
+                                                <rect key="frame" x="8.5" y="0.0" width="105" height="30"/>
+                                                <state key="normal" title="Frida file check"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CfZ-tL-j2U">
+                                                <rect key="frame" x="4.5" y="62" width="113" height="30"/>
+                                                <state key="normal" title="Frida port check"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ajh-Cn-Mhx">
+                                                <rect key="frame" x="0.0" y="124" width="122" height="30"/>
+                                                <state key="normal" title="Frida dylib loaded"/>
+                                                <connections>
+                                                    <action selector="frida_dylib_check:" destination="x4H-Cl-EEH" eventType="touchUpInside" id="Cvr-Pa-Lvd"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="ImL-YN-IBq" firstAttribute="centerY" secondItem="BJa-fp-Y6w" secondAttribute="centerY" id="Hs1-CN-5eB"/>
+                            <constraint firstItem="ImL-YN-IBq" firstAttribute="centerX" secondItem="BJa-fp-Y6w" secondAttribute="centerX" id="U4B-sv-ufv"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="BJa-fp-Y6w"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Frida" id="30x-ve-dUB"/>
+                    <connections>
+                        <outletCollection property="buttons" destination="bRG-Ih-Zcz" collectionClass="NSMutableArray" id="Mdh-nP-SLM"/>
+                        <outletCollection property="buttons" destination="CfZ-tL-j2U" collectionClass="NSMutableArray" id="UzL-Ra-Ydn"/>
+                        <outletCollection property="buttons" destination="Ajh-Cn-Mhx" collectionClass="NSMutableArray" id="NMm-LA-cpr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Dx9-GB-1xq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="154" y="-1060"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="tLZ-VE-N3o">
             <objects>
@@ -314,6 +366,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
+                        <segue destination="x4H-Cl-EEH" kind="relationship" relationship="viewControllers" id="Vao-83-Vtt"/>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="5pj-TP-ZUR"/>
                         <segue destination="R1f-PG-7qg" kind="relationship" relationship="viewControllers" id="yym-Ml-jET"/>
                         <segue destination="pcv-UJ-06d" kind="relationship" relationship="viewControllers" id="Def-zI-S5L"/>
