@@ -17,6 +17,7 @@
 		0F358CE32525C10F00804C44 /* YD_Random_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F358CE22525C10F00804C44 /* YD_Random_VC.swift */; };
 		0F358CE52525C9FF00804C44 /* debugger_ptrace.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F358CE42525C9FF00804C44 /* debugger_ptrace.m */; };
 		0F3E52B525309E68001F6D20 /* YD_Frida_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F3E52B425309E68001F6D20 /* YD_Frida_VC.swift */; };
+		0F3E52B72530A249001F6D20 /* frida_detection.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F3E52B62530A249001F6D20 /* frida_detection.m */; };
 		0F59981622046D62001D0DAF /* YD_Enclave_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */; };
 		0F68B5AA21B8519C00C0D35F /* YD_Enclave_Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */; };
 		0FF69547228EED8500D767C4 /* YDAliceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */; };
@@ -62,6 +63,8 @@
 		0F358CE42525C9FF00804C44 /* debugger_ptrace.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = debugger_ptrace.m; sourceTree = "<group>"; };
 		0F358CE62525CA1E00804C44 /* debugger_ptrace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = debugger_ptrace.h; sourceTree = "<group>"; };
 		0F3E52B425309E68001F6D20 /* YD_Frida_VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Frida_VC.swift; sourceTree = "<group>"; };
+		0F3E52B62530A249001F6D20 /* frida_detection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = frida_detection.m; sourceTree = "<group>"; };
+		0F3E52B82530A263001F6D20 /* frida_detection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = frida_detection.h; sourceTree = "<group>"; };
 		0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_VC.swift; sourceTree = "<group>"; };
 		0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_Manager.swift; sourceTree = "<group>"; };
 		0F82A83C23585ECC00728710 /* YD_swizzle_NSURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YD_swizzle_NSURLSession.m; sourceTree = "<group>"; };
@@ -126,6 +129,8 @@
 				30D4E6F92080729900ABE7AA /* debugger_sysctl.c */,
 				0F328B5622A5338A00594085 /* thread_chomper.h */,
 				0F328B5422A532BB00594085 /* thread_chomper.m */,
+				0F3E52B82530A263001F6D20 /* frida_detection.h */,
+				0F3E52B62530A249001F6D20 /* frida_detection.m */,
 				0FFAAE1A252B5B7C00BACA90 /* file_check_apis.h */,
 				0FFAAE18252B5ABD00BACA90 /* file_check_apis.m */,
 				0F358CE62525CA1E00804C44 /* debugger_ptrace.h */,
@@ -257,6 +262,7 @@
 				0F328B5322A4E00F00594085 /* YD_Button_Ext.swift in Sources */,
 				30D4E6FB2080729900ABE7AA /* debugger_sysctl.c in Sources */,
 				0FFAAE19252B5ABD00BACA90 /* file_check_apis.m in Sources */,
+				0F3E52B72530A249001F6D20 /* frida_detection.m in Sources */,
 				0F2E46E62356F18900E8C57D /* YD_Error.swift in Sources */,
 				30D4E6FF208072CD00ABE7AA /* YD_Time_Helper.swift in Sources */,
 				0F25FC19228C6BE00041F80E /* YD_Thread_Chomper_CVC.swift in Sources */,

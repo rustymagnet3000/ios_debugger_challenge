@@ -3,5 +3,6 @@
 #include "debugger_ptrace.h"
 #include "file_check_apis.h"
 #include "thread_chomper.h"
+#include "frida_detection.h"
 #include "YDAliceSDK.framework/Headers/YDHelloClass.h"
 #import "RNCryptor.h"
