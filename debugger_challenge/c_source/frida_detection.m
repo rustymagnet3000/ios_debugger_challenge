@@ -2,16 +2,6 @@
 #include "frida_detection.h"
 #define MAX_ARRAYS 3
 #define MAX_STR_LEN 15
-#define TARGET "frida"
-
-/*
-   The Array of Byte Arrays is constant.
-   It was declared as immutable (const).
-   It is wasteful, in terms of space.
-   3 (MAX_ARRAYS) * 15 (MAX_STR_LEN) = 35 bytes.
-   Only about 22 bytes in chars + 3 NULL terminator (0x00) are actually used.
-   The unused bytes are set to NULL.
-*/
 
 @implementation YDFridaDetection
 
@@ -21,8 +11,18 @@ const char byteArrays[MAX_ARRAYS][MAX_STR_LEN] = {
         { 0x46, 0x52, 0x49, 0x44, 0x41 } // FRIDA
 };
 
-
 typedef int (*funcptr)( void );
+
+/* check Parent loaded name. Trying to detect Frida-Trace */
++(BOOL)checkParent{
+    
+    NSProcessInfo *processInfo = [NSProcessInfo processInfo];
+    NSString *processName = [processInfo processName];
+    int processID = [processInfo processIdentifier];
+    pid_t parent = getppid();
+    NSLog(@"Process Name: '%@'\tProcess ID:'%d'\tParent'%d'", processName, processID, parent);
+    return NO;
+}
 
 +(BOOL)checkLoadAddress{
      
@@ -46,20 +46,16 @@ typedef int (*funcptr)( void );
     unsigned int count = 0;
 
     const char **images = objc_copyImageNames ( &count );
-    for (int i=0; i<count; i++) {
+    for ( int y = 0 ; y < count ; y ++ ) {
         
-        NSString *module = [[NSString alloc] initWithCString:images[i] encoding:NSUTF8StringEncoding];
-        
-        for (int i=0; i<MAX_ARRAYS; i++) {
-            if([module containsString:@TARGET]){
-                NSLog(@"🍭[*]%@", module);
+        for ( int i=0 ; i<MAX_ARRAYS ; i++ ) {
+            char *result = nil;
+            result = strnstr ( images[y], byteArrays[i], strlen ( images[y] ));
+            if( result != nil )
                 return YES;
-            }
         }
     }
+    NSLog(@"[*]🐝No suspect modules found");
     return NO;
 }
-
-
-
 @end
