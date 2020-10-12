@@ -1,7 +1,7 @@
 #ifndef debugger_ptrace_h
 #define debugger_ptrace_h
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #include <unistd.h>
 #include <stdlib.h>
 #include <assert.h>

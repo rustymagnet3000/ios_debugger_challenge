@@ -11,6 +11,11 @@ class YD_Frida_VC: UIViewController {
         self.YDAlertController(user_message: feedback_string + " \(result)")
     }
     
+    @IBAction func frida_module_check(_ sender: Any) {
+        let result = YDFridaDetection.checkModules()
+        self.YDAlertController(user_message: feedback_string + " \(result)")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         buttons.forEach { $0.YDButtonStyle(ydColor: UIColor.darkGray) }

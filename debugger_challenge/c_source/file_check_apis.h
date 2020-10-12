@@ -5,7 +5,7 @@
 #else
 #define NSLog(...) {}
 #endif
-#import <Foundation/Foundation.h>
+@import Foundation;
 #include <unistd.h>
 #include <sys/syscall.h>
 

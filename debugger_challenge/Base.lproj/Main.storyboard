@@ -311,21 +311,28 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="OjY-lL-V24">
-                                <rect key="frame" x="86" y="213" width="122" height="154"/>
+                                <rect key="frame" x="86" y="213" width="135" height="216"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="ImL-YN-IBq">
-                                        <rect key="frame" x="0.0" y="0.0" width="122" height="154"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="135" height="216"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRG-Ih-Zcz">
-                                                <rect key="frame" x="8.5" y="0.0" width="105" height="30"/>
+                                                <rect key="frame" x="15" y="0.0" width="105" height="30"/>
                                                 <state key="normal" title="Frida file check"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CfZ-tL-j2U">
-                                                <rect key="frame" x="4.5" y="62" width="113" height="30"/>
+                                                <rect key="frame" x="11" y="62" width="113" height="30"/>
                                                 <state key="normal" title="Frida port check"/>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ztC-K9-V6d">
+                                                <rect key="frame" x="0.0" y="124" width="135" height="30"/>
+                                                <state key="normal" title="Frida Module check"/>
+                                                <connections>
+                                                    <action selector="frida_module_check:" destination="x4H-Cl-EEH" eventType="touchUpInside" id="0Bp-TJ-gHY"/>
+                                                </connections>
+                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ajh-Cn-Mhx">
-                                                <rect key="frame" x="0.0" y="124" width="122" height="30"/>
+                                                <rect key="frame" x="6.5" y="186" width="122" height="30"/>
                                                 <state key="normal" title="Frida dylib loaded"/>
                                                 <connections>
                                                     <action selector="frida_dylib_check:" destination="x4H-Cl-EEH" eventType="touchUpInside" id="Cvr-Pa-Lvd"/>
@@ -348,6 +355,7 @@
                         <outletCollection property="buttons" destination="bRG-Ih-Zcz" collectionClass="NSMutableArray" id="Mdh-nP-SLM"/>
                         <outletCollection property="buttons" destination="CfZ-tL-j2U" collectionClass="NSMutableArray" id="UzL-Ra-Ydn"/>
                         <outletCollection property="buttons" destination="Ajh-Cn-Mhx" collectionClass="NSMutableArray" id="NMm-LA-cpr"/>
+                        <outletCollection property="buttons" destination="ztC-K9-V6d" collectionClass="NSMutableArray" id="mno-BF-h0u"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dx9-GB-1xq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

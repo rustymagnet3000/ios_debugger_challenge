@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+@import Foundation;
 #include "frida_detection.h"
 #define MAX_ARRAYS 3
 #define MAX_STR_LEN 15
@@ -37,5 +37,28 @@ typedef int (*funcptr)( void );
 
     return NO;
 }
+
+/* Iterate through all loaded Modules inside the app, to check for additions at run-time */
+
++(BOOL)checkModules{
+    unsigned int count = 0;
+    const char **images = objc_copyImageNames(&count);
+    
+    for (int i=0; i<count; i++) {
+        NSLog(@"[*]🐝 %s", images[i]);
+    }
+
+    
+
+//    NSString *fridaStr = [[NSString alloc] initWithBytes:byteArrays[i] length:strlen(byteArrays[i]) encoding:NSASCIIStringEncoding ];
+//    NSLog(@"[*]🐝Checking: %@", fridaStr);
+//    if (NSClassFromString(fridaStr) != nil)
+//       NSLog(@"[*]🐝We have a HIT!%s", byteArrays[i]);
+
+
+    return NO;
+}
+
+
 
 @end

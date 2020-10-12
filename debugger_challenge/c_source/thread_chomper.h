@@ -7,7 +7,7 @@
 #define NSLog(...) {}
 #endif
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #include <unistd.h>
 #include <stdlib.h>
 #include <assert.h>

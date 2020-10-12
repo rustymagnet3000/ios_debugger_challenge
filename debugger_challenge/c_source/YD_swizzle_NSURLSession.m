@@ -1,5 +1,6 @@
-#import <Foundation/Foundation.h>
-#import <objc/runtime.h>
+@import Foundation;
+@import ObjectiveC.runtime;
+
 #define targetClassToSwizzle "debugger_challenge.YDURLSession"
 
 @implementation NSObject (YDSwizzleNSURLSession)

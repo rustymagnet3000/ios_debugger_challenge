@@ -5,4 +5,4 @@
 #include "thread_chomper.h"
 #include "frida_detection.h"
 #include "YDAliceSDK.framework/Headers/YDHelloClass.h"
-#import "RNCryptor.h"
+#include "RNCryptor.h"
