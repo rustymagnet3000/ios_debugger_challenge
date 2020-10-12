@@ -311,10 +311,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="OjY-lL-V24">
-                                <rect key="frame" x="86" y="213" width="135" height="216"/>
+                                <rect key="frame" x="86" y="213" width="135" height="278"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="ImL-YN-IBq">
-                                        <rect key="frame" x="0.0" y="0.0" width="135" height="216"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="135" height="278"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRG-Ih-Zcz">
                                                 <rect key="frame" x="15" y="0.0" width="105" height="30"/>
@@ -338,6 +338,13 @@
                                                     <action selector="frida_dylib_check:" destination="x4H-Cl-EEH" eventType="touchUpInside" id="Cvr-Pa-Lvd"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dg6-w3-nCC">
+                                                <rect key="frame" x="28" y="248" width="79" height="30"/>
+                                                <state key="normal" title="Frida-Trace"/>
+                                                <connections>
+                                                    <action selector="frida_trace_check:" destination="x4H-Cl-EEH" eventType="touchUpInside" id="YvW-F8-nGN"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                     </stackView>
                                 </subviews>
@@ -356,6 +363,7 @@
                         <outletCollection property="buttons" destination="CfZ-tL-j2U" collectionClass="NSMutableArray" id="UzL-Ra-Ydn"/>
                         <outletCollection property="buttons" destination="Ajh-Cn-Mhx" collectionClass="NSMutableArray" id="NMm-LA-cpr"/>
                         <outletCollection property="buttons" destination="ztC-K9-V6d" collectionClass="NSMutableArray" id="mno-BF-h0u"/>
+                        <outletCollection property="buttons" destination="Dg6-w3-nCC" collectionClass="NSMutableArray" id="Oc5-nQ-X4k"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dx9-GB-1xq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

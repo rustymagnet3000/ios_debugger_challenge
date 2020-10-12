@@ -333,12 +333,12 @@ The C API, `Sysctl` was the [Apple][a3a00022] recommended way to check if a debu
 
   [a3a00022]: https://developer.apple.com/library/archive/qa/qa1361/index.html "apple_link"
 
-> The same trick for Challenge 1 (ptrace) worked with sysctl
+> The sysctl utility retrieves kernel state and allows processes with appropriate privilege to set kernel tate.
 
-I wanted to be more creative.  I was inspired by https://github.com/DerekSelander/LLDB to create a new, empty Swift framework that loaded a C function API named - you guessed it -`sysctl`.  This new piece of code would be injected into my app's `image list`.
+To avoid repeating the `trace` trick, create a new, empty Swift framework that loaded a C function API named `sysctl`.  This code would be injected into my app's process at run-time.
 
 ##### Create an empty Swift framework
-I created an empty Swift project.  I added the following C code.  You don't need a C header file.
+Create an empty Swift project. Add the following C code ( from Apple ).  You don't need a C header file.
 ![framework_settings](debugger_challenge/readme_images/framework_creation.png)
 ##### Write your fake sysctl API
 ```
@@ -351,10 +351,10 @@ int sysctl(int * mib, u_int byte_size, void *info, size_t *size, void *temp, siz
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{  // ensure this is only called once & not on every function call
         handle = dlopen("/usr/lib/system/libsystem_c.dylib", RTLD_NOW);
-        real_sysctl = dlsym(handle, "sysctl");  // get function pointer
+        real_sysctl = dlsym(handle, "sysctl");  // get actual pointer
     });
 
-    printf("Real sysctl function: %p\nFake sysctl: %p\n", real_sysctl, sysctl);
+    printf("Real sysctl address: %p\nFake sysctl address: %p\n", real_sysctl, sysctl);
     printf("HOOKED SYSCTL");
     return fake_result;
 }
@@ -371,7 +371,7 @@ Now load the process...
 Loading "/Users/PATH_TO_FRAMEWORK/rusty_bypass.framework/rusty_bypass"...ok
 Image 0 loaded.
 
-(lldb) image lookup -s sysctl           // shows a great view of where the API is invoked
+(lldb) image lookup -s sysctl  
 ```
 ##### dlopen and dlsym
 Find the load address for the `sysctl` function inside the iOS app.
@@ -424,17 +424,8 @@ rip = 0x000000012e292dc0  rusty_bypass`sysctl at hook_debugger_check.c:5
 (lldb) continue
 ```
 ### COMPLETE
+This was a cumbersome way to overwrite a register. There is a much simpler and reliable way to patch out anto-debug registers at run-time.
 
-##### Bonus - use lldb to print when inside your fake sysctl API
-I wanted to check I was inside of my hooked-sysctl.  I could have added `syslog` statements to achieve the same.  But that missed the point of improving `lldb` skills.  Here was a more fun way...
-```
-(lldb) breakpoint set -p "return" -f hook_debugger_check.c
-(lldb) breakpoint modify --auto-continue 1
-(lldb) breakpoint command add 1
-  script print "hello”
-  DONE
-(lldb) continue
-```
 ## Challenge: Bypass anti-debug (Exception Ports)
 Another anti-debug technique on macOS / iOS was to check if a debugger was attached by looking if any of the `Ports` used by a Debugger returned a valid response.  
 

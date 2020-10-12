@@ -14,13 +14,17 @@ const char byteArrays[MAX_ARRAYS][MAX_STR_LEN] = {
 typedef int (*funcptr)( void );
 
 /* check Parent loaded name. Trying to detect Frida-Trace */
+/* FAILED -> frida-trace still return a ppid of 1 on jailbroken 11.4 device */
+
 +(BOOL)checkParent{
     
-    NSProcessInfo *processInfo = [NSProcessInfo processInfo];
-    NSString *processName = [processInfo processName];
-    int processID = [processInfo processIdentifier];
-    pid_t parent = getppid();
-    NSLog(@"Process Name: '%@'\tProcess ID:'%d'\tParent'%d'", processName, processID, parent);
+    NSProcessInfo *process = [NSProcessInfo processInfo];
+    NSString *name = [process processName];
+  
+    pid_t pid = getpid();
+    pid_t parentpid = getppid();
+    NSLog(@"[*]🐝Process Name: '%@'\tProcess ID:'%d'\tParent'%d'", name, pid, parentpid);
+    
     return NO;
 }
 
@@ -48,6 +52,7 @@ typedef int (*funcptr)( void );
     const char **images = objc_copyImageNames ( &count );
     for ( int y = 0 ; y < count ; y ++ ) {
         
+        NSLog(@"🍭[*]%s", images[y]);
         for ( int i=0 ; i<MAX_ARRAYS ; i++ ) {
             char *result = nil;
             result = strnstr ( images[y], byteArrays[i], strlen ( images[y] ));
