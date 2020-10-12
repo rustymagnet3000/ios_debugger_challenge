@@ -2,6 +2,7 @@
 #include "frida_detection.h"
 #define MAX_ARRAYS 3
 #define MAX_STR_LEN 15
+#define TARGET "frida"
 
 /*
    The Array of Byte Arrays is constant.
@@ -39,23 +40,23 @@ typedef int (*funcptr)( void );
 }
 
 /* Iterate through all loaded Modules inside the app, to check for additions at run-time */
+/* this only seems to detect Frida-Gadget */
 
 +(BOOL)checkModules{
     unsigned int count = 0;
-    const char **images = objc_copyImageNames(&count);
-    
+
+    const char **images = objc_copyImageNames ( &count );
     for (int i=0; i<count; i++) {
-        NSLog(@"[*]🐝 %s", images[i]);
+        
+        NSString *module = [[NSString alloc] initWithCString:images[i] encoding:NSUTF8StringEncoding];
+        
+        for (int i=0; i<MAX_ARRAYS; i++) {
+            if([module containsString:@TARGET]){
+                NSLog(@"🍭[*]%@", module);
+                return YES;
+            }
+        }
     }
-
-    
-
-//    NSString *fridaStr = [[NSString alloc] initWithBytes:byteArrays[i] length:strlen(byteArrays[i]) encoding:NSASCIIStringEncoding ];
-//    NSLog(@"[*]🐝Checking: %@", fridaStr);
-//    if (NSClassFromString(fridaStr) != nil)
-//       NSLog(@"[*]🐝We have a HIT!%s", byteArrays[i]);
-
-
     return NO;
 }
 
