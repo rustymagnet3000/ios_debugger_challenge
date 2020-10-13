@@ -5,6 +5,11 @@ class YD_Home_VC: UIViewController {
     @IBOutlet var  buttons: [UIButton] = []
     fileprivate let feedback_string = "Debugger attached ="
     fileprivate let tab_title = "Debugger detections"
+
+    @IBAction func ppid_button(_ sender: Any) {
+        let result = YDDebuggerPtrace.checkParent()
+        self.YDAlertController(user_message: feedback_string + " \(result)")
+    }
     
     @IBAction func ptrace_asm_button(_ sender: Any) {
         let result = YDDebuggerPtrace.setPtraceWithASM()

@@ -16,7 +16,7 @@ typedef int (*ptrace_ptr_t)(int _request, pid_t _pid, caddr_t _addr, int _data);
 
 
 @interface YDDebuggerPtrace: NSObject
-
++(BOOL)checkParent;
 +(BOOL)setPtraceWithASM;
 +(BOOL)setPtraceWithSymbol;
 

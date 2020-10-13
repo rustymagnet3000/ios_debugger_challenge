@@ -17,7 +17,7 @@ class YD_Frida_VC: UIViewController {
     }
     
     @IBAction func frida_trace_check(_ sender: Any) {
-        let result = YDFridaDetection.checkParent()
+        let result = false      //TODO: add correct tracing call
         self.YDAlertController(user_message: feedback_string + " \(result)")
     }
     

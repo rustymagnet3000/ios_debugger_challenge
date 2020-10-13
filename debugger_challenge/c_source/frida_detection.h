@@ -10,7 +10,6 @@
 #include <sys/sysctl.h>
 
 @interface YDFridaDetection: NSObject
-+(BOOL)checkParent;
 +(BOOL)checkLoadAddress;
 +(BOOL)checkModules;
 @end

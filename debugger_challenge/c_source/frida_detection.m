@@ -13,20 +13,6 @@ const char byteArrays[MAX_ARRAYS][MAX_STR_LEN] = {
 
 typedef int (*funcptr)( void );
 
-/* check Parent loaded name. Trying to detect Frida-Trace */
-/* FAILED -> frida-trace still return a ppid of 1 on jailbroken 11.4 device */
-
-+(BOOL)checkParent{
-    
-    NSProcessInfo *process = [NSProcessInfo processInfo];
-    NSString *name = [process processName];
-  
-    pid_t pid = getpid();
-    pid_t parentpid = getppid();
-    NSLog(@"[*]🐝Process Name: '%@'\tProcess ID:'%d'\tParent'%d'", name, pid, parentpid);
-    
-    return NO;
-}
 
 +(BOOL)checkLoadAddress{
      
