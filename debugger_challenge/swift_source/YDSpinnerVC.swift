@@ -2,7 +2,7 @@ import UIKit
 
 class YDSpinnerVC: UIViewController {
 
-    var spinner = UIActivityIndicatorView(style: .whiteLarge)
+    var spinner = UIActivityIndicatorView(style: .gray)
     
     override func loadView() {
         view = UIView()

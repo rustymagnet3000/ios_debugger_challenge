@@ -105,19 +105,19 @@
 		0F25FC17228C6B850041F80E /* swift_source */ = {
 			isa = PBXGroup;
 			children = (
+				30D4E6E62080725700ABE7AA /* YD_App_Delegate.swift */,
 				30D4E6E82080725700ABE7AA /* YD_Home_VC.swift */,
 				0F358CE22525C10F00804C44 /* YD_Random_VC.swift */,
 				0F2E46E12356F0A000E8C57D /* YD_URLSession_VC.swift */,
 				0F2E46E32356F18100E8C57D /* YD_URL_Session.swift */,
 				0F2E46E52356F18900E8C57D /* YD_Error.swift */,
-				0F72899A2535E15C0011D9DE /* YDSpinnerVC.swift */,
 				0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */,
 				0F3E52B425309E68001F6D20 /* YD_Frida_VC.swift */,
 				0F25FC18228C6BE00041F80E /* YD_Thread_Chomper_CVC.swift */,
 				0F328B5222A4E00F00594085 /* YD_Button_Ext.swift */,
 				0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */,
 				30D4BA0E2115E1C100C31AE5 /* YD_Crypto.swift */,
-				30D4E6E62080725700ABE7AA /* YD_App_Delegate.swift */,
+				0F72899A2535E15C0011D9DE /* YDSpinnerVC.swift */,
 				30D4E6FC208072CD00ABE7AA /* YD_Alert_Helper.swift */,
 				30D4E6FD208072CD00ABE7AA /* YD_Time_Helper.swift */,
 			);
