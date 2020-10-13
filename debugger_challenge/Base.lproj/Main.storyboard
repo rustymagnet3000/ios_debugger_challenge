@@ -11,7 +11,7 @@
         <!--Thread Chomper-->
         <scene sceneID="SCu-CB-8RT">
             <objects>
-                <viewController id="AKY-oq-JqH" customClass="YD_Thread_Chomper_CVC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="AKY-oq-JqH" customClass="YDThreadChomperCVC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
                     <label key="view" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EiB-sj-qAq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -29,7 +29,7 @@
         <!--URL Session-->
         <scene sceneID="W5L-61-JEo">
             <objects>
-                <viewController id="sAQ-o7-ZpC" customClass="YD_URLSession_VC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="sAQ-o7-ZpC" customClass="YDURLSessionVC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lM5-VR-wIc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -62,7 +62,7 @@
         <!--Debuggers-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="YD_Home_VC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="YDHomeVC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -137,7 +137,7 @@
         <!--Secure Enclave-->
         <scene sceneID="tdB-nu-rLq">
             <objects>
-                <viewController id="pcv-UJ-06d" customClass="YD_Enclave_VC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="pcv-UJ-06d" customClass="YDEnclaveVC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kHA-pz-iiH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -313,7 +313,7 @@
         <!--Frida-->
         <scene sceneID="0Qx-VT-iWJ">
             <objects>
-                <viewController id="x4H-Cl-EEH" customClass="YD_Frida_VC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="x4H-Cl-EEH" customClass="YDFridaVC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pOT-Zb-N2e">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -408,7 +408,7 @@
         <!--Random-->
         <scene sceneID="eCG-eq-IHk">
             <objects>
-                <viewController id="R1f-PG-7qg" customClass="YD_Random_VC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="R1f-PG-7qg" customClass="YDRandomVC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="IOR-HP-QnR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

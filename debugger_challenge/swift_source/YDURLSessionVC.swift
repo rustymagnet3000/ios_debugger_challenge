@@ -1,6 +1,6 @@
 import UIKit
 
-class YD_URLSession_VC: UIViewController {
+class YDURLSessionVC: UIViewController {
 
     @IBOutlet weak var btn_outlet: UIButton!
     fileprivate let urlstr = "https://www.httpbin.org/get"

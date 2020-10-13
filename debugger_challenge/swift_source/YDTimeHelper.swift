@@ -1,6 +1,6 @@
 import Foundation
 
-class YD_Time_Helper {
+class YDTimeHelper {
     var raw_date: Date
     var readable_date: String
     var epoch_time: Int

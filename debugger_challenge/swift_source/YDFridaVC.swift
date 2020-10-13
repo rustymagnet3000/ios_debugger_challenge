@@ -1,6 +1,6 @@
 import UIKit
 
-class YD_Frida_VC: UIViewController {
+class YDFridaVC: UIViewController {
 
     @IBOutlet var  buttons: [UIButton] = []
     fileprivate let feedback_string = "Frida detected ="

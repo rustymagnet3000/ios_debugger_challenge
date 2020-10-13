@@ -1,6 +1,6 @@
 import UIKit
 
-class YD_Thread_Chomper_CVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class YDThreadChomperCVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
     private let reuseIdentifier = "fishCell"
     private var caughtFish: NSMutableArray = []

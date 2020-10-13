@@ -1,6 +1,6 @@
 import Foundation
 
-class YD_Crypto_Helper {
+class YDCryptoHelper {
 
     enum AESError: Error {
         case KeyError((String, Int))
@@ -103,7 +103,7 @@ class YD_Crypto_Helper {
         let keyData   = "AAAAAAAAAAAAAAAA".data(using:String.Encoding.utf8)!
         print("clearData:   \(clearData as NSData)")
         print("keyData:     \(keyData as NSData)")
-        let a = YD_Crypto_Helper()
+        let a = YDCryptoHelper()
         var cryptData :Data?
         do {
             cryptData = try a.aesCBCEncrypt(data:clearData, keyData:keyData)

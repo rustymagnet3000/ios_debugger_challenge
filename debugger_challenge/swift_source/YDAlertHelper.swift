@@ -1,6 +1,6 @@
 import UIKit
 
-class YD_Alert_Helper {
+class YDAlertHelper {
     var alert_controller: UIAlertController
     var title_message: String
     var body_message: String
@@ -21,13 +21,13 @@ class YD_Alert_Helper {
 
 extension UIViewController {
     func YDAlertController(user_message: String) {
-        let time = YD_Time_Helper(raw_date: Date())
-        let alert = YD_Alert_Helper(body_message: user_message + " 🐝\n\n\(time.readable_date)")
+        let time = YDTimeHelper(raw_date: Date())
+        let alert = YDAlertHelper(body_message: user_message + " 🐝\n\n\(time.readable_date)")
         self.present(alert.alert_controller, animated: true, completion: nil)
     }
     
     func YDAlertController(title: String, message: String) {
-        let alert = YD_Alert_Helper(title: title, message: message)
+        let alert = YDAlertHelper(title: title, message: message)
         self.present(alert.alert_controller, animated: true, completion: nil)
     }
 }

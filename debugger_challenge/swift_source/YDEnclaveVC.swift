@@ -1,6 +1,6 @@
 import UIKit
 
-class YD_Enclave_VC: UIViewController {
+class YDEnclaveVC: UIViewController {
     
     @IBOutlet weak var signatureVerifyLbl: UILabel!
     @IBOutlet weak var signatureLabel: UILabel!

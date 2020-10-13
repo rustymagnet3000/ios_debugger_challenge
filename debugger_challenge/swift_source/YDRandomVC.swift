@@ -1,12 +1,12 @@
 import UIKit
 
-class YD_Random_VC: UIViewController {
+class YDRandomVC: UIViewController {
 
     @IBOutlet var  buttons: [UIButton] = []
        
     @IBAction func crypto_button(_ sender: Any) {
         self.YDAlertController(user_message: "about to call common crypto API")
-        YD_Crypto_Helper.funky()
+        YDCryptoHelper.funky()
     }
     
     @IBAction func random_string_btn(_ sender: Any) {
