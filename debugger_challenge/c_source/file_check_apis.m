@@ -3,8 +3,6 @@
 
 @implementation YDFileChecker
 
- BOOL file_exists = NO;                  // global variable ( available to watchpoint )
-
  +(int64_t) asmSyscallFunction:(const char *) fp{
 
      int64_t res = 99;                   // signed 64 bit wide int, as api can return -1
@@ -40,8 +38,8 @@
     #else
         NSLog(@"[*]Unknown target.");
     #endif
-    file_exists = (result == 0) ? YES : NO;
-    NSLog(@"Result:%lld", result);
-    return file_exists;
+    
+    NSLog(@"[*]Result:%lld", result);
+    return (result == 0) ? YES : NO;;
 }
 @end

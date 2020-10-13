@@ -13,10 +13,18 @@
     
     NSProcessInfo *process = [NSProcessInfo processInfo];
     NSString *name = [process processName];
-  
+
     pid_t pid = getpid();
     pid_t parentpid = getppid();
-    NSLog(@"[*]🐝Process Name: '%@'\tProcess ID:'%d'\tParent'%d'", name, pid, parentpid);
+    NSLog(@"[*]🐝Process Name: '%@'\tProcess ID:'%d'\tParent'%d'\t%@", name, pid, parentpid, [process hostName]);
+    
+    #if defined(__arm64__)
+        return parentpid != 1 ? YES : NO;
+    #elif defined(__x86_64__)
+        if([name containsString:@"debugserver"]){
+            return YES;
+        }
+    #endif
     
     return NO;
 }
