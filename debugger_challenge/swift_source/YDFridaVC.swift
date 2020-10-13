@@ -5,10 +5,10 @@ class YDFridaVC: UIViewController {
     @IBOutlet var  buttons: [UIButton] = []
     fileprivate let feedback_string = "Frida detected ="
     fileprivate let tab_title = "Frida detections"
-    fileprivate let child = YDSpinnerVC()
-    
+    fileprivate var child = YDSpinnerVC()
     
     @IBAction func frida_port_check(_ sender: Any) {
+        
         addSpinnerView()
         DispatchQueue.global(qos: .background).async {
             let result = YDFridaDetection.checkDefaultPort()

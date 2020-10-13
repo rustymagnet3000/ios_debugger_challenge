@@ -174,12 +174,12 @@
 		30D4E6E52080725700ABE7AA /* debugger_challenge */ = {
 			isa = PBXGroup;
 			children = (
-				0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */,
 				0F25FC17228C6B850041F80E /* swift_source */,
 				0F68B5A821B84F2000C0D35F /* c_source */,
 				30D4E6ED2080725900ABE7AA /* Assets.xcassets */,
 				30D4E6EA2080725700ABE7AA /* Main.storyboard */,
 				30D4E6EF2080725900ABE7AA /* LaunchScreen.storyboard */,
+				0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */,
 				30D4E6F22080725900ABE7AA /* Info.plist */,
 				30D4E6F82080729800ABE7AA /* debugger_challenge-Bridging-Header.h */,
 			);
