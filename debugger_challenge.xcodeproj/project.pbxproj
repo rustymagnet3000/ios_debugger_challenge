@@ -20,6 +20,7 @@
 		0F3E52B72530A249001F6D20 /* frida_detection.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F3E52B62530A249001F6D20 /* frida_detection.m */; };
 		0F59981622046D62001D0DAF /* YD_Enclave_VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */; };
 		0F68B5AA21B8519C00C0D35F /* YD_Enclave_Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */; };
+		0F72899B2535E15C0011D9DE /* YDSpinnerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F72899A2535E15C0011D9DE /* YDSpinnerVC.swift */; };
 		0FF69547228EED8500D767C4 /* YDAliceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */; };
 		0FF69548228EED8500D767C4 /* YDAliceSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0FFAAE19252B5ABD00BACA90 /* file_check_apis.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFAAE18252B5ABD00BACA90 /* file_check_apis.m */; };
@@ -67,6 +68,7 @@
 		0F3E52B82530A263001F6D20 /* frida_detection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = frida_detection.h; sourceTree = "<group>"; };
 		0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_VC.swift; sourceTree = "<group>"; };
 		0F68B5A921B8519C00C0D35F /* YD_Enclave_Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YD_Enclave_Manager.swift; sourceTree = "<group>"; };
+		0F72899A2535E15C0011D9DE /* YDSpinnerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YDSpinnerVC.swift; sourceTree = "<group>"; };
 		0F82A83C23585ECC00728710 /* YD_swizzle_NSURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YD_swizzle_NSURLSession.m; sourceTree = "<group>"; };
 		0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YDAliceSDK.framework; sourceTree = "<group>"; };
 		0FFAAE18252B5ABD00BACA90 /* file_check_apis.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = file_check_apis.m; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				0F2E46E12356F0A000E8C57D /* YD_URLSession_VC.swift */,
 				0F2E46E32356F18100E8C57D /* YD_URL_Session.swift */,
 				0F2E46E52356F18900E8C57D /* YD_Error.swift */,
+				0F72899A2535E15C0011D9DE /* YDSpinnerVC.swift */,
 				0F59981522046D62001D0DAF /* YD_Enclave_VC.swift */,
 				0F3E52B425309E68001F6D20 /* YD_Frida_VC.swift */,
 				0F25FC18228C6BE00041F80E /* YD_Thread_Chomper_CVC.swift */,
@@ -256,6 +259,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F72899B2535E15C0011D9DE /* YDSpinnerVC.swift in Sources */,
 				30D4E6E92080725700ABE7AA /* YD_Home_VC.swift in Sources */,
 				0F2E46E42356F18100E8C57D /* YD_URL_Session.swift in Sources */,
 				0F328B5522A532BB00594085 /* thread_chomper.m in Sources */,

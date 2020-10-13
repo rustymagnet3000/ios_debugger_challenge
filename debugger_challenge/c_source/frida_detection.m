@@ -13,6 +13,36 @@ const char byteArrays[MAX_ARRAYS][MAX_STR_LEN] = {
 
 typedef int (*funcptr)( void );
 
+/* Iterate through local TCP ports  */
+/* sending message to identify frida-server */
+
++(BOOL)checkDefaultPort{
+
+    int result, sock;
+    int refused_conns = 0, open_conns = 0, unknown_conns = 0;
+    struct sockaddr_in sa = {0};
+
+    sa.sin_family = AF_INET;
+    sa.sin_addr.s_addr = inet_addr(HOSTNAME);
+
+    puts("[*]🐝scan started...");
+    for( int i = START;  i < END; i++ ){
+        sa.sin_port = htons( i );
+        sock = socket( AF_INET, SOCK_STREAM, 0 );
+        result = connect( sock , ( struct sockaddr *) &sa , sizeof sa );
+        if ( result == 0 && ( i = FRIDA_DEFAULT)) {
+            NSLog( @"[!]🐝Frida default port open!" );
+            return YES;
+        }
+        else if ( result == -1 ) {
+            ( errno == 61 ) ? refused_conns++ : unknown_conns++ ;
+        }
+        close ( sock );
+    }
+
+    NSLog(@"[*]🐝Completed.\n\tOpen ports: %d\tRefused ports:%d\tUnknown response:%d\n", open_conns, refused_conns, unknown_conns);
+    return NO;
+}
 
 +(BOOL)checkLoadAddress{
      

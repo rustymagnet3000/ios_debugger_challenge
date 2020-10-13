@@ -20,6 +20,7 @@
     
     #if defined(__arm64__)
         return parentpid != 1 ? YES : NO;
+    //MARK: broken. Not sure how to get parent processes name.
     #elif defined(__x86_64__)
         if([name containsString:@"debugserver"]){
             return YES;
