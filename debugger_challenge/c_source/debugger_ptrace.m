@@ -3,7 +3,7 @@
 @implementation YDDebuggerPtrace
 
 + (void) warning {
-    NSLog(@"*** If a debugger attached, expect a segment fault or exit *** \n");
+    NSLog(@"[*]🐝⚠️ if a debugger attached, expect a segment fault or exit");
 }
 
 /* check Parent loaded name. Trying to detect Frida-Trace */
@@ -20,11 +20,9 @@
     
     #if defined(__arm64__)
         return parentpid != 1 ? YES : NO;
-    //MARK: broken. Not sure how to get parent processes name.
+    //MARK: broken. Unsure if it is possible to get parent processes name on __x86_64__
     #elif defined(__x86_64__)
-        if([name containsString:@"debugserver"]){
-            return YES;
-        }
+        NSLog(@"[*]🐝: Work in progress -> the same getppid  does NOT work on an iOS Simulator\t%@");
     #endif
     
     return NO;

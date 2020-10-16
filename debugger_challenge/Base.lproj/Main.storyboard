@@ -62,7 +62,7 @@
         <!--Debuggers-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="YDHomeVC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="YDDebuggerVC" customModule="debugger_challenge" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -378,6 +378,9 @@
                         <outletCollection property="buttons" destination="Ajh-Cn-Mhx" collectionClass="NSMutableArray" id="NMm-LA-cpr"/>
                         <outletCollection property="buttons" destination="ztC-K9-V6d" collectionClass="NSMutableArray" id="mno-BF-h0u"/>
                         <outletCollection property="buttons" destination="Dg6-w3-nCC" collectionClass="NSMutableArray" id="Oc5-nQ-X4k"/>
+                        <outletCollection property="disabledbuttons" destination="ztC-K9-V6d" collectionClass="NSMutableArray" id="Efr-cu-ts7"/>
+                        <outletCollection property="disabledbuttons" destination="Ajh-Cn-Mhx" collectionClass="NSMutableArray" id="Qms-bu-Ywz"/>
+                        <outletCollection property="disabledbuttons" destination="Dg6-w3-nCC" collectionClass="NSMutableArray" id="kJ7-Bu-k6r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dx9-GB-1xq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -396,8 +399,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="x4H-Cl-EEH" kind="relationship" relationship="viewControllers" id="Vao-83-Vtt"/>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="5pj-TP-ZUR"/>
+                        <segue destination="x4H-Cl-EEH" kind="relationship" relationship="viewControllers" id="Vao-83-Vtt"/>
                         <segue destination="R1f-PG-7qg" kind="relationship" relationship="viewControllers" id="yym-Ml-jET"/>
                         <segue destination="pcv-UJ-06d" kind="relationship" relationship="viewControllers" id="Def-zI-S5L"/>
                         <segue destination="sAQ-o7-ZpC" kind="relationship" relationship="viewControllers" id="H1g-YM-Rgj"/>

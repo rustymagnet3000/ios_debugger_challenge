@@ -27,7 +27,7 @@
 		30D4BA0A2115E00700C31AE5 /* RNCryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA092115E00600C31AE5 /* RNCryptor.swift */; };
 		30D4BA0F2115E1C100C31AE5 /* YDCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA0E2115E1C100C31AE5 /* YDCrypto.swift */; };
 		30D4E6E72080725700ABE7AA /* YDAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4E6E62080725700ABE7AA /* YDAppDelegate.swift */; };
-		30D4E6E92080725700ABE7AA /* YDHomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4E6E82080725700ABE7AA /* YDHomeVC.swift */; };
+		30D4E6E92080725700ABE7AA /* YDDebuggerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4E6E82080725700ABE7AA /* YDDebuggerVC.swift */; };
 		30D4E6EC2080725700ABE7AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30D4E6EA2080725700ABE7AA /* Main.storyboard */; };
 		30D4E6EE2080725900ABE7AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30D4E6ED2080725900ABE7AA /* Assets.xcassets */; };
 		30D4E6F12080725900ABE7AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30D4E6EF2080725900ABE7AA /* LaunchScreen.storyboard */; };
@@ -78,7 +78,7 @@
 		30D4BA0E2115E1C100C31AE5 /* YDCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YDCrypto.swift; sourceTree = "<group>"; };
 		30D4E6E32080725700ABE7AA /* debugger_challenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = debugger_challenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30D4E6E62080725700ABE7AA /* YDAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YDAppDelegate.swift; sourceTree = "<group>"; };
-		30D4E6E82080725700ABE7AA /* YDHomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YDHomeVC.swift; sourceTree = "<group>"; };
+		30D4E6E82080725700ABE7AA /* YDDebuggerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YDDebuggerVC.swift; sourceTree = "<group>"; };
 		30D4E6EB2080725700ABE7AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		30D4E6ED2080725900ABE7AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		30D4E6F02080725900ABE7AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -106,7 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				30D4E6E62080725700ABE7AA /* YDAppDelegate.swift */,
-				30D4E6E82080725700ABE7AA /* YDHomeVC.swift */,
+				30D4E6E82080725700ABE7AA /* YDDebuggerVC.swift */,
 				0F358CE22525C10F00804C44 /* YDRandomVC.swift */,
 				0F2E46E12356F0A000E8C57D /* YDURLSessionVC.swift */,
 				0F2E46E32356F18100E8C57D /* YDURLSession.swift */,
@@ -260,7 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F72899B2535E15C0011D9DE /* YDSpinnerVC.swift in Sources */,
-				30D4E6E92080725700ABE7AA /* YDHomeVC.swift in Sources */,
+				30D4E6E92080725700ABE7AA /* YDDebuggerVC.swift in Sources */,
 				0F2E46E42356F18100E8C57D /* YDURLSession.swift in Sources */,
 				0F328B5522A532BB00594085 /* thread_chomper.m in Sources */,
 				0F328B5322A4E00F00594085 /* YDButtonExt.swift in Sources */,

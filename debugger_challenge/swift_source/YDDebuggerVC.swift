@@ -1,6 +1,6 @@
 import UIKit
 
-class YDHomeVC: UIViewController {
+class YDDebuggerVC: UIViewController {
 
     @IBOutlet var  buttons: [UIButton] = []
     fileprivate let feedback_string = "Debugger attached ="
