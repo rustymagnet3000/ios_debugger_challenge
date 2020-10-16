@@ -327,6 +327,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRG-Ih-Zcz">
                                                 <rect key="frame" x="15" y="0.0" width="105" height="30"/>
                                                 <state key="normal" title="Frida file check"/>
+                                                <connections>
+                                                    <action selector="frida_file_check:" destination="x4H-Cl-EEH" eventType="touchUpInside" id="Mem-JQ-KYI"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CfZ-tL-j2U">
                                                 <rect key="frame" x="11" y="62" width="113" height="30"/>
@@ -368,7 +371,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="BJa-fp-Y6w"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Frida" id="30x-ve-dUB"/>
+                    <tabBarItem key="tabBarItem" title="Frida" image="car" selectedImage="car" id="30x-ve-dUB"/>
                     <connections>
                         <outletCollection property="buttons" destination="bRG-Ih-Zcz" collectionClass="NSMutableArray" id="Mdh-nP-SLM"/>
                         <outletCollection property="buttons" destination="CfZ-tL-j2U" collectionClass="NSMutableArray" id="UzL-Ra-Ydn"/>
@@ -474,6 +477,7 @@
     </scenes>
     <resources>
         <image name="about" width="30" height="30"/>
+        <image name="car" width="30" height="30"/>
         <image name="cloud" width="30" height="30"/>
         <image name="key" width="30" height="30"/>
         <image name="link" width="30" height="30"/>

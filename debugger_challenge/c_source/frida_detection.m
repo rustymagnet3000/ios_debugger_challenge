@@ -1,7 +1,4 @@
-@import Foundation;
 #include "frida_detection.h"
-#define MAX_ARRAYS 3
-#define MAX_STR_LEN 15
 
 @implementation YDFridaDetection
 
@@ -13,11 +10,38 @@ const char byteArrays[MAX_ARRAYS][MAX_STR_LEN] = {
 
 typedef int (*funcptr)( void );
 
+/* Check if Frida Server detected on Disk. Only a J/B device will be able to hit this path */
+/* but it depends on the level of Jailbreak. "Tweaks off" still may not give a Sandbox permission error */
+
++(BOOL)checkIfFridaInstalled{
+    
+    NSString *frida_on_filesystem = @"/usr/sbin/frida-server";
+    NSURL *theURL = [ NSURL fileURLWithPath:frida_on_filesystem isDirectory:NO ];
+    NSError *err;
+    
+    if ([ theURL checkResourceIsReachableAndReturnError:&err]  == YES )
+        return YES;
+    
+    if ( err != NULL ) {
+        NSLog(@"[*]🐝Error in file check: %ld", (long)err.code);
+        if ( err.code == 257 )
+            NSLog(@"[*]🐝Sandbox permission error.");
+    }
+    
+    FILE *file;
+    file = fopen(frida_on_filesystem.fileSystemRepresentation, "r");
+    if ( !file )
+        NSLog(@"[*]🐝if ObjC APIs fails, fopen also failed!");
+
+    NSLog(@"[*]🐝Trying access() as it is a sits libsystem_kernel.dylib!");
+    
+    return (access(frida_on_filesystem.fileSystemRepresentation, F_OK) == 0) ? YES : NO;
+}
+
 /* Iterate through local TCP ports  */
 /* sending message to identify frida-server */
 
 +(BOOL)checkDefaultPort{
-
     int result, sock;
     int refused_conns = 0, open_conns = 0, unknown_conns = 0;
     struct sockaddr_in sa = {0};
@@ -44,6 +68,8 @@ typedef int (*funcptr)( void );
     return NO;
 }
 
+/* Check if any Frida strings return a Symbol pointer, at run-time */
+
 +(BOOL)checkLoadAddress{
      
     funcptr ptr = NULL;
@@ -60,7 +86,7 @@ typedef int (*funcptr)( void );
 }
 
 /* Iterate through all loaded Modules inside the app, to check for additions at run-time */
-/* this only seems to detect Frida-Gadget */
+/* Goal: detect Frida-Gadget.dylib */
 
 +(BOOL)checkModules{
     unsigned int count = 0;

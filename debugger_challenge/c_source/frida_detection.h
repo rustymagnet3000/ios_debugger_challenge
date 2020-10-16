@@ -4,7 +4,6 @@
 @import Foundation;
 @import ObjectiveC.runtime;
 
-
 #import <stdlib.h>
 #import <stdio.h>
 #import <unistd.h>          // required for ppid
@@ -20,8 +19,11 @@
 #define START 26000
 #define END 27500
 #define FRIDA_DEFAULT 27042
+#define MAX_ARRAYS 3
+#define MAX_STR_LEN 15
 
 @interface YDFridaDetection: NSObject
++(BOOL)checkIfFridaInstalled;
 +(BOOL)checkDefaultPort;
 +(BOOL)checkLoadAddress;
 +(BOOL)checkModules;

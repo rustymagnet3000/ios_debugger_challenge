@@ -7,6 +7,12 @@ class YDFridaVC: UIViewController {
     fileprivate let tab_title = "Frida detections"
     fileprivate var child = YDSpinnerVC()
     
+    @IBAction func frida_file_check(_ sender: Any) {
+        let result = YDFridaDetection.checkIfFridaInstalled()
+        self.YDAlertController(user_message: feedback_string + " \(result)")
+    }
+    
+    
     @IBAction func frida_port_check(_ sender: Any) {
         
         addSpinnerView()
