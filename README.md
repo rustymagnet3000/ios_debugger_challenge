@@ -5,13 +5,16 @@
 - [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)
 - [Challenge: Bypass ptrace (asm Syscall)](#challenge-bypass-ptrace-asm-syscall)
 - [Challenge: Bypass anti-debug (sysctl)](#challenge-bypass-anti-debug-sysctl)
+- [Challenge: Bypass anti-debug ( sysctl, more advanced )](#challenge-bypass-anti-debug-sysctl-more-advanced-)
 - [Challenge: Bypass anti-debug (Exception Ports)](#challenge-bypass-anti-debug-exception-ports)
 - [Challenge: Hook Apple's Random String function](#challenge-hook-apples-random-string-function)
 - [Challenge: Find Encryption key](#challenge-find-encryption-key)
 - [Challenge: Dancing with Threads](#challenge-dancing-with-threads)
-- [Challenge: Certificate Pinning bypass (NSURLSession)](#challenge-certificate-pinning-bypass-nsurlsession)
+- [Challenge: Certificate Pinning bypass ( with Frida )](#challenge-certificate-pinning-bypass-with-frida-)
+- [Challenge: Certificate Pinning bypass ( with Method Swizzle )](#challenge-certificate-pinning-bypass-with-method-swizzle-)
 
 <!-- /TOC -->
+
 ## Challenge: Method Swizzling on non-jailbroken device
 Why `Swizzle`? If you understand `swizzling` you understand part of `Objective-C's` beauty. Read this from [Apple][20e2b71f]
 :
@@ -346,8 +349,10 @@ Now check your Load Address:  0x0000000113be7c04  for `sysctl`
 ```
 ##### Verify what you found, the easy way
 ```
-(lldb) image dump symtab -m rusty_bypass`
-Now check your Load Address.  `0x000000012e292dc0` for `sysctl`
+(lldb) image lookup -a $rip
+      Address: libsystem_c.dylib[0x0000000113be7c04]
+      (libsystem_c.dylib.__TEXT.__text + 170512)
+      Summary: libsystem_c.dylib`sysctl
 ```
 ##### Set a breakpoint
 ```
@@ -372,6 +377,56 @@ rip = 0x000000012e292dc0  rusty_bypass`sysctl at hook_debugger_check.c:5
 ```
 ### COMPLETE
 This was a cumbersome way to overwrite a register. There is a much simpler and reliable way to patch out anto-debug registers at run-time.
+
+## Challenge: Bypass anti-debug ( sysctl, more advanced )
+Where you stop is important.
+```
+(lldb) b sysctl
+Breakpoint 3: where = libsystem_c.dylib`sysctl, address = 0x00007fff5214c304
+```
+At this point, you can read what is inside the registers.
+```
+sysctl(mib, sizeof(mib) / sizeof(*mib), &info, &size, NULL, 0);
+```
+You can read memory to understand what was passed into each register.  Is there a better way ? You can use the call stack and move to frame before `sysctl`:
+```
+(lldb) bt
+(lldb) frame select 1
+```
+Now you can observe the real variable settings:
+
+```
+(lldb) frame variable -A
+(lldb) p mib
+(int [4]) $14 = ([0] = 1, [1] = 14, [2] = 1, [3] = 23490)
+```
+Now - with the Apple documentation - we can see that the interesting value in `mib[3]` is the app's process ID.
+```
+  mib[0] = CTL_KERN;
+  mib[1] = KERN_PROC;
+  mib[2] = KERN_PROC_PID;		/* by process id */
+  mib[3] = getpid();		/* current process ID */
+```
+If you did want to read memory instead of using the call stack, you could:
+```
+(lldb) po (int *) mib
+0x00007ffee5f99610
+
+(lldb) mem read 0x00007ffee5f99610 -f d
+0x7ffee5f99610: 1
+0x7ffee5f99614: 14
+0x7ffee5f99618: 1
+0x7ffee5f9961c: 23490
+```
+### COMPLETE
+Now we can bypass the check by patching out the value inside of `mib[3]`:
+```
+(lldb) po getppid()
+23493
+
+(lldb) po mib[3]=23493
+23493   // overwrite the getpid() with getppid()
+```
 
 ## Challenge: Bypass anti-debug (Exception Ports)
 Another anti-debug technique on macOS / iOS was to check if a debugger was attached by looking if any of the `Ports` used by a Debugger returned a valid response.  
@@ -676,7 +731,7 @@ I was not satisfied with attempt 1.  It was only available on debug builds, wher
 ```
 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 ```
-## Challenge: Certificate Pinning bypass (NSURLSession)
+## Challenge: Certificate Pinning bypass ( with Frida )
 Do I trust this server, before establishing a connection to this server?
 
 That question is what `Certificate Pinning` adds to a mobile app.  It derives the answer by comparing Public Keys it has stored locally against Public Keys sent by the Server during a secured network setup.  
@@ -747,8 +802,8 @@ Success!
 ```
 ![secTrustHook](debugger_challenge/readme_images/bypassedNSURLSession.png)
 
-##### Attempt 2 - Method Swizzle
-The Frida bypass worked well for trivial `iOS Truststore` pinning. But what happened if the app checked a locally held list of Public Keys against the Public Keys it received during the TLS setup negotiation?
+## Challenge: Certificate Pinning bypass ( with Method Swizzle )
+The Frida bypass worked well for trivial `iOS Truststore` pinning. But what happened if the app checked a locally held list of Public Keys ( the `pinlist` ) against the Public Keys it received during the client-server `TLS` setup Z?
 
 I liked this guy's example code:
 https://www.bugsee.com/blog/ssl-certificate-pinning-in-mobile-applications/
