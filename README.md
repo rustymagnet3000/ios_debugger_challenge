@@ -379,7 +379,8 @@ rip = 0x000000012e292dc0  rusty_bypass`sysctl at hook_debugger_check.c:5
 This was a cumbersome way to overwrite a register. There is a much simpler and reliable way to patch out anto-debug registers at run-time.
 
 ## Challenge: Bypass anti-debug ( sysctl, more advanced )
-Where you stop is important.
+`sysctl` asks the Kernel to detect if a process is being debugged.  The result is the `P_TRACED` flag gets set. This is defined inside of `/sys/proc.h`.  How does `sysctl` tell the Kernel which process ID it wants to check ?  Let's inspect.
+
 ```
 (lldb) b sysctl
 Breakpoint 3: where = libsystem_c.dylib`sysctl, address = 0x00007fff5214c304
@@ -388,7 +389,7 @@ At this point, you can read what is inside the registers.
 ```
 sysctl(mib, sizeof(mib) / sizeof(*mib), &info, &size, NULL, 0);
 ```
-You can read memory to understand what was passed into each register.  Is there a better way ? You can use the call stack and move to frame before `sysctl`:
+You could read memory to understand what was passed into each register.  Is there a better simpler way ? You can use the call stack and move to frame before `sysctl`:
 ```
 (lldb) bt
 (lldb) frame select 1
@@ -412,15 +413,20 @@ If you did want to read memory instead of using the call stack, you could:
 (lldb) po (int *) mib
 0x00007ffee5f99610
 
-(lldb) mem read 0x00007ffee5f99610 -f d
+(lldb) mem read 0x00007ffee646e610  -f d -c 4
 0x7ffee5f99610: 1
 0x7ffee5f99614: 14
 0x7ffee5f99618: 1
 0x7ffee5f9961c: 23490
+
+
 ```
 ### COMPLETE
 Now we can bypass the check by patching out the value inside of `mib[3]`:
 ```
+(lldb) p/x 0x00007ffee646e610 + 12      // mib[3]
+(long) $16 = 0x00007ffee646e61c
+
 (lldb) po getppid()
 23493
 
@@ -431,7 +437,7 @@ Now we can bypass the check by patching out the value inside of `mib[3]`:
 ## Challenge: Bypass anti-debug (Exception Ports)
 Another anti-debug technique on macOS / iOS was to check if a debugger was attached by looking if any of the `Ports` used by a Debugger returned a valid response.  
 
-This relied on the C `task_get_exception_ports` API.  You passed in the `Exception Port` you wanted  to check.  This was always argument 2 to the function.  This was the `RSI register` on `ARM` devices).  
+This relied on the C `task_get_exception_ports` API.  You passed in the `Exception Port` you wanted  to check.  This was always argument 2 ( `arg2`) to the function.
 
 ### COMPLETE
 Thanks to: https://alexomara.com/blog/defeating-anti-debug-techniques-macos-mach-exception-ports/.  Set the Exception Ports to check to a null value.  

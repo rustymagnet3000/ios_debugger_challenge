@@ -1,6 +1,4 @@
-#include "debugger_sysctl.h"
-#include "debugger_exception_ports.h"
-#include "debugger_ptrace.h"
+#include "debugger_checks.h"
 #include "file_check_apis.h"
 #include "thread_chomper.h"
 #include "frida_detection.h"

@@ -7,27 +7,27 @@ class YDDebuggerVC: UIViewController {
     fileprivate let tab_title = "Debugger detections"
 
     @IBAction func ppid_button(_ sender: Any) {
-        let result = YDDebuggerPtrace.checkParent()
+        let result = YDDebuggerChecks.checkParent()
         self.YDAlertController(user_message: feedback_string + " \(result)")
     }
     
     @IBAction func ptrace_asm_button(_ sender: Any) {
-        let result = YDDebuggerPtrace.setPtraceWithASM()
+        let result = YDDebuggerChecks.setPtraceWithASM()
         self.YDAlertController(user_message: feedback_string + " \(result)")
     }
     
     @IBAction func exception_port_button(_ sender: Any) {
-        let result = debugger_exception_ports()
+        let result = YDDebuggerChecks.debugger_exception_ports()
         self.YDAlertController(user_message: feedback_string + " \(result)")
     }
     
     @IBAction func ptrace_chk_btn(_ sender: Any) {
-        let result = YDDebuggerPtrace.setPtraceWithSymbol()
+        let result = YDDebuggerChecks.setPtraceWithSymbol()
         self.YDAlertController(user_message: feedback_string + " \(result)")
     }
     
     @IBAction func debug_chk_btn(_ sender: UIButton) {
-        let result = debugger_sysctl()
+        let result = YDDebuggerChecks.debugger_sysctl()
         self.YDAlertController(user_message: feedback_string + " \(result)")
     }
     

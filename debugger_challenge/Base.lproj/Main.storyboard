@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="avJ-R6-jEN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="avJ-R6-jEN">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -34,7 +35,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9ef-tl-hcX">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9ef-tl-hcX">
                                 <rect key="frame" x="66.5" y="316" width="242" height="30"/>
                                 <state key="normal" title="Can you fix broken NSURLSession?"/>
                                 <connections>
@@ -42,12 +43,12 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="3x8-IV-Yni"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="9ef-tl-hcX" firstAttribute="centerX" secondItem="3x8-IV-Yni" secondAttribute="centerX" id="Bdm-xh-IPb"/>
                             <constraint firstItem="9ef-tl-hcX" firstAttribute="centerY" secondItem="3x8-IV-Yni" secondAttribute="centerY" id="sul-7p-cdh"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="3x8-IV-Yni"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="URL Session" image="cloud" selectedImage="cloud" id="hZ5-vb-ivf"/>
                     <navigationItem key="navigationItem" id="uHG-bf-tNz"/>
@@ -68,41 +69,41 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="6hh-mC-k8n">
-                                <rect key="frame" x="103" y="192" width="169" height="278"/>
+                                <rect key="frame" x="103.5" y="192" width="168" height="278"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="yCz-Th-X4B">
-                                        <rect key="frame" x="0.0" y="0.0" width="169" height="278"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="168" height="278"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7f0-vk-6d2">
-                                                <rect key="frame" x="64.5" y="0.0" width="40" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7f0-vk-6d2">
+                                                <rect key="frame" x="64" y="0.0" width="40" height="30"/>
                                                 <state key="normal" title="sysctl"/>
                                                 <connections>
                                                     <action selector="debug_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nqi-03-2bq"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="60Y-ut-pa8">
-                                                <rect key="frame" x="30.5" y="62" width="108" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="60Y-ut-pa8">
+                                                <rect key="frame" x="30" y="62" width="108" height="30"/>
                                                 <state key="normal" title="Exception Ports"/>
                                                 <connections>
                                                     <action selector="exception_port_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FT0-gZ-ulK"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH0-zF-jqs">
-                                                <rect key="frame" x="49.5" y="124" width="70" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH0-zF-jqs">
+                                                <rect key="frame" x="49" y="124" width="70" height="30"/>
                                                 <state key="normal" title="parent pid"/>
                                                 <connections>
                                                     <action selector="ppid_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Q9A-hg-ehB"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bU6-80-dWa">
-                                                <rect key="frame" x="19" y="186" width="131" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bU6-80-dWa">
+                                                <rect key="frame" x="18.5" y="186" width="131" height="30"/>
                                                 <state key="normal" title="ptrace with symbol"/>
                                                 <connections>
                                                     <action selector="ptrace_chk_btn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3OM-vJ-1bx"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LXN-f2-Vcs">
-                                                <rect key="frame" x="0.0" y="248" width="169" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LXN-f2-Vcs">
+                                                <rect key="frame" x="0.0" y="248" width="168" height="30"/>
                                                 <state key="normal" title="ptrace with asm / syscall"/>
                                                 <connections>
                                                     <action selector="ptrace_asm_button:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XGL-VQ-Avs"/>
@@ -113,12 +114,12 @@
                                 </subviews>
                             </stackView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6hh-mC-k8n" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="H1A-6l-vRw"/>
                             <constraint firstItem="6hh-mC-k8n" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="Wx0-lf-1hl"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Debuggers" image="rocket" selectedImage="rocket" id="zup-Zs-kjY"/>
                     <navigationItem key="navigationItem" id="UAJ-wL-HT1"/>
@@ -175,7 +176,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kjl-9I-Kkg">
                                                 <rect key="frame" x="16" y="146" width="343" height="60"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -183,7 +184,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gNK-b7-OeG">
                                                 <rect key="frame" x="16" y="396" width="343" height="60"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -215,7 +216,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9s1-Xb-ucG">
                                         <rect key="frame" x="7" y="0.0" width="121" height="30"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nxe-x5-nRu">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nxe-x5-nRu">
                                                 <rect key="frame" x="0.0" y="0.0" width="121" height="30"/>
                                                 <state key="normal" title="Generate key pair"/>
                                                 <connections>
@@ -227,14 +228,14 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="K9d-af-NRR">
                                         <rect key="frame" x="0.0" y="39" width="128" height="30"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="anN-hI-2b2">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="anN-hI-2b2">
                                                 <rect key="frame" x="0.0" y="0.0" width="53" height="30"/>
                                                 <state key="normal" title="Encrypt"/>
                                                 <connections>
                                                     <action selector="encrypt_btn:" destination="pcv-UJ-06d" eventType="touchUpInside" id="LcZ-r2-LDs"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lOH-6g-S5z">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lOH-6g-S5z">
                                                 <rect key="frame" x="73" y="0.0" width="55" height="30"/>
                                                 <state key="normal" title="Decrypt"/>
                                                 <connections>
@@ -246,14 +247,14 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="dZi-ce-jCa">
                                         <rect key="frame" x="37" y="78" width="91" height="30"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yzL-Wh-IP4">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yzL-Wh-IP4">
                                                 <rect key="frame" x="0.0" y="0.0" width="31" height="30"/>
                                                 <state key="normal" title="Sign"/>
                                                 <connections>
                                                     <action selector="sign_btn:" destination="pcv-UJ-06d" eventType="touchUpInside" id="zGc-Bb-kn5"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sjy-xw-bWK">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sjy-xw-bWK">
                                                 <rect key="frame" x="51" y="0.0" width="40" height="30"/>
                                                 <state key="normal" title="Verify"/>
                                                 <connections>
@@ -265,6 +266,7 @@
                                 </subviews>
                             </stackView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="IoH-72-Olf"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="eJs-4n-FH1" firstAttribute="centerX" secondItem="WJo-Od-hdH" secondAttribute="centerX" id="2Yv-nE-RJg"/>
@@ -275,7 +277,6 @@
                             <constraint firstItem="WJo-Od-hdH" firstAttribute="top" relation="greaterThanOrEqual" secondItem="IoH-72-Olf" secondAttribute="top" constant="20" id="hjG-yq-AsH"/>
                             <constraint firstItem="IoH-72-Olf" firstAttribute="trailing" secondItem="WJo-Od-hdH" secondAttribute="trailing" constant="20" id="k9w-Bw-HiA"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="IoH-72-Olf"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Secure Enclave" image="key" selectedImage="key" id="XBw-JW-8bt"/>
                     <connections>
@@ -324,35 +325,35 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="ImL-YN-IBq">
                                         <rect key="frame" x="0.0" y="0.0" width="135" height="278"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRG-Ih-Zcz">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRG-Ih-Zcz">
                                                 <rect key="frame" x="15" y="0.0" width="105" height="30"/>
                                                 <state key="normal" title="Frida file check"/>
                                                 <connections>
                                                     <action selector="frida_file_check:" destination="x4H-Cl-EEH" eventType="touchUpInside" id="Mem-JQ-KYI"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CfZ-tL-j2U">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CfZ-tL-j2U">
                                                 <rect key="frame" x="11" y="62" width="113" height="30"/>
                                                 <state key="normal" title="Frida port check"/>
                                                 <connections>
                                                     <action selector="frida_port_check:" destination="x4H-Cl-EEH" eventType="touchUpInside" id="ELT-c6-cAL"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ztC-K9-V6d">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ztC-K9-V6d">
                                                 <rect key="frame" x="0.0" y="124" width="135" height="30"/>
                                                 <state key="normal" title="Frida Module check"/>
                                                 <connections>
                                                     <action selector="frida_module_check:" destination="x4H-Cl-EEH" eventType="touchUpInside" id="0Bp-TJ-gHY"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ajh-Cn-Mhx">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ajh-Cn-Mhx">
                                                 <rect key="frame" x="6.5" y="186" width="122" height="30"/>
                                                 <state key="normal" title="Frida dylib loaded"/>
                                                 <connections>
                                                     <action selector="frida_dylib_check:" destination="x4H-Cl-EEH" eventType="touchUpInside" id="Cvr-Pa-Lvd"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dg6-w3-nCC">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dg6-w3-nCC">
                                                 <rect key="frame" x="28" y="248" width="79" height="30"/>
                                                 <state key="normal" title="Frida-Trace"/>
                                                 <connections>
@@ -364,12 +365,12 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="BJa-fp-Y6w"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="ImL-YN-IBq" firstAttribute="centerY" secondItem="BJa-fp-Y6w" secondAttribute="centerY" id="Hs1-CN-5eB"/>
                             <constraint firstItem="ImL-YN-IBq" firstAttribute="centerX" secondItem="BJa-fp-Y6w" secondAttribute="centerX" id="U4B-sv-ufv"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="BJa-fp-Y6w"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Frida" image="car" selectedImage="car" id="30x-ve-dUB"/>
                     <connections>
@@ -379,7 +380,6 @@
                         <outletCollection property="buttons" destination="ztC-K9-V6d" collectionClass="NSMutableArray" id="mno-BF-h0u"/>
                         <outletCollection property="buttons" destination="Dg6-w3-nCC" collectionClass="NSMutableArray" id="Oc5-nQ-X4k"/>
                         <outletCollection property="disabledbuttons" destination="ztC-K9-V6d" collectionClass="NSMutableArray" id="Efr-cu-ts7"/>
-                        <outletCollection property="disabledbuttons" destination="Ajh-Cn-Mhx" collectionClass="NSMutableArray" id="Qms-bu-Ywz"/>
                         <outletCollection property="disabledbuttons" destination="Dg6-w3-nCC" collectionClass="NSMutableArray" id="kJ7-Bu-k6r"/>
                     </connections>
                 </viewController>
@@ -425,28 +425,28 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="C8h-CF-4ZV">
                                         <rect key="frame" x="0.0" y="0.0" width="227" height="216"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xmX-oH-A2a">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xmX-oH-A2a">
                                                 <rect key="frame" x="65.5" y="0.0" width="96" height="30"/>
                                                 <state key="normal" title="random string"/>
                                                 <connections>
                                                     <action selector="random_string_btn:" destination="R1f-PG-7qg" eventType="touchUpInside" id="wtW-L8-V0o"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SKs-Si-zSB">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SKs-Si-zSB">
                                                 <rect key="frame" x="59.5" y="62" width="108" height="30"/>
                                                 <state key="normal" title="common crypto"/>
                                                 <connections>
                                                     <action selector="crypto_button:" destination="R1f-PG-7qg" eventType="touchUpInside" id="GmJ-Wg-eHP"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="50s-XJ-2vy">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="50s-XJ-2vy">
                                                 <rect key="frame" x="0.0" y="124" width="227" height="30"/>
                                                 <state key="normal" title="Random number from framework"/>
                                                 <connections>
                                                     <action selector="get_random_number_btn:" destination="R1f-PG-7qg" eventType="touchUpInside" id="pZr-lT-Zew"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sC7-Te-ZbQ">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sC7-Te-ZbQ">
                                                 <rect key="frame" x="55.5" y="186" width="116" height="30"/>
                                                 <state key="normal" title="File check - exist"/>
                                                 <connections>
@@ -458,12 +458,12 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="uMz-G3-YEO"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="PTo-9L-qEB" firstAttribute="centerY" secondItem="uMz-G3-YEO" secondAttribute="centerY" id="2v6-ix-acB"/>
                             <constraint firstItem="PTo-9L-qEB" firstAttribute="centerX" secondItem="uMz-G3-YEO" secondAttribute="centerX" id="mf8-Ix-m8A"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="uMz-G3-YEO"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Random" image="about" selectedImage="about" id="SA8-1m-LBl"/>
                     <connections>
@@ -485,5 +485,14 @@
         <image name="key" width="30" height="30"/>
         <image name="link" width="30" height="30"/>
         <image name="rocket" width="30" height="30"/>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>
