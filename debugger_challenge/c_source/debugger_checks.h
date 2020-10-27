@@ -8,10 +8,10 @@
 #import <pthread.h>
 #import <sys/syscall.h>
 #import <sys/sysctl.h>
-#import <mach-o/dyld.h>    // read dynamically loaded libraries
 #import <sys/types.h>
-#import <dlfcn.h>           // required for dlsym
+#import <mach-o/dyld.h>    // read dynamically loaded libraries
 #import <mach/mach.h>
+#import <dlfcn.h>           // required for dlsym
 
 #define PTRACE_NAME "ptrace"
 

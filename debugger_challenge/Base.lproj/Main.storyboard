@@ -420,10 +420,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="PTo-9L-qEB">
-                                <rect key="frame" x="74" y="223" width="227" height="216"/>
+                                <rect key="frame" x="74" y="192" width="227" height="278"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="C8h-CF-4ZV">
-                                        <rect key="frame" x="0.0" y="0.0" width="227" height="216"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="227" height="278"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xmX-oH-A2a">
                                                 <rect key="frame" x="65.5" y="0.0" width="96" height="30"/>
@@ -432,11 +432,11 @@
                                                     <action selector="random_string_btn:" destination="R1f-PG-7qg" eventType="touchUpInside" id="wtW-L8-V0o"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SKs-Si-zSB">
-                                                <rect key="frame" x="59.5" y="62" width="108" height="30"/>
-                                                <state key="normal" title="common crypto"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B1N-mb-W7V">
+                                                <rect key="frame" x="61" y="62" width="105" height="30"/>
+                                                <state key="normal" title="Sandbox check"/>
                                                 <connections>
-                                                    <action selector="crypto_button:" destination="R1f-PG-7qg" eventType="touchUpInside" id="GmJ-Wg-eHP"/>
+                                                    <action selector="sandbox_check:" destination="R1f-PG-7qg" eventType="touchUpInside" id="Xpr-hV-Ekt"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="50s-XJ-2vy">
@@ -446,8 +446,15 @@
                                                     <action selector="get_random_number_btn:" destination="R1f-PG-7qg" eventType="touchUpInside" id="pZr-lT-Zew"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SKs-Si-zSB">
+                                                <rect key="frame" x="59.5" y="186" width="108" height="30"/>
+                                                <state key="normal" title="common crypto"/>
+                                                <connections>
+                                                    <action selector="crypto_button:" destination="R1f-PG-7qg" eventType="touchUpInside" id="GmJ-Wg-eHP"/>
+                                                </connections>
+                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sC7-Te-ZbQ">
-                                                <rect key="frame" x="55.5" y="186" width="116" height="30"/>
+                                                <rect key="frame" x="55.5" y="248" width="116" height="30"/>
                                                 <state key="normal" title="File check - exist"/>
                                                 <connections>
                                                     <action selector="file_check:" destination="R1f-PG-7qg" eventType="touchUpInside" id="w2p-o5-mOC"/>
@@ -471,11 +478,12 @@
                         <outletCollection property="buttons" destination="SKs-Si-zSB" collectionClass="NSMutableArray" id="VE9-uv-XUn"/>
                         <outletCollection property="buttons" destination="50s-XJ-2vy" collectionClass="NSMutableArray" id="pRe-ar-UUo"/>
                         <outletCollection property="buttons" destination="sC7-Te-ZbQ" collectionClass="NSMutableArray" id="KYv-sZ-teA"/>
+                        <outletCollection property="buttons" destination="B1N-mb-W7V" collectionClass="NSMutableArray" id="bmF-VV-6eq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="STk-Ie-7qd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-537" y="-690"/>
+            <point key="canvasLocation" x="-809" y="-669"/>
         </scene>
     </scenes>
     <resources>
