@@ -9,9 +9,11 @@
 
 @interface YDFileChecker: NSObject
 
++(BOOL)checkSymLinks;
 +(BOOL)checkFileExists;
 +(BOOL)checkSandboxFork;
 +(BOOL)checkSandboxWrite;
+
 @end
 
 #endif /* file_check_apis_h */

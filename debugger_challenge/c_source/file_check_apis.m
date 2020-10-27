@@ -4,7 +4,17 @@
 @implementation YDFileChecker
 
 
++(BOOL)checkSymLinks{
 
+    const char *app_path = "/Applications";
+    struct stat s;
+    if (lstat(app_path, &s) == 0)
+    {
+        if (S_ISLNK(s.st_mode) == 1)            /* S_ISLNK == symbolic link */
+            return YES;
+    }
+    return NO;
+}
 
 
 +(BOOL)checkSandboxWrite{

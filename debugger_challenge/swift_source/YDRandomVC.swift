@@ -33,6 +33,13 @@ class YDRandomVC: UIViewController {
         let result = YDFileChecker.checkSandboxWrite()
             self.YDAlertController(user_message: "Checking sandbox restrictions: \(result)")
     }
+
+    @IBAction func symlink_check(_ sender: Any) {
+        let result = YDFileChecker.checkSymLinks()
+            self.YDAlertController(user_message: "Checking for a Symlink: \(result)")
+    }
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         buttons.forEach {
