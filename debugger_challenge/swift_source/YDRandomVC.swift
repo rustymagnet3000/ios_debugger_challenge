@@ -24,11 +24,15 @@ class YDRandomVC: UIViewController {
             self.YDAlertController(user_message: "Checking for file: \(result)")
     }
     
-    @IBAction func sandbox_check(_ sender: Any) {
-        let result = YDFileChecker.checkSandbox()
+    @IBAction func sandbox_check_fork(_ sender: Any) {
+        let result = YDFileChecker.checkSandboxFork()
             self.YDAlertController(user_message: "Checking sandbox restrictions: \(result)")
     }
     
+    @IBAction func sandbox_check_fopen(_ sender: Any) {
+        let result = YDFileChecker.checkSandboxWrite()
+            self.YDAlertController(user_message: "Checking sandbox restrictions: \(result)")
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         buttons.forEach {

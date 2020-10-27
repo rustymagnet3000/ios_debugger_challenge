@@ -5,12 +5,13 @@
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 
 @interface YDFileChecker: NSObject
 
 +(BOOL)checkFileExists;
-+(BOOL)checkSandbox;
-
++(BOOL)checkSandboxFork;
++(BOOL)checkSandboxWrite;
 @end
 
 #endif /* file_check_apis_h */

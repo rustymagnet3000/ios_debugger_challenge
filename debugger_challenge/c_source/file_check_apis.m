@@ -3,7 +3,38 @@
 
 @implementation YDFileChecker
 
-+(BOOL)checkSandbox{
+
+
+
+
++(BOOL)checkSandboxWrite{
+    
+    /* Should not be able to write outside of my sandbox  */
+    /* but fopen and NSFileManager adhere to sandboxing, even on a jailbroken Electra device */
+    
+    NSLog (@"[*]Sandboxed area:%@", NSHomeDirectory() );
+    const char *outside_sandbox = "/private/foobar.txt";
+    FILE *fp;
+    fp = fopen(outside_sandbox, "w");
+    
+    if (fp != nil)
+        return YES;
+    
+    NSError *error;
+    NSString *stringToBeWritten = @"Jailbreak sandbox check. Writing text to a file.";
+    [stringToBeWritten writeToFile:@"/private/jailbreak.txt" atomically:YES encoding:NSUTF8StringEncoding error:&error];
+    
+    if (error == nil)
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:@"/private/jailbreak.txt" error:nil];
+        return YES;
+    }else{
+        NSLog (@"[*]Sandboxed error:%@", [error description]);
+        return NO;
+    }
+}
+    
++(BOOL)checkSandboxFork{
     
     /*
         fork() causes creation of a new process. The child process has a unique process ID.
