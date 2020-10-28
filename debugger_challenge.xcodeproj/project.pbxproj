@@ -118,20 +118,20 @@
 			path = swift_source;
 			sourceTree = "<group>";
 		};
-		0F68B5A821B84F2000C0D35F /* c_source */ = {
+		0F68B5A821B84F2000C0D35F /* objc_source */ = {
 			isa = PBXGroup;
 			children = (
-				0F82A83C23585ECC00728710 /* YDswizzleNSURLSession.m */,
+				0F358CE62525CA1E00804C44 /* debugger_checks.h */,
+				0F358CE42525C9FF00804C44 /* debugger_checks.m */,
 				0F328B5622A5338A00594085 /* thread_chomper.h */,
 				0F328B5422A532BB00594085 /* thread_chomper.m */,
 				0F3E52B82530A263001F6D20 /* frida_detection.h */,
 				0F3E52B62530A249001F6D20 /* frida_detection.m */,
 				0FFAAE1A252B5B7C00BACA90 /* file_check_apis.h */,
 				0FFAAE18252B5ABD00BACA90 /* file_check_apis.m */,
-				0F358CE62525CA1E00804C44 /* debugger_checks.h */,
-				0F358CE42525C9FF00804C44 /* debugger_checks.m */,
+				0F82A83C23585ECC00728710 /* YDswizzleNSURLSession.m */,
 			);
-			path = c_source;
+			path = objc_source;
 			sourceTree = "<group>";
 		};
 		30D4BA082115E00600C31AE5 /* RNCryptor */ = {
@@ -165,7 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				0F25FC17228C6B850041F80E /* swift_source */,
-				0F68B5A821B84F2000C0D35F /* c_source */,
+				0F68B5A821B84F2000C0D35F /* objc_source */,
 				30D4E6ED2080725900ABE7AA /* Assets.xcassets */,
 				30D4E6EA2080725700ABE7AA /* Main.storyboard */,
 				30D4E6EF2080725900ABE7AA /* LaunchScreen.storyboard */,
