@@ -2,6 +2,7 @@ import UIKit
 
 class YDRandomVC: UIViewController {
 
+    static var screenshotCount = 0
     @IBOutlet var  buttons: [UIButton] = []
        
     @IBAction func crypto_button(_ sender: Any) {
@@ -14,32 +15,21 @@ class YDRandomVC: UIViewController {
         print(randomString.uuidString)
         self.YDAlertController(user_message: "Random string: \(randomString.uuidString)")
     }
+    
     @IBAction func get_random_number_btn(_ sender: Any) {
         let answer = YDHelloClass().getRandomNumber()
         self.YDAlertController(user_message: "Random number: \(answer)")
     }
     
-    @IBAction func file_check(_ sender: Any) {
+    @IBAction func jailbreak_check(_ sender: Any) {
         let result = YDFileChecker.checkFileExists()
-            self.YDAlertController(user_message: "Checking for file: \(result)")
+            self.YDAlertController(user_message: "Checking for jailbreak: \(result)")
     }
     
-    @IBAction func sandbox_check_fork(_ sender: Any) {
-        let result = YDFileChecker.checkSandboxFork()
-            self.YDAlertController(user_message: "Checking sandbox restrictions: \(result)")
+    @IBAction func screenshot_check(_ sender: Any) {
+        self.YDAlertController(user_message: "Screenshot counter: \(YDRandomVC.screenshotCount)")
     }
     
-    @IBAction func sandbox_check_fopen(_ sender: Any) {
-        let result = YDFileChecker.checkSandboxWrite()
-            self.YDAlertController(user_message: "Checking sandbox restrictions: \(result)")
-    }
-
-    @IBAction func symlink_check(_ sender: Any) {
-        let result = YDFileChecker.checkSymLinks()
-            self.YDAlertController(user_message: "Checking for a Symlink: \(result)")
-    }
-
-
     override func viewDidLoad() {
         super.viewDidLoad()
         buttons.forEach {

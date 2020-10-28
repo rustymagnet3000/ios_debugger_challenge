@@ -420,10 +420,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="PTo-9L-qEB">
-                                <rect key="frame" x="74" y="130" width="227" height="402"/>
+                                <rect key="frame" x="74" y="161" width="227" height="340"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="C8h-CF-4ZV">
-                                        <rect key="frame" x="0.0" y="0.0" width="227" height="402"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="227" height="340"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xmX-oH-A2a">
                                                 <rect key="frame" x="65.5" y="0.0" width="96" height="30"/>
@@ -433,42 +433,35 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B1N-mb-W7V">
-                                                <rect key="frame" x="36" y="62" width="155" height="30"/>
-                                                <state key="normal" title="Sandbox check ( fork )"/>
+                                                <rect key="frame" x="78" y="62" width="71" height="30"/>
+                                                <state key="normal" title="Jailbroken"/>
                                                 <connections>
-                                                    <action selector="sandbox_check_fork:" destination="R1f-PG-7qg" eventType="touchUpInside" id="xfD-oF-Qiu"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EeN-2T-Ny2">
-                                                <rect key="frame" x="29.5" y="124" width="168" height="30"/>
-                                                <state key="normal" title="Sandbox check ( fopen )"/>
-                                                <connections>
-                                                    <action selector="sandbox_check_fopen:" destination="R1f-PG-7qg" eventType="touchUpInside" id="CkU-ua-J6Y"/>
+                                                    <action selector="jailbreak_check:" destination="R1f-PG-7qg" eventType="touchUpInside" id="wUs-fw-hRw"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q8C-6A-WnX">
-                                                <rect key="frame" x="64" y="186" width="99" height="30"/>
-                                                <state key="normal" title="Symlink check"/>
+                                                <rect key="frame" x="74.5" y="124" width="78" height="30"/>
+                                                <state key="normal" title="Screenshot"/>
                                                 <connections>
-                                                    <action selector="symlink_check:" destination="R1f-PG-7qg" eventType="touchUpInside" id="iHK-BE-gVz"/>
+                                                    <action selector="screenshot_check:" destination="R1f-PG-7qg" eventType="touchUpInside" id="hQy-t4-4bJ"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="50s-XJ-2vy">
-                                                <rect key="frame" x="0.0" y="248" width="227" height="30"/>
+                                                <rect key="frame" x="0.0" y="186" width="227" height="30"/>
                                                 <state key="normal" title="Random number from framework"/>
                                                 <connections>
                                                     <action selector="get_random_number_btn:" destination="R1f-PG-7qg" eventType="touchUpInside" id="pZr-lT-Zew"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SKs-Si-zSB">
-                                                <rect key="frame" x="59.5" y="310" width="108" height="30"/>
+                                                <rect key="frame" x="59.5" y="248" width="108" height="30"/>
                                                 <state key="normal" title="common crypto"/>
                                                 <connections>
                                                     <action selector="crypto_button:" destination="R1f-PG-7qg" eventType="touchUpInside" id="GmJ-Wg-eHP"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sC7-Te-ZbQ">
-                                                <rect key="frame" x="55.5" y="372" width="116" height="30"/>
+                                                <rect key="frame" x="55.5" y="310" width="116" height="30"/>
                                                 <state key="normal" title="File check - exist"/>
                                                 <connections>
                                                     <action selector="file_check:" destination="R1f-PG-7qg" eventType="touchUpInside" id="w2p-o5-mOC"/>
@@ -493,7 +486,6 @@
                         <outletCollection property="buttons" destination="50s-XJ-2vy" collectionClass="NSMutableArray" id="pRe-ar-UUo"/>
                         <outletCollection property="buttons" destination="sC7-Te-ZbQ" collectionClass="NSMutableArray" id="KYv-sZ-teA"/>
                         <outletCollection property="buttons" destination="B1N-mb-W7V" collectionClass="NSMutableArray" id="bmF-VV-6eq"/>
-                        <outletCollection property="buttons" destination="EeN-2T-Ny2" collectionClass="NSMutableArray" id="NAh-i0-htQ"/>
                         <outletCollection property="buttons" destination="Q8C-6A-WnX" collectionClass="NSMutableArray" id="7Lf-UY-Psx"/>
                     </connections>
                 </viewController>

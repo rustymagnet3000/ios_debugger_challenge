@@ -10,7 +10,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().barTintColor = UIColor.green
         UINavigationBar.appearance().tintColor = UIColor.black
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-               
+        
+        let mainQueue = OperationQueue.main
+        NotificationCenter.default.addObserver(forName: UIApplication.userDidTakeScreenshotNotification,
+                object: nil,
+                queue: mainQueue) { notification in
+                    print("[!]detected screenshot")
+            YDRandomVC.screenshotCount += 1
+            }
+
         return true
     }
 }
