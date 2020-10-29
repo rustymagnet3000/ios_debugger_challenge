@@ -21,9 +21,18 @@ class YDRandomVC: UIViewController {
         self.YDAlertController(user_message: "Random number: \(answer)")
     }
     
+    @IBAction func get_some_bytes(_ sender: Any) {
+        self.YDAlertController(user_message: "BYTES")
+    }
+    
     @IBAction func jailbreak_check(_ sender: Any) {
         let result = YDFileChecker.checkFileExists()
-            self.YDAlertController(user_message: "Checking for jailbreak: \(result)")
+            self.YDAlertController(user_message: "Jailbroken: \(result)")
+    }
+    
+    @IBAction func file_exists_check(_ sender: Any) {
+        let result = YDFileChecker.checkFileExists()
+            self.YDAlertController(user_message: "Checking if info.plist exists: \(result)")
     }
     
     @IBAction func screenshot_check(_ sender: Any) {

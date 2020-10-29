@@ -399,9 +399,9 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
+                        <segue destination="R1f-PG-7qg" kind="relationship" relationship="viewControllers" id="yym-Ml-jET"/>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="5pj-TP-ZUR"/>
                         <segue destination="x4H-Cl-EEH" kind="relationship" relationship="viewControllers" id="Vao-83-Vtt"/>
-                        <segue destination="R1f-PG-7qg" kind="relationship" relationship="viewControllers" id="yym-Ml-jET"/>
                         <segue destination="pcv-UJ-06d" kind="relationship" relationship="viewControllers" id="Def-zI-S5L"/>
                         <segue destination="sAQ-o7-ZpC" kind="relationship" relationship="viewControllers" id="H1g-YM-Rgj"/>
                         <segue destination="AKY-oq-JqH" kind="relationship" relationship="viewControllers" id="be5-AJ-S3I"/>
@@ -420,51 +420,58 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="PTo-9L-qEB">
-                                <rect key="frame" x="74" y="161" width="227" height="340"/>
+                                <rect key="frame" x="74" y="130" width="227" height="402"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="C8h-CF-4ZV">
-                                        <rect key="frame" x="0.0" y="0.0" width="227" height="340"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="227" height="402"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xmX-oH-A2a">
-                                                <rect key="frame" x="65.5" y="0.0" width="96" height="30"/>
-                                                <state key="normal" title="random string"/>
-                                                <connections>
-                                                    <action selector="random_string_btn:" destination="R1f-PG-7qg" eventType="touchUpInside" id="wtW-L8-V0o"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B1N-mb-W7V">
-                                                <rect key="frame" x="78" y="62" width="71" height="30"/>
+                                                <rect key="frame" x="78" y="0.0" width="71" height="30"/>
                                                 <state key="normal" title="Jailbroken"/>
                                                 <connections>
                                                     <action selector="jailbreak_check:" destination="R1f-PG-7qg" eventType="touchUpInside" id="wUs-fw-hRw"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cQP-FC-JY7">
+                                                <rect key="frame" x="94" y="62" width="39" height="30"/>
+                                                <state key="normal" title="Bytes"/>
+                                                <connections>
+                                                    <action selector="get_some_bytes:" destination="R1f-PG-7qg" eventType="touchUpInside" id="994-BU-Rsp"/>
+                                                </connections>
+                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q8C-6A-WnX">
-                                                <rect key="frame" x="74.5" y="124" width="78" height="30"/>
-                                                <state key="normal" title="Screenshot"/>
+                                                <rect key="frame" x="46" y="124" width="135" height="30"/>
+                                                <state key="normal" title="Screenshot counter"/>
                                                 <connections>
                                                     <action selector="screenshot_check:" destination="R1f-PG-7qg" eventType="touchUpInside" id="hQy-t4-4bJ"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xmX-oH-A2a">
+                                                <rect key="frame" x="65.5" y="186" width="96" height="30"/>
+                                                <state key="normal" title="random string"/>
+                                                <connections>
+                                                    <action selector="random_string_btn:" destination="R1f-PG-7qg" eventType="touchUpInside" id="wtW-L8-V0o"/>
+                                                </connections>
+                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="50s-XJ-2vy">
-                                                <rect key="frame" x="0.0" y="186" width="227" height="30"/>
+                                                <rect key="frame" x="0.0" y="248" width="227" height="30"/>
                                                 <state key="normal" title="Random number from framework"/>
                                                 <connections>
                                                     <action selector="get_random_number_btn:" destination="R1f-PG-7qg" eventType="touchUpInside" id="pZr-lT-Zew"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SKs-Si-zSB">
-                                                <rect key="frame" x="59.5" y="248" width="108" height="30"/>
-                                                <state key="normal" title="common crypto"/>
+                                                <rect key="frame" x="42" y="310" width="143" height="30"/>
+                                                <state key="normal" title="Call Common Crypto"/>
                                                 <connections>
                                                     <action selector="crypto_button:" destination="R1f-PG-7qg" eventType="touchUpInside" id="GmJ-Wg-eHP"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sC7-Te-ZbQ">
-                                                <rect key="frame" x="55.5" y="310" width="116" height="30"/>
-                                                <state key="normal" title="File check - exist"/>
+                                                <rect key="frame" x="61.5" y="372" width="104" height="30"/>
+                                                <state key="normal" title="check info.plist"/>
                                                 <connections>
-                                                    <action selector="file_check:" destination="R1f-PG-7qg" eventType="touchUpInside" id="w2p-o5-mOC"/>
+                                                    <action selector="file_exists_check:" destination="R1f-PG-7qg" eventType="touchUpInside" id="KXr-tm-W0t"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -487,6 +494,7 @@
                         <outletCollection property="buttons" destination="sC7-Te-ZbQ" collectionClass="NSMutableArray" id="KYv-sZ-teA"/>
                         <outletCollection property="buttons" destination="B1N-mb-W7V" collectionClass="NSMutableArray" id="bmF-VV-6eq"/>
                         <outletCollection property="buttons" destination="Q8C-6A-WnX" collectionClass="NSMutableArray" id="7Lf-UY-Psx"/>
+                        <outletCollection property="buttons" destination="cQP-FC-JY7" collectionClass="NSMutableArray" id="d2b-c8-FuW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="STk-Ie-7qd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
