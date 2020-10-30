@@ -433,8 +433,8 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cQP-FC-JY7">
-                                                <rect key="frame" x="94" y="62" width="39" height="30"/>
-                                                <state key="normal" title="Bytes"/>
+                                                <rect key="frame" x="69.5" y="62" width="88" height="30"/>
+                                                <state key="normal" title="Animal bytes"/>
                                                 <connections>
                                                     <action selector="get_some_bytes:" destination="R1f-PG-7qg" eventType="touchUpInside" id="994-BU-Rsp"/>
                                                 </connections>

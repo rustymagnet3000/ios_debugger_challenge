@@ -3,6 +3,8 @@ import UIKit
 class YDRandomVC: UIViewController {
 
     static var screenshotCount = 0
+    static let animal_bytes:[UInt8] = [66, 97, 98, 111, 111, 110]      // "Baboon"
+    
     @IBOutlet var  buttons: [UIButton] = []
        
     @IBAction func crypto_button(_ sender: Any) {
@@ -22,7 +24,9 @@ class YDRandomVC: UIViewController {
     }
     
     @IBAction func get_some_bytes(_ sender: Any) {
-        self.YDAlertController(user_message: "BYTES")
+        if let result = String(bytes: YDRandomVC.animal_bytes, encoding: String.Encoding.ascii) {
+            self.YDAlertController(user_message: "Can you change the animal? \(result)")
+        }
     }
     
     @IBAction func jailbreak_check(_ sender: Any) {
