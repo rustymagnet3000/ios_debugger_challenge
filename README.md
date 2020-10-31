@@ -15,6 +15,9 @@
 
 <!-- /TOC -->
 
+## Challenge: Bypass ptrace (asm)
+To start with, let's start with a reminder; "how do you eat an Elephant?"  Correct, one piece at a time.  Bypassing ASM code is daunting. But how about focusing on a tiny piece of code, outside the target app.  Get the technique down and then try the bigger app?
+
 ## Challenge: Animal bytes. Find the Animal type and change it.
 Let’s find the string.
 ```
