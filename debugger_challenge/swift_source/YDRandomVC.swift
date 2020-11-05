@@ -31,7 +31,7 @@ class YDRandomVC: UIViewController {
     
     @IBAction func jailbreak_check(_ sender: Any) {
         let jailbreak = YDJailbreakCheck()
-        self.YDAlertController(user_message: "Jailbroken: \(jailbreak.getStatus())")
+        self.YDAlertController(user_message: "Jailbroken: \(jailbreak.getJailbreakStatus() ?? "[!]no value")")
     }
     
     @IBAction func file_exists_check(_ sender: Any) {

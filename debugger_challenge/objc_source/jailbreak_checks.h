@@ -7,7 +7,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-/* TODO: add IN_PROGRESS define */
+typedef enum : NSUInteger {
+    CLEAN_DEVICE = 0,
+    SUSPECT_JAILBREAK = 1,
+    JAILBROKEN,
+} JAILBREAKRESULT;
+
 #define CLEAN_DEVICE            0x00        // 0b00000000
 #define JAILBROKEN              0x01        // 0b00000001
 #define SANDBOX_ESCAPE          0x02        // 0b00000010
@@ -15,12 +20,12 @@
 #define ELECTRA_PRESENT         0x08        // 0b00001000
 #define JB_DYLIB_PRESENT        0x16        // 0b00010000
 #define MAX_BITS                5           // max value where Bit Fields are OR'd together 0b00011111 = 5 bits == 0x31
-
+/* TODO: add IN_PROGRESS define */
 
 @interface YDJailbreakCheck: NSObject{
     unsigned short status : MAX_BITS;
 }
--(BOOL)getStatus;
+-(NSString *)getJailbreakStatus;
 +(BOOL)checkSymLinks;
 +(BOOL)checkFileExists;
 +(BOOL)checkSandboxFork;

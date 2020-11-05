@@ -10,12 +10,26 @@
     return self;
 }
 
--(BOOL)getStatus{
-    return (status > 0) ? YES : NO;
+-(NSString *)getJailbreakStatus{
+    int jb_detection_counter = 0;
+       
+    for (unsigned short i = 0; i < MAX_BITS; i++) {
+        if (status & (1 << i))
+            jb_detection_counter++;
+    }
+    printf("[*]Jailbreak detections fired: %d\n", jb_detection_counter);
+    switch (jb_detection_counter) {
+        case CLEAN_DEVICE:
+            return @"Clean device";
+        case SUSPECT_JAILBREAK:
+            return @"Suspect jailbreak";
+        default:
+            return @"Jailbroken";
+    }
 }
 
-+(BOOL)checkSymLinks{
 
++(BOOL)checkSymLinks{
     const char *app_path = "/Applications";
     struct stat s;
     if (lstat(app_path, &s) == 0)
