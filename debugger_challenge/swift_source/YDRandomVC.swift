@@ -30,12 +30,12 @@ class YDRandomVC: UIViewController {
     }
     
     @IBAction func jailbreak_check(_ sender: Any) {
-        let result = YDJailbreakCheck.result()
-            self.YDAlertController(user_message: "Jailbroken: \(result)")
+        let jailbreak = YDJailbreakCheck()
+        self.YDAlertController(user_message: "Jailbroken: \(jailbreak.getStatus())")
     }
     
     @IBAction func file_exists_check(_ sender: Any) {
-        let result = YDFileChecker.checkFileExists()
+        let result = YDJailbreakCheck.checkFileExists()
             self.YDAlertController(user_message: "Checking if info.plist exists: \(result)")
     }
     

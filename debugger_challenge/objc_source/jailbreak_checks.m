@@ -2,6 +2,18 @@
 
 @implementation YDJailbreakCheck
 
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        status = CLEAN_DEVICE;
+    }
+    return self;
+}
+
+-(BOOL)getStatus{
+    return (status > 0) ? YES : NO;
+}
+
 +(BOOL)checkSymLinks{
 
     const char *app_path = "/Applications";
@@ -16,7 +28,6 @@
 
 
 +(BOOL)checkSandboxWrite{
-    
     /* Should not be able to write outside of my sandbox  */
     /* but fopen and NSFileManager adhere to sandboxing, even on a jailbroken Electra device */
     
