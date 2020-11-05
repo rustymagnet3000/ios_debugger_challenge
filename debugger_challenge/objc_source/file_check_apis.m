@@ -1,8 +1,6 @@
-#include "file_check_apis.h"
+#include "jailbreak_checks.h"
 
-
-@implementation YDFileChecker
-
+@implementation YDJailbreakCheck
 
 +(BOOL)checkSymLinks{
 

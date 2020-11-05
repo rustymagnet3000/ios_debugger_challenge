@@ -1,5 +1,5 @@
 #include "debugger_checks.h"
-#include "file_check_apis.h"
+#include "jailbreak_checks.h"
 #include "thread_chomper.h"
 #include "frida_detection.h"
 #include "YDAliceSDK.framework/Headers/YDHelloClass.h"

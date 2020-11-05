@@ -68,7 +68,7 @@
 		0F82A83C23585ECC00728710 /* YDswizzleNSURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YDswizzleNSURLSession.m; sourceTree = "<group>"; };
 		0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YDAliceSDK.framework; sourceTree = "<group>"; };
 		0FFAAE18252B5ABD00BACA90 /* file_check_apis.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = file_check_apis.m; sourceTree = "<group>"; };
-		0FFAAE1A252B5B7C00BACA90 /* file_check_apis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = file_check_apis.h; sourceTree = "<group>"; };
+		0FFAAE1A252B5B7C00BACA90 /* jailbreak_checks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jailbreak_checks.h; sourceTree = "<group>"; };
 		30D4BA092115E00600C31AE5 /* RNCryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNCryptor.swift; sourceTree = "<group>"; };
 		30D4BA0C2115E03500C31AE5 /* RNCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCryptor.h; sourceTree = "<group>"; };
 		30D4BA0E2115E1C100C31AE5 /* YDCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YDCrypto.swift; sourceTree = "<group>"; };
@@ -127,7 +127,7 @@
 				0F328B5422A532BB00594085 /* thread_chomper.m */,
 				0F3E52B82530A263001F6D20 /* frida_detection.h */,
 				0F3E52B62530A249001F6D20 /* frida_detection.m */,
-				0FFAAE1A252B5B7C00BACA90 /* file_check_apis.h */,
+				0FFAAE1A252B5B7C00BACA90 /* jailbreak_checks.h */,
 				0FFAAE18252B5ABD00BACA90 /* file_check_apis.m */,
 				0F82A83C23585ECC00728710 /* YDswizzleNSURLSession.m */,
 			);
