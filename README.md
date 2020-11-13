@@ -17,6 +17,21 @@
 
 <!-- /TOC -->
 
+## Challenge: Other ways to bypass Jailbreak detections
+Writing a self built Jailbreak detection is tempting.  But there are elegant libraries available to detect `Elevated Privilege`.  Check out an open-source Swift version: https://github.com/securing/IOSSecuritySuite.
+```
+if IOSSecuritySuite.amIJailbroken() {
+	print("This device is jailbroken")
+} else {
+	print("This device is not jailbroken")
+}
+```
+Most of the libraries have a `true/false` response, at a high-level.  But what happens if Apple changed an API?  What happens if a detection fired incorrectly, an an Apple change / chipset change ?  This is a common problem in Security;`false positives`.
+
+Mature iOS libraries recognize the risk of `false positives`.  Code is written code underneath the `true/false` response that is building a confidence level.
+
+There are lots of articles online that focus anti-Jailbreak on `patching` out a `Boolean` response to `amIJailbroken()`.  This challenge is looking at other variables - the ones that build the confidence level - that can be targeted instead of the `Boolean`.
+
 ## Challenge: Bypass ptrace (asm)
 To start with, let's start with a reminder; "how do you eat an Elephant?"  Correct, one piece at a time.  Bypassing ASM code is daunting. But how about focusing on a tiny piece of code, outside the target app.  Get the technique down and then try the bigger app?
 
