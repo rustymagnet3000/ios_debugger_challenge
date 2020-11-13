@@ -28,17 +28,17 @@ if IOSSecuritySuite.amIJailbroken() {
 	print("This device is not jailbroken")
 }
 ```
-Most of the libraries have a `true/false` response, at a high-level.  But what happens if Apple changed an API?  What happens if ARM change something?  What happens a detection failed or was forced to fail?  You hit two common problem in Security;`false positives` and a `fail close / fail open policy`.
+Most of the libraries have a `true/false` response, at a high-level.  But what happens if Apple changes an API?  What happens if ARM change something?  What happens if a detection fails or is forced to fail?  You hit two common problem in Security;`false positives` and a `fail close / fail open policy`.
 
-Mature iOS libraries recognize these risk.  Code is written code underneath the `true/false` response that is building a confidence level.
+A third party library can probably give you the `Jailbreak == true/false` plus a confidence level whether stuff failed or it was a definite jailbreak.
 ```
 static func amIJailbrokenWithFailedChecks() -> (jailbroken: Bool, failedChecks: [FailedCheck]) {
     let status = performChecks()
     return (!status.passed, status.failedChecks)
 }
 ```
-##### Not all jailbreaks are equal
-It gets worse for jailbreak detection.  
+##### Layers of detections are required
+It gets worse for writers of jailbreak detections.  You need layers of code.  For example, the below code is ineffective on a device that has only has a basic jailbreak applied:
 ```
 /* Loop through all loaded Dynamic libraries at run-time */
 -(void)checkModules{
@@ -51,10 +51,11 @@ It gets worse for jailbreak detection.
                                     @"cynject",
                                     nil];
 ```
-Alone, the above code can be ineffective on a device that has a basic jailbreak applied.  If you look at the `iOS Electra jailbreak` you can set it in two modes.  `Tweaks off`: you can `ssh` to the device, run a debugger but not much else. The above code is not triggered.  `Tweaks on` will dynamically inject `TweakInject.dylib` at run-time, so the detection becomes useful.
 
+Consider `iOS Electra jailbreak`. You can set it in two modes.  `Tweaks off`: you can `ssh` to the device, start `Frida` manually, run a `debugger`. The above code is not triggered.  `Tweaks on` will dynamically inject `TweakInject.dylib` at run-time, so the detection becomes useful.
 
-There are lots of articles online that focus anti-Jailbreak on `patching` out a `Boolean` response to `amIJailbroken()`.  This challenge is looking at other variables - the ones that build the confidence level - that can be targeted instead of the `Boolean`.
+##### Jailbroken == YES
+There are tonnes of articles on `patching` out a `Boolean` response to `amIJailbroken()`.  But what happens if there no `Boolean` return type to find?  There is likely to be a counter that increments when it finds evidence of Jailbreak.  That is what this challenge offers.
 
 
 

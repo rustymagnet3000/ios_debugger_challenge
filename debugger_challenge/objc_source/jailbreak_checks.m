@@ -9,6 +9,7 @@
         [self checkModules];
         [self checkSuspiciousFiles];
         [self checkSandboxFork];
+        [self checkSandboxWrite];
     }
     return self;
 }
@@ -31,9 +32,29 @@
     }
 }
 
+/* Should not be able to write outside of my sandbox  */
+/* but fopen and NSFileManager adhere to sandboxing, even on a jailbroken Electra device */
+/* TODO: Change the write to file API */
+
+-(void)checkSandboxWrite{
+
+    NSLog (@"[*]Sandboxed area:%@", NSHomeDirectory() );
+    
+    NSError *error;
+    NSString *stringToBeWritten = @"Jailbreak \"escape sandbox\" check. Writing meaningless text to a file";
+    [stringToBeWritten writeToFile:@"/private/foobar.txt" atomically:YES encoding:NSUTF8StringEncoding error:&error];
+    
+    if (error == nil){
+        [[NSFileManager defaultManager] removeItemAtPath:@"/private/jailbreak.txt" error:nil];
+        status |= 1 << 1;
+    }else{
+        NSLog (@"[*]Sandboxed error:%@", [error description]);
+    }
+}
+
+
 /* Iterate through all a list of suspicious files */
 /* Goal: check if suspicious file ( not the permissions of the file ) */
-
 -(void)checkSuspiciousFiles{
     
     NSArray *suspectFiles = [[NSArray alloc] initWithObjects:
@@ -121,31 +142,7 @@
 }
 
 
-+(BOOL)checkSandboxWrite{
-    /* Should not be able to write outside of my sandbox  */
-    /* but fopen and NSFileManager adhere to sandboxing, even on a jailbroken Electra device */
-    
-    NSLog (@"[*]Sandboxed area:%@", NSHomeDirectory() );
-    const char *outside_sandbox = "/private/foobar.txt";
-    FILE *fp;
-    fp = fopen(outside_sandbox, "w");
-    
-    if (fp != nil)
-        return YES;
-    
-    NSError *error;
-    NSString *stringToBeWritten = @"Jailbreak sandbox check. Writing text to a file.";
-    [stringToBeWritten writeToFile:@"/private/jailbreak.txt" atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    
-    if (error == nil)
-    {
-        [[NSFileManager defaultManager] removeItemAtPath:@"/private/jailbreak.txt" error:nil];
-        return YES;
-    }else{
-        NSLog (@"[*]Sandboxed error:%@", [error description]);
-        return NO;
-    }
-}
+
     
 
 
