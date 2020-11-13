@@ -35,7 +35,7 @@ class YDRandomVC: UIViewController {
     }
     
     @IBAction func file_exists_check(_ sender: Any) {
-        let result = YDJailbreakCheck.checkFileExists()
+        let result = YDJailbreakCheck.checkInfoPlistExists()
             self.YDAlertController(user_message: "Checking if info.plist exists: \(result)")
     }
     

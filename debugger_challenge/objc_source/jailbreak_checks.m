@@ -7,6 +7,7 @@
     if (self) {
         status = CLEAN_DEVICE;
         [self checkModules];
+        [self checkSuspiciousFiles];
     }
     return self;
 }
@@ -29,9 +30,34 @@
     }
 }
 
+/* Iterate through all a list of suspicious files */
+/* Goal: check if suspicious file ( not the permissions of the file ) */
+
+-(void)checkSuspiciousFiles{
+    
+    NSArray *suspectFiles = [[NSArray alloc] initWithObjects:
+                                    @"/bin/bash",
+                                    @"/usr/sbin/sshd",
+                                    @"/bin/sh",
+                                    @"/Applications/Cydia.app",
+                                    @"/Library/MobileSubstrate/MobileSubstrate.dylib",
+                                    @"/var/cache/apt",
+                                    @"/var/lib/cydia",
+                                    nil];
+    
+
+    for (NSString *file in suspectFiles) {
+        NSURL *theURL = [ NSURL fileURLWithPath:file isDirectory:NO ];
+        NSError *err;
+        if ([ theURL checkResourceIsReachableAndReturnError:&err]  == YES )
+            NSLog(@"\t🍭[*]%@\t:%@", NSStringFromSelector(_cmd), file);
+            status |= 1 << 3;
+        
+    }
+}
+
 /* Iterate through all loaded Dynamic libraries at run-time */
 /* Goal: detection supicious libraries */
-
 -(void)checkModules{
     unsigned int count = 0;
     NSArray *suspectLibraries = [[NSArray alloc] initWithObjects:
@@ -48,7 +74,7 @@
             
             NSString *module_in_app = [NSString stringWithUTF8String:images[y]];
             if ([module_in_app containsString:suspectLibraries[i]]){
-                NSLog(@"\t🍭[*]%@", module_in_app);
+                NSLog(@"\t🍭[*]%@\t:%@", NSStringFromSelector(_cmd), module_in_app);
                 status |= 1 << 4;
                 return;
             }
@@ -100,11 +126,8 @@
     
     /*
         fork() causes creation of a new process. The child process has a unique process ID.
-        
         On a sandboxed iOS app this is restricted.  It will give a -1 response to the parent process, no child process is created
-
         With the electra iOS jailbreak, this never passed this test.
-     
      */
              
     int pid = 99;
@@ -147,7 +170,7 @@
 }
 
 
-+(BOOL)checkFileExists{
++(BOOL)checkInfoPlistExists{
     int64_t result = -10;
     NSBundle *appbundle = [NSBundle mainBundle];
     NSString *filepath = [appbundle pathForResource:@"Info" ofType:@"plist"];

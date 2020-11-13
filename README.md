@@ -3,6 +3,7 @@
 ![](https://img.shields.io/github/commit-activity/m/rustymagnet3000/debugger_challenge?style=for-the-badge)
 <!-- TOC depthFrom:2 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
 
+- [Challenge: Understand Jailbreak detections](#challenge-understand-jailbreak-detections)
 - [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)
 - [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)
 - [Challenge: Bypass ptrace (asm Syscall)](#challenge-bypass-ptrace-asm-syscall)
@@ -57,45 +58,6 @@ There are lots of articles online that focus anti-Jailbreak on `patching` out a 
 
 
 
-
-
-## Challenge: Bypass ptrace (asm)
-To start with, let's start with a reminder; "how do you eat an Elephant?"  Correct, one piece at a time.  Bypassing ASM code is daunting. But how about focusing on a tiny piece of code, outside the target app.  Get the technique down and then try the bigger app?
-
-## Challenge: Animal bytes. Find the Animal type and change it.
-Let’s find the string.
-```
-▶ strings c_play         
-<nothing of interest>
-```
-Ok, so we can guess the string was `obfuscated`, `encrypted` or maybe just hidden?
-
-const int animalByteArray[7] = { 66, 97, 98, 111, 111, 110 };
-```
-▶ rabin2 -qz c_play         
-0x100003f60 28 6 Baboon
-```
-r2 c_play
-
-[0x100003ec0]> s 0x100003f60
-
-[0x100003f60]> x 28		< Int array of seven ( 7 x sizeOfInt(4))
-
-- offset -    0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF
-0x100003f60  4200 0000 6100 0000 6200 0000 6f00 0000  B...a...b...o...
-0x100003f70  6f00 0000 6e00 0000 0000 0000            o...n.......
-
-
-[0x100003ec0]> iS
-[Sections]
-00 0x00003e90   158 0x100003e90   158 -r-x 0.__TEXT.__text
-01 0x00003f2e    12 0x100003f2e    12 -r-x 1.__TEXT.__stubs
-02 0x00003f3c    36 0x100003f3c    36 -r-x 2.__TEXT.__stub_helper
-03 0x00003f60    28 0x100003f60    28 -r-x 3.__TEXT.__const. <— IN HERE
-04 0x00003f7c    52 0x100003f7c    52 -r-x 4.__TEXT.__cstring
-
-Now you have the Section (__TEXT) for an lldb memory search.
-You want to find out what Section the code is inside.
 
 
 ## Challenge: Method Swizzling on non-jailbroken device

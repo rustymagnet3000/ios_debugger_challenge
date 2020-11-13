@@ -18,7 +18,7 @@ typedef enum : NSUInteger {
 #define JAILBROKEN              0x01        // 0b00000001
 #define SANDBOX_ESCAPE          0x02        // 0b00000010
 #define CYDIA_PRESENT           0x04        // 0b00000100
-#define ELECTRA_PRESENT         0x08        // 0b00001000
+#define SUSPICIOUS_FILES        0x08        // 0b00001000
 #define JB_DYLIB_PRESENT        0x16        // 0b00010000
 #define MAX_BITS                5           // max value where Bit Fields are OR'd together 0b00011111 = 5 bits == 0x31
 /* TODO: add IN_PROGRESS define */
@@ -28,10 +28,11 @@ typedef enum : NSUInteger {
 }
 -(NSString *)getJailbreakStatus;
 +(BOOL)checkSymLinks;
-+(BOOL)checkFileExists;
 +(BOOL)checkSandboxFork;
 +(BOOL)checkSandboxWrite;
++(BOOL)checkInfoPlistExists;
 -(void)checkModules;
+-(void)checkSuspiciousFiles;
 @end
 
 #endif /* jailbreak_checks_h */
