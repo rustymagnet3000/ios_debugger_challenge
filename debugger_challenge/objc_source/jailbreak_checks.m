@@ -35,13 +35,12 @@
 -(void)checkModules{
     unsigned int count = 0;
     NSArray *suspectLibraries = [[NSArray alloc] initWithObjects:
-                                    @"UIKit.dylib",                 // TODO: delete
                                     @"SubstrateLoader.dylib",
                                     @"MobileSubstrate.dylib",
                                     @"TweakInject.dylib",
                                     @"CydiaSubstrate",
                                     @"cynject",
-                                 nil];
+                                    nil];
 
     const char **images = objc_copyImageNames ( &count );
     for (int y = 0 ; y < count ; y ++) {
@@ -50,12 +49,12 @@
             NSString *module_in_app = [NSString stringWithUTF8String:images[y]];
             if ([module_in_app containsString:suspectLibraries[i]]){
                 NSLog(@"\t🍭[*]%@", module_in_app);
-                status |= 1U << 5;
+                status |= 1 << 4;
+                return;
             }
         }
     }
     NSLog(@"[*]🐝No suspect modules found");
-    
 }
 
 

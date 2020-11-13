@@ -17,7 +17,8 @@
 
 <!-- /TOC -->
 
-## Challenge: Other ways to bypass Jailbreak detections
+## Challenge: Understand Jailbreak detections
+##### Writing Jailbreak detections
 Writing a self built Jailbreak detection is tempting.  But there are elegant libraries available to detect `Elevated Privilege`.  Check out an open-source Swift version: https://github.com/securing/IOSSecuritySuite.
 ```
 if IOSSecuritySuite.amIJailbroken() {
@@ -35,7 +36,28 @@ static func amIJailbrokenWithFailedChecks() -> (jailbroken: Bool, failedChecks: 
     return (!status.passed, status.failedChecks)
 }
 ```
+##### Not all jailbreaks are equal
+It gets worse for jailbreak detection.  
+```
+/* Loop through all loaded Dynamic libraries at run-time */
+-(void)checkModules{
+    unsigned int count = 0;
+    NSArray *suspectLibraries = [[NSArray alloc] initWithObjects:
+                                    @"SubstrateLoader.dylib",
+                                    @"MobileSubstrate.dylib",
+                                    @"TweakInject.dylib",
+                                    @"CydiaSubstrate",
+                                    @"cynject",
+                                    nil];
+```
+Alone, the above code can be ineffective on a device that has a basic jailbreak applied.  If you look at the `iOS Electra jailbreak` you can set it in two modes.  `Tweaks off`: you can `ssh` to the device, run a debugger but not much else. The above code is not triggered.  `Tweaks on` will dynamically inject `TweakInject.dylib` at run-time, so the detection becomes useful.
+
+
 There are lots of articles online that focus anti-Jailbreak on `patching` out a `Boolean` response to `amIJailbroken()`.  This challenge is looking at other variables - the ones that build the confidence level - that can be targeted instead of the `Boolean`.
+
+
+
+
 
 ## Challenge: Bypass ptrace (asm)
 To start with, let's start with a reminder; "how do you eat an Elephant?"  Correct, one piece at a time.  Bypassing ASM code is daunting. But how about focusing on a tiny piece of code, outside the target app.  Get the technique down and then try the bigger app?
