@@ -26,10 +26,15 @@ if IOSSecuritySuite.amIJailbroken() {
 	print("This device is not jailbroken")
 }
 ```
-Most of the libraries have a `true/false` response, at a high-level.  But what happens if Apple changed an API?  What happens if a detection fired incorrectly, an an Apple change / chipset change ?  This is a common problem in Security;`false positives`.
+Most of the libraries have a `true/false` response, at a high-level.  But what happens if Apple changed an API?  What happens if ARM change something?  What happens a detection failed or was forced to fail?  You hit two common problem in Security;`false positives` and a `fail close / fail open policy`.
 
-Mature iOS libraries recognize the risk of `false positives`.  Code is written code underneath the `true/false` response that is building a confidence level.
-
+Mature iOS libraries recognize these risk.  Code is written code underneath the `true/false` response that is building a confidence level.
+```
+static func amIJailbrokenWithFailedChecks() -> (jailbroken: Bool, failedChecks: [FailedCheck]) {
+    let status = performChecks()
+    return (!status.passed, status.failedChecks)
+}
+```
 There are lots of articles online that focus anti-Jailbreak on `patching` out a `Boolean` response to `amIJailbroken()`.  This challenge is looking at other variables - the ones that build the confidence level - that can be targeted instead of the `Boolean`.
 
 ## Challenge: Bypass ptrace (asm)

@@ -2,10 +2,11 @@
 #define jailbreak_checks_h
 
 @import Foundation;
-#include <unistd.h>
-#include <sys/syscall.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+@import ObjectiveC.runtime;
+#import <unistd.h>
+#import <sys/syscall.h>
+#import <sys/types.h>
+#import <sys/stat.h>
 
 typedef enum : NSUInteger {
     CLEAN_DEVICE = 0,
@@ -30,7 +31,7 @@ typedef enum : NSUInteger {
 +(BOOL)checkFileExists;
 +(BOOL)checkSandboxFork;
 +(BOOL)checkSandboxWrite;
-
+-(void)checkModules;
 @end
 
 #endif /* jailbreak_checks_h */
