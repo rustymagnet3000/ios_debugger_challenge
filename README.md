@@ -20,7 +20,7 @@
 
 ## Challenge: Understand Jailbreak detections
 ##### Writing Jailbreak detections
-Writing a self built Jailbreak detection is tempting.  But there are elegant libraries available to detect `Elevated Privilege`.  Check out an open-source Swift version: https://github.com/securing/IOSSecuritySuite.
+Writing a self-built Jailbreak detection is tempting.  But there are elegant libraries available to detect `Elevated Privilege`.  Check out an open-source Swift version: https://github.com/securing/IOSSecuritySuite.
 ```
 if IOSSecuritySuite.amIJailbroken() {
 	print("This device is jailbroken")
@@ -28,7 +28,7 @@ if IOSSecuritySuite.amIJailbroken() {
 	print("This device is not jailbroken")
 }
 ```
-Most of the libraries have a `true/false` response, at a high-level.  But what happens if Apple changes an API?  What happens if ARM change something?  What happens if a detection fails or is forced to fail?  You hit two common problem in Security;`false positives` and a `fail close / fail open policy`.
+Most of the libraries have a `true/false` response, at a high-level.  But what happens if Apple change an API?  What happens if ARM change something?  What happens if a detection fails or is forced to fail?  You hit two common problem in Security;`false positives` and a `fail close / fail open policy`.
 
 A third party library can probably give you the `Jailbreak == true/false` plus a confidence level whether stuff failed or it was a definite jailbreak.
 ```
