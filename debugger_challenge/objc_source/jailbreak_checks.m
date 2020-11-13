@@ -8,6 +8,7 @@
         status = CLEAN_DEVICE;
         [self checkModules];
         [self checkSuspiciousFiles];
+        [self checkSandboxFork];
     }
     return self;
 }
@@ -84,6 +85,30 @@
 }
 
 
+/*
+    fork() causes creation of a new process. The child process has a unique process ID.
+    On a sandboxed iOS app this is restricted.  It will give a -1 response to the parent process, no child process is created
+    With the electra iOS jailbreak, fork() didn't work.
+    If fork() succeeds, it returns a value of 0 to the child process and returns the process ID of the child process to the parent process.
+*/
+-(void)checkSandboxFork{
+                
+    int pid = 99;
+    
+    #if defined(__arm64__)
+        pid = fork();
+        NSLog(@"[*]pid returned from fork():%d", pid);
+        if ( pid == -1 )
+            NSLog(@"[*]fork() request denied with Sandbox error: %d", errno);
+
+        else if ( pid >= 0 )
+            status |= 1 << 1;
+    
+    #elif defined(__x86_64__)
+        NSLog(@"[!]Not calling fork() as this works on an iOS simulator");
+    #endif
+}
+
 +(BOOL)checkSymLinks{
     const char *app_path = "/Applications";
     struct stat s;
@@ -122,33 +147,7 @@
     }
 }
     
-+(BOOL)checkSandboxFork{
-    
-    /*
-        fork() causes creation of a new process. The child process has a unique process ID.
-        On a sandboxed iOS app this is restricted.  It will give a -1 response to the parent process, no child process is created
-        With the electra iOS jailbreak, this never passed this test.
-     */
-             
-    int pid = 99;
-    
-    #if defined(__arm64__)
-        pid = fork();
-        NSLog(@"[*]pid returned from fork():%d", pid);
-        if ( pid == -1 )
-            NSLog(@"[*]fork() request denied with Sandbox error: %d", errno);
-    
-    #elif defined(__x86_64__)
-        NSLog(@"[!]Not calling fork() as this works on an iOS simulator");
-    
-    #else
-        NSLog(@"[*]Unknown target.");
-    
-    #endif
 
-    return (pid >= 0) ? YES : NO;   // fork() returns a value of 0 to the child process and returns the process ID of the child process to the parent process.
-    
-}
 
  +(int64_t) asmSyscallFunction:(const char *) fp{
 

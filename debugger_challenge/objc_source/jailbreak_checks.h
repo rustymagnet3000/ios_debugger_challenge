@@ -28,11 +28,11 @@ typedef enum : NSUInteger {
 }
 -(NSString *)getJailbreakStatus;
 +(BOOL)checkSymLinks;
-+(BOOL)checkSandboxFork;
 +(BOOL)checkSandboxWrite;
 +(BOOL)checkInfoPlistExists;
 -(void)checkModules;
 -(void)checkSuspiciousFiles;
+-(void)checkSandboxFork;
 @end
 
 #endif /* jailbreak_checks_h */
