@@ -38,7 +38,7 @@ static func amIJailbrokenWithFailedChecks() -> (jailbroken: Bool, failedChecks: 
 }
 ```
 ##### Layers of detections are required
-It gets worse for writers of jailbreak detections.  You need layers of code.  For example, the below code is ineffective on a device that has only has a basic jailbreak applied:
+Not all jailbreaks are equal.  You need layers of code to account for this.  For example, the below code is ineffective on a device that has only has a basic jailbreak applied:
 ```
 /* Loop through all loaded Dynamic libraries at run-time */
 -(void)checkModules{
@@ -52,7 +52,20 @@ It gets worse for writers of jailbreak detections.  You need layers of code.  Fo
                                     nil];
 ```
 
-Consider `iOS Electra jailbreak`. You can set it in two modes.  `Tweaks off`: you can `ssh` to the device, start `Frida` manually, run a `debugger`. The above code is not triggered.  `Tweaks on` will dynamically inject `TweakInject.dylib` at run-time, so the detection becomes useful.
+For example, with the `Electra jailbreak` for `iOS` it could be set in two modes.  `Tweaks off`: you can `ssh` to the device, start `Frida` manually, run a `debugger`. The above code is not triggered.  `Tweaks on` will dynamically inject `TweakInject.dylib` at run-time, so the detection becomes useful.
+
+Consider another example; it was common to test a `write` call from your app's sandbox to directory like `private`, `root` or `/`:
+```
+-(void)checkSandboxWrite{
+	...
+	..
+	[stringToBeWritten writeToFile:@"/private/foobar.txt" atomically:YES encoding:NSUTF8StringEncoding error:&error];
+	...
+	..
+
+```
+This generated `Code=513 "You don’t have permission to save the file “foobar.txt” in the folder “private”." {Error Domain=NSPOSIXErrorDomain Code=1 "Operation not permitted"}}` on an `Electra` jailbroken device.
+
 
 ##### Jailbroken == YES
 There are tonnes of articles on `patching` out a `Boolean` response to `amIJailbroken()`.  But what happens if there no `Boolean` return type to find?  There is likely to be a counter that increments when it finds evidence of Jailbreak.  That is what this challenge offers.

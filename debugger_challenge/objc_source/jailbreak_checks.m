@@ -6,10 +6,11 @@
     self = [super init];
     if (self) {
         status = CLEAN_DEVICE;
-        [self checkModules];
-        [self checkSuspiciousFiles];
-        [self checkSandboxFork];
-        [self checkSandboxWrite];
+//        [self checkModules];
+//        [self checkSuspiciousFiles];
+//        [self checkSandboxFork];
+//        [self checkSandboxWrite];
+        [self checkSymLinks];
     }
     return self;
 }
@@ -32,23 +33,56 @@
     }
 }
 
+/* Check whether certain directories/files are symbolic links                           */
+/* example: /User is a symbolic link for:    /var/mobile                                */
+/* ls -lR / | grep ^l                 -> listr all symbolic links on iOS                */
+
+-(void)checkSymLinks{
+    NSArray *suspectSymlinks = [[NSArray alloc] initWithObjects:
+                                    @"Store",                   // Cydia
+                                    @"TweakInject",
+                                    @"/Applications",
+                                    @"DynamicLibraries",
+                                    @"/var/lib/undecimus/apt",
+                                    @"/usr/libexec",
+                                    nil];
+
+    for (NSString *link in suspectSymlinks) {
+        struct stat s;
+        if (lstat(link.UTF8String, &s) == 0)
+        {
+            if (S_ISLNK(s.st_mode) == 1){            /* S_ISLNK == symbolic link */
+                NSLog (@"🍭[*]Suspicious symlink:%@", link);
+                status |= 1 << 2;
+            }
+        }
+    }
+}
+
+
+
 /* Should not be able to write outside of my sandbox  */
 /* but fopen and NSFileManager adhere to sandboxing, even on a jailbroken Electra device */
-/* TODO: Change the write to file API */
 
 -(void)checkSandboxWrite{
 
     NSLog (@"[*]Sandboxed area:%@", NSHomeDirectory() );
-    
+    NSString *fileToWrite = @"/private/t";
     NSError *error;
     NSString *stringToBeWritten = @"Jailbreak \"escape sandbox\" check. Writing meaningless text to a file";
-    [stringToBeWritten writeToFile:@"/private/foobar.txt" atomically:YES encoding:NSUTF8StringEncoding error:&error];
+    [stringToBeWritten writeToFile:fileToWrite atomically:YES encoding:NSUTF8StringEncoding error:&error];
     
     if (error == nil){
-        [[NSFileManager defaultManager] removeItemAtPath:@"/private/jailbreak.txt" error:nil];
+        NSLog (@"[*]No errors writing to: %@", fileToWrite);
+        [[NSFileManager defaultManager] removeItemAtPath:fileToWrite error:nil];
         status |= 1 << 1;
     }else{
         NSLog (@"[*]Sandboxed error:%@", [error description]);
+    }
+    
+    if(access (fileToWrite.UTF8String, W_OK ) != -1)
+    {
+        NSLog (@"[*]No error throw from Access()");
     }
 }
 
@@ -72,7 +106,7 @@
         NSURL *theURL = [ NSURL fileURLWithPath:file isDirectory:NO ];
         NSError *err;
         if ([ theURL checkResourceIsReachableAndReturnError:&err]  == YES )
-            NSLog(@"\t🍭[*]%@\t:%@", NSStringFromSelector(_cmd), file);
+            NSLog(@"🍭[*]%@\t:%@", NSStringFromSelector(_cmd), file);
             status |= 1 << 3;
         
     }
@@ -130,21 +164,6 @@
     #endif
 }
 
-+(BOOL)checkSymLinks{
-    const char *app_path = "/Applications";
-    struct stat s;
-    if (lstat(app_path, &s) == 0)
-    {
-        if (S_ISLNK(s.st_mode) == 1)            /* S_ISLNK == symbolic link */
-            return YES;
-    }
-    return NO;
-}
-
-
-
-    
-
 
  +(int64_t) asmSyscallFunction:(const char *) fp{
 
@@ -170,7 +189,7 @@
     int64_t result = -10;
     NSBundle *appbundle = [NSBundle mainBundle];
     NSString *filepath = [appbundle pathForResource:@"Info" ofType:@"plist"];
-    __unused const char *fp = filepath.fileSystemRepresentation;
+    __unused const char *fp = filepath.UTF8String;
     
     #if defined(__arm64__)
         NSLog(@"[*]access() call with __arm64__ ASM instructions");
