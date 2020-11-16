@@ -20,8 +20,10 @@
 <!-- /TOC -->
 
 ## Challenge: Adding Entitlements
-##### Adding an Entitlement without https://developer.apple.com/
-Let's try and add a basic `entitlement`, after the app is in the wild.
+Let's try and add a basic `entitlement`, after the app is in the wild.  Normally you have to add entitlement by creating a new `provisioning profile` at: https://developer.apple.com/
+
+There is a long list of available `entitlements`:
+https://developer.apple.com/documentation/bundleresources/entitlements
 
 Open `XCode` and select `/File/New/PropertyList`.  Now add `com.apple.developer.contacts.notes` as a `Boolean` set to `1`.
 
@@ -41,30 +43,24 @@ Now let's get ready to code sign an already generated `ipa` file:
 ```
 security find-identity -v -p codesigning				// find the "Apple Development" ID, if the developer license is paid
 export CODESIGNID=xxxx
+```
+Now we need to code sign EVERYTHING that is inside of the app bundle.  There are a few articles online about code signing that only sign the binary. But all the dynamic frameworks, bundles, assets also get signed.
+
+I use `applesign` which is a `NodeJS module` and `command line utility` for re-signing iOS applications.
+```
 applesign -7 -i ${CODESIGNID} -m embedded.mobileprovision -e entitlements.plist extracted.ipa
 ```
 Now the entire app bundle has be code signed you can install it:
 ```
-ios<!-- TOC depthFrom:2 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
-
-- [Challenge: Adding Entitlements](#challenge-adding-entitlements)
-- [Challenge: Understand Jailbreak detections](#challenge-understand-jailbreak-detections)
-- [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)
-- [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)
-- [Challenge: Bypass ptrace (asm Syscall)](#challenge-bypass-ptrace-asm-syscall)
-- [Challenge: Bypass anti-debug (sysctl)](#challenge-bypass-anti-debug-sysctl)
-- [Challenge: Bypass anti-debug ( sysctl, more advanced )](#challenge-bypass-anti-debug-sysctl-more-advanced-)
-- [Challenge: Bypass anti-debug (Exception Ports)](#challenge-bypass-anti-debug-exception-ports)
-- [Challenge: Hook Apple's Random String function](#challenge-hook-apples-random-string-function)
-- [Challenge: Find Encryption key](#challenge-find-encryption-key)
-- [Challenge: Dancing with Threads](#challenge-dancing-with-threads)
-- [Challenge: Certificate Pinning bypass ( with Frida )](#challenge-certificate-pinning-bypass-with-frida-)
-- [Challenge: Certificate Pinning bypass ( with Method Swizzle )](#challenge-certificate-pinning-bypass-with-method-swizzle-)
-
-<!-- /TOC -->-deploy -W -b signed.ipa
+ios-deploy -W -b signed.ipa
 ```
+The first error is:`Error 0xe8008016: The executable was signed with invalid entitlements.`
 
-
+What if I specify a new `Bundle ID`?
+```
+applesign -7 -i ${CODESIGNID} -m embedded.mobileprovision -e entitlements.plist extracted.ipa -b com.fresh.id
+```
+The same error.
 
 
 ## Challenge: Understand Jailbreak detections

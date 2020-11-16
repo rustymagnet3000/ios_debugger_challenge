@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0F097B532562BE1400044F5C /* entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F097B522562BE1400044F5C /* entitlements.plist */; };
-		0F097B552562BE6D00044F5C /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F097B542562BE6D00044F5C /* Property List.plist */; };
 		0F25FC19228C6BE00041F80E /* YDThreadChomperCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F25FC18228C6BE00041F80E /* YDThreadChomperCVC.swift */; };
 		0F2E46E22356F0A000E8C57D /* YDURLSessionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2E46E12356F0A000E8C57D /* YDURLSessionVC.swift */; };
 		0F2E46E42356F18100E8C57D /* YDURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2E46E32356F18100E8C57D /* YDURLSession.swift */; };
@@ -52,7 +50,6 @@
 
 /* Begin PBXFileReference section */
 		0F097B522562BE1400044F5C /* entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = entitlements.plist; sourceTree = "<group>"; };
-		0F097B542562BE6D00044F5C /* Property List.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Property List.plist"; sourceTree = "<group>"; };
 		0F25FC18228C6BE00041F80E /* YDThreadChomperCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = YDThreadChomperCVC.swift; path = debugger_challenge/swift_source/YDThreadChomperCVC.swift; sourceTree = SOURCE_ROOT; };
 		0F2E46E12356F0A000E8C57D /* YDURLSessionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YDURLSessionVC.swift; sourceTree = "<group>"; };
 		0F2E46E32356F18100E8C57D /* YDURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YDURLSession.swift; sourceTree = "<group>"; };
@@ -169,7 +166,6 @@
 			isa = PBXGroup;
 			children = (
 				0F097B522562BE1400044F5C /* entitlements.plist */,
-				0F097B542562BE6D00044F5C /* Property List.plist */,
 				0F25FC17228C6B850041F80E /* swift_source */,
 				0F68B5A821B84F2000C0D35F /* objc_source */,
 				30D4E6ED2080725900ABE7AA /* Assets.xcassets */,
@@ -242,10 +238,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F097B532562BE1400044F5C /* entitlements.plist in Resources */,
 				30D4E6F12080725900ABE7AA /* LaunchScreen.storyboard in Resources */,
 				30D4E6EE2080725900ABE7AA /* Assets.xcassets in Resources */,
-				0F097B552562BE6D00044F5C /* Property List.plist in Resources */,
 				30D4E6EC2080725700ABE7AA /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
