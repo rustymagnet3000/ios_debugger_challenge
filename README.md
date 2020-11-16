@@ -3,6 +3,7 @@
 ![](https://img.shields.io/github/commit-activity/m/rustymagnet3000/debugger_challenge?style=for-the-badge)
 <!-- TOC depthFrom:2 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
 
+- [Challenge: Adding Entitlements](#challenge-adding-entitlements)
 - [Challenge: Understand Jailbreak detections](#challenge-understand-jailbreak-detections)
 - [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)
 - [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)
@@ -17,6 +18,54 @@
 - [Challenge: Certificate Pinning bypass ( with Method Swizzle )](#challenge-certificate-pinning-bypass-with-method-swizzle-)
 
 <!-- /TOC -->
+
+## Challenge: Adding Entitlements
+##### Adding an Entitlement without https://developer.apple.com/
+Let's try and add a basic `entitlement`, after the app is in the wild.
+
+Open `XCode` and select `/File/New/PropertyList`.  Now add `com.apple.developer.contacts.notes` as a `Boolean` set to `1`.
+
+If you want to read the file from the command line: `plistutil -i entitlements.plist -f xml`:
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.developer.contacts.notes</key>
+	<true/>
+</dict>
+</plist>
+```
+Now let's get ready to code sign an already generated `ipa` file:
+```
+security find-identity -v -p codesigning				// find the "Apple Development" ID, if the developer license is paid
+export CODESIGNID=xxxx
+applesign -7 -i ${CODESIGNID} -m embedded.mobileprovision -e entitlements.plist extracted.ipa
+```
+Now the entire app bundle has be code signed you can install it:
+```
+ios<!-- TOC depthFrom:2 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [Challenge: Adding Entitlements](#challenge-adding-entitlements)
+- [Challenge: Understand Jailbreak detections](#challenge-understand-jailbreak-detections)
+- [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)
+- [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)
+- [Challenge: Bypass ptrace (asm Syscall)](#challenge-bypass-ptrace-asm-syscall)
+- [Challenge: Bypass anti-debug (sysctl)](#challenge-bypass-anti-debug-sysctl)
+- [Challenge: Bypass anti-debug ( sysctl, more advanced )](#challenge-bypass-anti-debug-sysctl-more-advanced-)
+- [Challenge: Bypass anti-debug (Exception Ports)](#challenge-bypass-anti-debug-exception-ports)
+- [Challenge: Hook Apple's Random String function](#challenge-hook-apples-random-string-function)
+- [Challenge: Find Encryption key](#challenge-find-encryption-key)
+- [Challenge: Dancing with Threads](#challenge-dancing-with-threads)
+- [Challenge: Certificate Pinning bypass ( with Frida )](#challenge-certificate-pinning-bypass-with-frida-)
+- [Challenge: Certificate Pinning bypass ( with Method Swizzle )](#challenge-certificate-pinning-bypass-with-method-swizzle-)
+
+<!-- /TOC -->-deploy -W -b signed.ipa
+```
+
+
+
 
 ## Challenge: Understand Jailbreak detections
 ##### Writing Jailbreak detections
