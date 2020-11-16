@@ -1,12 +1,7 @@
 import UIKit
 
 extension UIButton {
-    override open var isHighlighted: Bool {
-        didSet {
-            backgroundColor = isHighlighted ? UIColor.red : UIColor.blue
-        }
-    }
-    
+
     func YDButtonStyle(ydColor:UIColor) {
         self.layer.cornerRadius = 8
         self.layer.borderWidth = 1

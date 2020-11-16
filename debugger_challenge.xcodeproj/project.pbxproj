@@ -49,6 +49,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0F097B502562A59400044F5C /* entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = entitlements.plist; sourceTree = "<group>"; };
 		0F25FC18228C6BE00041F80E /* YDThreadChomperCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = YDThreadChomperCVC.swift; path = debugger_challenge/swift_source/YDThreadChomperCVC.swift; sourceTree = SOURCE_ROOT; };
 		0F2E46E12356F0A000E8C57D /* YDURLSessionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YDURLSessionVC.swift; sourceTree = "<group>"; };
 		0F2E46E32356F18100E8C57D /* YDURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YDURLSession.swift; sourceTree = "<group>"; };
@@ -168,6 +169,7 @@
 				0F68B5A821B84F2000C0D35F /* objc_source */,
 				30D4E6ED2080725900ABE7AA /* Assets.xcassets */,
 				30D4E6EA2080725700ABE7AA /* Main.storyboard */,
+				0F097B502562A59400044F5C /* entitlements.plist */,
 				30D4E6EF2080725900ABE7AA /* LaunchScreen.storyboard */,
 				0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */,
 				30D4E6F22080725900ABE7AA /* Info.plist */,
@@ -415,6 +417,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U8MSEX235L;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -430,6 +433,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "funky-chicken.debugger-challenge";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "debugger_challenge/debugger_challenge-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -442,6 +446,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U8MSEX235L;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -457,6 +462,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "funky-chicken.debugger-challenge";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "debugger_challenge/debugger_challenge-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
