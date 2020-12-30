@@ -15,6 +15,7 @@
     return self;
 }
 
+#pragma mark: Calculate Jailbreak status from bit fields
 -(NSString *)getJailbreakStatus{
     int jb_detection_counter = 0;
        
@@ -33,10 +34,9 @@
     }
 }
 
-/* Check whether certain directories/files are symbolic links                           */
+#pragma mark: Check whether certain directories/files are symbolic links                */
 /* example: /User is a symbolic link for:    /var/mobile                                */
 /* ls -lR / | grep ^l                 -> listr all symbolic links on iOS                */
-
 -(void)checkSymLinks{
     NSArray *suspectSymlinks = [[NSArray alloc] initWithObjects:
                                     @"Store",                   // Cydia
@@ -60,10 +60,8 @@
 }
 
 
-
-/* Should not be able to write outside of my sandbox  */
-/* but fopen and NSFileManager adhere to sandboxing, even on a jailbroken Electra device */
-
+#pragma mark: check if you can write outside of sandbox
+#pragma mark: fopen() and NSFileManager() adhere to sandboxing, even on a jailbroken Electra device */
 -(void)checkSandboxWrite{
 
     NSLog (@"[*]Sandboxed area:%@", NSHomeDirectory() );
@@ -87,8 +85,7 @@
 }
 
 
-/* Iterate through all a list of suspicious files */
-/* Goal: check if suspicious file ( not the permissions of the file ) */
+#pragma mark: Iterate through array of suspicious file locations. looking for presence of file. not assessing  permissions of file
 -(void)checkSuspiciousFiles{
     
     NSArray *suspectFiles = [[NSArray alloc] initWithObjects:
@@ -112,8 +109,7 @@
     }
 }
 
-/* Iterate through all loaded Dynamic libraries at run-time */
-/* Goal: detection supicious libraries */
+#pragma mark: Iterate through all loaded Dynamic libraries at run-time. Goal: detection supicious libraries */
 -(void)checkModules{
     unsigned int count = 0;
     NSArray *suspectLibraries = [[NSArray alloc] initWithObjects:
@@ -140,15 +136,13 @@
 }
 
 
-/*
-    fork() causes creation of a new process. The child process has a unique process ID.
-    On a sandboxed iOS app this is restricted.  It will give a -1 response to the parent process, no child process is created
+#pragma mark: fork() causes creation of a new process. The child process has a unique process ID.
+/*  On a sandboxed iOS app this is restricted.  It will give a -1 response to the parent process, no child process is created
     With the electra iOS jailbreak, fork() didn't work.
-    If fork() succeeds, it returns a value of 0 to the child process and returns the process ID of the child process to the parent process.
-*/
+    If fork() succeeds, it returns a value of 0 to the child process and returns the process ID of the child process to the parent process. */
 -(void)checkSandboxFork{
                 
-    int pid = 99;
+    volatile int pid = 99;
     
     #if defined(__arm64__)
         pid = fork();
@@ -164,7 +158,7 @@
     #endif
 }
 
-
+#pragma mark: arm64 asm code to invoke a syscall()
  +(int64_t) asmSyscallFunction:(const char *) fp{
 
      int64_t res = 99;                   // signed 64 bit wide int, as api can return -1
@@ -184,7 +178,7 @@
     return res;
 }
 
-
+#pragma mark: check whether info.plist file exists at default location
 +(BOOL)checkInfoPlistExists{
     int64_t result = -10;
     NSBundle *appbundle = [NSBundle mainBundle];

@@ -10,9 +10,14 @@ const char byteArrays[MAX_ARRAYS][MAX_STR_LEN] = {
 
 typedef int (*funcptr)( void );
 
-/* Check if Frida Server detected on Disk. Only a J/B device will be able to hit this path */
-/* but it depends on the level of Jailbreak. "Tweaks off" still may not give a Sandbox permission error */
+#pragma mark: Ask Kernal for the Thread List inside of app's process. Checking for Frida named Threads.
++(BOOL)fridaNamedThreads{
 
+    
+}
+
+
+#pragma mark: Check if Frida Server detected on Disk. Only a J/B device will be able to hit this path
 +(BOOL)checkIfFridaInstalled{
     
     NSString *frida_on_filesystem = @"/usr/sbin/frida-server";
@@ -38,9 +43,7 @@ typedef int (*funcptr)( void );
     return (access(frida_on_filesystem.fileSystemRepresentation, F_OK) == 0) ? YES : NO;
 }
 
-/* Iterate through local TCP ports  */
-/* sending message to identify frida-server */
-
+#pragma mark: Iterate through local TCP ports. Sending message to identify frida-server */
 +(BOOL)checkDefaultPort{
     int result, sock;
     int refused_conns = 0, open_conns = 0, unknown_conns = 0;
@@ -68,8 +71,7 @@ typedef int (*funcptr)( void );
     return NO;
 }
 
-/* Check if any Frida strings return a Symbol pointer, at run-time */
-
+#pragma mark: Check if any Frida strings return a Symbol pointer, at run-time */
 +(BOOL)checkLoadAddress{
      
     funcptr ptr = NULL;
@@ -85,9 +87,7 @@ typedef int (*funcptr)( void );
     return NO;
 }
 
-/* Iterate through all loaded Modules inside the app, to check for additions at run-time */
-/* Goal: detect Frida-Gadget.dylib */
-
+#pragma mark: Iterate through loaded Modules inside the app, at run-time. Goal: detect Frida-Gadget.dylib
 +(BOOL)checkModules{
     unsigned int count = 0;
 
