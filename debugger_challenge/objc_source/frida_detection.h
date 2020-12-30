@@ -21,7 +21,7 @@
 #define START 26000
 #define END 27500
 #define FRIDA_DEFAULT 27042
-#define MAX_ARRAYS 3
+#define MAX_FRIDA_STRINGS 6
 #define MAX_STR_LEN 15
 #define THREAD_NAME_MAX 30
 

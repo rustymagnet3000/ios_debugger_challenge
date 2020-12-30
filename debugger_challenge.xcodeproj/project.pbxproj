@@ -425,6 +425,8 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)/debugger_challenge",
 				);
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				INFOPLIST_FILE = debugger_challenge/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -454,6 +456,8 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)/debugger_challenge",
 				);
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				INFOPLIST_FILE = debugger_challenge/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = (

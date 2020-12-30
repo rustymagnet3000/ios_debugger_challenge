@@ -6,10 +6,10 @@
     self = [super init];
     if (self) {
         status = CLEAN_DEVICE;
-//        [self checkModules];
-//        [self checkSuspiciousFiles];
-//        [self checkSandboxFork];
-//        [self checkSandboxWrite];
+        [self checkModules];
+        [self checkSuspiciousFiles];
+        [self checkSandboxFork];
+        [self checkSandboxWrite];
         [self checkSymLinks];
     }
     return self;
@@ -142,9 +142,8 @@
     If fork() succeeds, it returns a value of 0 to the child process and returns the process ID of the child process to the parent process. */
 -(void)checkSandboxFork{
                 
-    volatile int pid = 99;
-    
     #if defined(__arm64__)
+        int pid = 99;
         pid = fork();
         NSLog(@"[*]pid returned from fork():%d", pid);
         if ( pid == -1 )

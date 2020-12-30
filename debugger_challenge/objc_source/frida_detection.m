@@ -2,15 +2,18 @@
 
 @implementation YDFridaDetection
 
-const char byteArrays[MAX_ARRAYS][MAX_STR_LEN] = {
+const char byteArrays[MAX_FRIDA_STRINGS][MAX_STR_LEN] = {
         { 0x66, 0x72, 0x69, 0x64, 0x61 },// frida
         { 0x66, 0x72, 0x69, 0x64, 0x61, 0x2d, 0x73,0x65,0x72,0x76,0x65,0x72 }, // frida-server
-        { 0x46, 0x52, 0x49, 0x44, 0x41 } // FRIDA
+        { 0x46, 0x52, 0x49, 0x44, 0x41 },
+        "frida-gadget",
+        "gum-js-loop",
+        "gdbus"
 };
 
 typedef int (*funcptr)( void );
 
-#pragma mark: Ask Kernal for the Thread List ( task_threads() ) inside of app's process. Convert mach thread IDs to pthreads.  Check for names of threads.  pthread_from_mach_thread_npChecking for Frida named Threads.
+#pragma mark: Ask Kernal for the Thread List - task_threads() - inside of app's process. Convert mach thread IDs to pthreads, using pthread_from_mach_thread_np().  Check for names of threads.  Checking for Frida named Threads.
 +(BOOL)fridaNamedThreads{
   
     thread_act_array_t thread_list;
@@ -36,7 +39,7 @@ typedef int (*funcptr)( void );
             NSLog(@"🐝mach thread %u\t\ttid:%#08x\t%s", thread_list[i], (unsigned int) tid, thread_name[0] == '\0' ?  "< not named >" : thread_name);
         }
         else
-            NSLog(@"mach thread %u: no pthread found", thread_list[i]);
+            NSLog(@"🔸mach thread %u\t\tno pthread found", thread_list[i]);
     }
     mach_port_deallocate(this_task, this_thread);
     vm_deallocate(this_task, (vm_address_t)thread_list, sizeof(thread_t) * thread_count);
@@ -105,7 +108,7 @@ typedef int (*funcptr)( void );
      
     funcptr ptr = NULL;
 
-    for (int i=0; i<MAX_ARRAYS; i++) {
+    for (int i=0; i<MAX_FRIDA_STRINGS; i++) {
         NSLog(@"[*]🐝Checking: %s", byteArrays[i]);
         ptr = (funcptr)dlsym( RTLD_DEFAULT, byteArrays[i] );
 
@@ -121,18 +124,23 @@ typedef int (*funcptr)( void );
     unsigned int count = 0;
 
     const char **images = objc_copyImageNames ( &count );
-    for ( int y = 0 ; y < count ; y ++ ) {
-        
+    for (int y = 0; y < count; y++) {
         NSLog(@"🍭[*]%s", images[y]);
-        for ( int i=0 ; i<MAX_ARRAYS ; i++ ) {
+        for (int i=0 ; i<MAX_FRIDA_STRINGS; i++) {
             char *result = nil;
             result = strnstr ( images[y], byteArrays[i], strlen ( images[y] ));
-            if( result != nil )
+            if (result != nil)
                 return YES;
         }
     }
     NSLog(@"[*]🐝No suspect modules found");
     return NO;
+}
+
++(NSInteger)loopThroughFridaStrings
+{
+    NSInteger count = 0;
+
 }
 
 
