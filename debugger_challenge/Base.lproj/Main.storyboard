@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="avJ-R6-jEN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="avJ-R6-jEN">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -354,8 +354,8 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dg6-w3-nCC">
-                                                <rect key="frame" x="28" y="248" width="79" height="30"/>
-                                                <state key="normal" title="Frida-Trace"/>
+                                                <rect key="frame" x="20" y="248" width="95" height="30"/>
+                                                <state key="normal" title="Frida Threads"/>
                                                 <connections>
                                                     <action selector="frida_trace_check:" destination="x4H-Cl-EEH" eventType="touchUpInside" id="YvW-F8-nGN"/>
                                                 </connections>
@@ -380,7 +380,6 @@
                         <outletCollection property="buttons" destination="ztC-K9-V6d" collectionClass="NSMutableArray" id="mno-BF-h0u"/>
                         <outletCollection property="buttons" destination="Dg6-w3-nCC" collectionClass="NSMutableArray" id="Oc5-nQ-X4k"/>
                         <outletCollection property="disabledbuttons" destination="ztC-K9-V6d" collectionClass="NSMutableArray" id="Efr-cu-ts7"/>
-                        <outletCollection property="disabledbuttons" destination="Dg6-w3-nCC" collectionClass="NSMutableArray" id="kJ7-Bu-k6r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dx9-GB-1xq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

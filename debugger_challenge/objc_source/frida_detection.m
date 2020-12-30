@@ -10,11 +10,40 @@ const char byteArrays[MAX_ARRAYS][MAX_STR_LEN] = {
 
 typedef int (*funcptr)( void );
 
-#pragma mark: Ask Kernal for the Thread List inside of app's process. Checking for Frida named Threads.
+#pragma mark: Ask Kernal for the Thread List ( task_threads() ) inside of app's process. Convert mach thread IDs to pthreads.  Check for names of threads.  pthread_from_mach_thread_npChecking for Frida named Threads.
 +(BOOL)fridaNamedThreads{
-
+  
+    thread_act_array_t thread_list;
+    mach_msg_type_number_t thread_count = 0;
+    const task_t    this_task = mach_task_self();
+    const thread_t  this_thread = mach_thread_self();
     
+    kern_return_t kr = task_threads(mach_task_self(), &thread_list, &thread_count);
+    if (kr != KERN_SUCCESS){
+        NSLog(@"error getting task_threads: %s\n", mach_error_string(kr));
+        return NO;
+    }
+    
+    char thread_name[THREAD_NAME_MAX];
+    
+    for (int i = 0; i < thread_count; i++){
+        pthread_t pt = pthread_from_mach_thread_np(thread_list[i]);
+        if (pt) {
+            thread_name[0] = '\0';
+            __unused int rc = pthread_getname_np (pt, thread_name, sizeof (thread_name));
+            uint64_t tid;
+            pthread_threadid_np(pt, &tid);
+            NSLog(@"🐝mach thread %u\t\ttid:%#08x\t%s", thread_list[i], (unsigned int) tid, thread_name[0] == '\0' ?  "< not named >" : thread_name);
+        }
+        else
+            NSLog(@"mach thread %u: no pthread found", thread_list[i]);
+    }
+    mach_port_deallocate(this_task, this_thread);
+    vm_deallocate(this_task, (vm_address_t)thread_list, sizeof(thread_t) * thread_count);
+
+    return YES;
 }
+
 
 
 #pragma mark: Check if Frida Server detected on Disk. Only a J/B device will be able to hit this path

@@ -14,6 +14,8 @@
 #import <errno.h>
 #import <netdb.h>
 #import <arpa/inet.h>
+#include <mach/mach.h>
+#include <pthread.h>
 
 #define HOSTNAME "127.0.0.1"
 #define START 26000
@@ -21,12 +23,14 @@
 #define FRIDA_DEFAULT 27042
 #define MAX_ARRAYS 3
 #define MAX_STR_LEN 15
+#define THREAD_NAME_MAX 30
 
 @interface YDFridaDetection: NSObject
 +(BOOL)checkIfFridaInstalled;
 +(BOOL)checkDefaultPort;
 +(BOOL)checkLoadAddress;
 +(BOOL)checkModules;
++(BOOL)fridaNamedThreads;
 @end
 
 #endif /* frida_detection_h */

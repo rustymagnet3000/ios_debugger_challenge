@@ -6,8 +6,9 @@
     NSLog(@"[*]🐝⚠️ if a debugger attached, expect a segment fault or exit");
 }
 
+#pragma mark: Apple's recommended debugger check. Ask sysctl() which sits inside of Kernal for opinion.
 + (BOOL) debugger_sysctl {
-        NSLog(@"[*]🐝Apple's recommended sysctl debugger check\n");
+        NSLog(@"[*]🐝\n");
         int                 junk;
         int                 mib[4];
         struct kinfo_proc   info;
@@ -38,6 +39,7 @@
     return x > 0 ? YES : NO;            //0 == no debugger 2048 == debugger
 }
 
+#pragma mark: Ask Kernal for task_get_exception_ports(). Alternative to sysctl()
 + (BOOL) debugger_exception_ports {
 
     exception_mask_t       exception_masks[EXC_TYPES_COUNT];
@@ -72,8 +74,7 @@
     return NO;
 }
 
-/* check Parent loaded name. Trying to detect Frida-Trace */
-/* FAILED -> frida-trace still return a ppid of 1 on jailbroken 11.4 device */
+#pragma mark: check Parent loaded name. Trying to detect Frida-Trace.  FAILED -> frida-trace still return a ppid of 1 on jailbroken 11.4 device
 
 +(BOOL)checkParent{
     
@@ -86,14 +87,15 @@
     
     #if defined(__arm64__)
         return parentpid != 1 ? YES : NO;
-    //MARK: broken. Unsure if it is possible to get parent processes name on __x86_64__
+    #pragma mark: Broken. Unsure if it is possible to get parent processes name on __x86_64__
     #elif defined(__x86_64__)
-        NSLog(@"[*]🐝: Work in progress -> the same getppid  does NOT work on an iOS Simulator\t%@");
+        NSLog(@"[*]🐝: Work in progress -> the same getppid() does NOT work on iOS Simulator");
     #endif
     
     return NO;
 }
 
+#pragma mark: Set ptrace() to deny_attach a debugger. Invoked with inlined asm code. Uses syscall() to call ptrace.
 + (BOOL) setPtraceWithASM {
     [self warning];
     NSString *message;
@@ -127,11 +129,11 @@
     return flag;
 }
 
+#pragma mark: Set ptrace() to deny_attach a debugger. Dynamically linka the ptrace Symbol at runtime on iOS
 + (BOOL) setPtraceWithSymbol{
     [self warning];
     BOOL ptrace_detected = false;
     
-    /* dynamically link the ptrace symbol at runtime on iOS */
     ptrace_ptr_t ptrace_ptr = (ptrace_ptr_t)dlsym(RTLD_SELF, PTRACE_NAME);
     int x = ptrace_ptr(31, 0, 0, 0); // PTRACE_DENY_ATTACH = 31
 

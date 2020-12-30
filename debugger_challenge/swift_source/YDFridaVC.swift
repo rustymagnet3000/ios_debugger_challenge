@@ -40,7 +40,7 @@ class YDFridaVC: UIViewController {
     }
     
     @IBAction func frida_trace_check(_ sender: Any) {
-        let result = false      //TODO: add correct tracing call
+        let result = YDFridaDetection.fridaNamedThreads()
         self.YDAlertController(user_message: feedback_string + " \(result)")
     }
     
