@@ -2,7 +2,7 @@
 
 @implementation YDFridaDetection
 
-const char byteArrays[MAX_FRIDA_STRINGS][MAX_STR_LEN] = {
+const char frida_strings[MAX_FRIDA_STRINGS][MAX_STR_LEN] = {
         { 0x66, 0x72, 0x69, 0x64, 0x61 },// frida
         { 0x66, 0x72, 0x69, 0x64, 0x61, 0x2d, 0x73,0x65,0x72,0x76,0x65,0x72 }, // frida-server
         { 0x46, 0x52, 0x49, 0x44, 0x41 },
@@ -16,6 +16,7 @@ typedef int (*funcptr)( void );
 #pragma mark: Ask Kernal for the Thread List - task_threads() - inside of app's process. Convert mach thread IDs to pthreads, using pthread_from_mach_thread_np().  Check for names of threads.  Checking for Frida named Threads.
 +(BOOL)fridaNamedThreads{
   
+    NSInteger count_name_threads = 0;
     thread_act_array_t thread_list;
     mach_msg_type_number_t thread_count = 0;
     const task_t    this_task = mach_task_self();
@@ -36,15 +37,16 @@ typedef int (*funcptr)( void );
             __unused int rc = pthread_getname_np (pt, thread_name, sizeof (thread_name));
             uint64_t tid;
             pthread_threadid_np(pt, &tid);
-            NSLog(@"🐝mach thread %u\t\ttid:%#08x\t%s", thread_list[i], (unsigned int) tid, thread_name[0] == '\0' ?  "< not named >" : thread_name);
+            if (thread_name[0] != '\0')
+                count_name_threads = [YDFridaDetection loopThroughFridaStrings:thread_name];
         }
-        else
-            NSLog(@"🔸mach thread %u\t\tno pthread found", thread_list[i]);
     }
+    
     mach_port_deallocate(this_task, this_thread);
     vm_deallocate(this_task, (vm_address_t)thread_list, sizeof(thread_t) * thread_count);
 
-    return YES;
+    NSLog(@"[*]🐝Suspected Frida thread count: %ld", (long)count_name_threads);
+    return count_name_threads > 0 ? YES : NO;
 }
 
 
@@ -109,8 +111,8 @@ typedef int (*funcptr)( void );
     funcptr ptr = NULL;
 
     for (int i=0; i<MAX_FRIDA_STRINGS; i++) {
-        NSLog(@"[*]🐝Checking: %s", byteArrays[i]);
-        ptr = (funcptr)dlsym( RTLD_DEFAULT, byteArrays[i] );
+        NSLog(@"[*]🐝Checking: %s", frida_strings[i]);
+        ptr = (funcptr)dlsym( RTLD_DEFAULT, frida_strings[i] );
 
         if( ptr != NULL )
             return YES;
@@ -121,27 +123,32 @@ typedef int (*funcptr)( void );
 
 #pragma mark: Iterate through loaded Modules inside the app, at run-time. Goal: detect Frida-Gadget.dylib
 +(BOOL)checkModules{
+    
+    NSInteger count_suspect_modules = 0;
     unsigned int count = 0;
-
     const char **images = objc_copyImageNames ( &count );
-    for (int y = 0; y < count; y++) {
-        NSLog(@"🍭[*]%s", images[y]);
-        for (int i=0 ; i<MAX_FRIDA_STRINGS; i++) {
-            char *result = nil;
-            result = strnstr ( images[y], byteArrays[i], strlen ( images[y] ));
-            if (result != nil)
-                return YES;
-        }
-    }
-    NSLog(@"[*]🐝No suspect modules found");
-    return NO;
+    
+    for (int y = 0; y < count; y++)
+        count_suspect_modules += [YDFridaDetection loopThroughFridaStrings:images[y]];
+    
+    NSLog(@"[*]🐝Suspect Frida modules count: %ld", (long)count_suspect_modules);
+    return count_suspect_modules > 0 ? YES : NO;
 }
 
-+(NSInteger)loopThroughFridaStrings
-{
+
+    
++(NSInteger) loopThroughFridaStrings:   (const char *)read_str {
+    
     NSInteger count = 0;
-
+    char *result;
+    
+    for (int i=0 ; i<MAX_FRIDA_STRINGS; i++) {
+        result = nil;
+        result = strnstr (read_str, frida_strings[i], strlen ( read_str ));
+        if (result != nil)
+            count++;
+    }
+    return count;
 }
-
 
 @end

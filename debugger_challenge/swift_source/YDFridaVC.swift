@@ -2,7 +2,6 @@ import UIKit
 
 class YDFridaVC: UIViewController {
 
-    @IBOutlet var  disabledbuttons: [UIButton] = []
     @IBOutlet var  buttons: [UIButton] = []
     fileprivate let feedback_string = "Frida detected ="
     fileprivate let tab_title = "Frida detections"
@@ -46,12 +45,7 @@ class YDFridaVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         buttons.forEach { $0.YDButtonStyle(ydColor: UIColor.darkGray) }
-        disabledbuttons.forEach {
-            $0.isEnabled = false
-            $0.alpha = 0.1;
-        }
     }
 
     override func viewDidAppear(_ animated: Bool) {

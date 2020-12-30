@@ -379,7 +379,6 @@
                         <outletCollection property="buttons" destination="Ajh-Cn-Mhx" collectionClass="NSMutableArray" id="NMm-LA-cpr"/>
                         <outletCollection property="buttons" destination="ztC-K9-V6d" collectionClass="NSMutableArray" id="mno-BF-h0u"/>
                         <outletCollection property="buttons" destination="Dg6-w3-nCC" collectionClass="NSMutableArray" id="Oc5-nQ-X4k"/>
-                        <outletCollection property="disabledbuttons" destination="ztC-K9-V6d" collectionClass="NSMutableArray" id="Efr-cu-ts7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dx9-GB-1xq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
