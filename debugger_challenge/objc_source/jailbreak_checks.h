@@ -23,7 +23,32 @@ typedef enum : NSUInteger {
 #define MAX_BITS                5           // max value where Bit Fields are OR'd together 0b00011111 = 5 bits == 0x31
 
 
-static NSString const *symlink_strs = @"Store,TweakInject,/Applications,DynamicLibraries,/var/lib/undecimus/apt,/usr/libexec";
+static NSString const *symlinkStrs[] =         {
+                                                    @"Store",                   // Cydia
+                                                    @"TweakInject",
+                                                    @"/Applications",
+                                                    @"DynamicLibraries",
+                                                    @"/var/lib/undecimus/apt",
+                                                    @"/usr/libexec"
+                                                };
+
+static NSString const *suspiciousFileStrs[] =   {
+                                                    @"/bin/bash",
+                                                    @"/usr/sbin/sshd",
+                                                    @"/bin/sh",
+                                                    @"/Applications/Cydia.app",
+                                                    @"/Library/MobileSubstrate/MobileSubstrate.dylib",
+                                                    @"/var/cache/apt",
+                                                    @"/var/lib/cydia"
+                                                };
+
+static NSString const *suspectLibraries[] =     {
+                                                    @"SubstrateLoader.dylib",
+                                                    @"MobileSubstrate.dylib",
+                                                    @"TweakInject.dylib",
+                                                    @"CydiaSubstrate",
+                                                    @"cynject",
+                                                };
 
 @interface YDJailbreakCheck: NSObject{
     unsigned short status : MAX_BITS;

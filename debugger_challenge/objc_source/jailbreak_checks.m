@@ -23,7 +23,7 @@
         if (status & (1 << i))
             jb_detection_counter++;
     }
-    printf("[*]Jailbreak detections fired: %d\n", jb_detection_counter);
+    printf("🐝Jailbreak detections fired: %d\n", jb_detection_counter);
     switch (jb_detection_counter) {
         case CLEAN_DEVICE:
             return @"Clean device";
@@ -39,17 +39,20 @@
 /* ls -lR / | grep ^l                 -> listr all symbolic links on iOS                */
 -(void)checkSymLinks{
 
-    NSArray *symlinks = [symlink_strs componentsSeparatedByString:@","];
+    NSInteger countSymlinks = sizeof(symlinkStrs) / sizeof(symlinkStrs[0]);
+    NSArray *symlinks = [NSArray arrayWithObjects:symlinkStrs count: countSymlinks];
+
     for (NSString *link in symlinks) {
         struct stat s;
         if (lstat(link.UTF8String, &s) == 0)
         {
             if (S_ISLNK(s.st_mode) == 1){            /* S_ISLNK == symbolic link */
-                NSLog (@"🍭[*]Suspicious symlink:%@", link);
+                NSLog (@"🐝Suspicious symlink:%@", link);
                 status |= 1 << 2;
             }
         }
     }
+    NSLog(@"🐝%@\tchecked:%ld symlinks", NSStringFromSelector(_cmd), (long)countSymlinks);
 }
 
 
@@ -57,75 +60,64 @@
 #pragma mark: fopen() and NSFileManager() adhere to sandboxing, even on a jailbroken Electra device */
 -(void)checkSandboxWrite{
 
-    NSLog (@"[*]Sandboxed area:%@", NSHomeDirectory() );
+    NSLog (@"🐝Sandboxed area:%@", NSHomeDirectory() );
     NSString *fileToWrite = @"/private/t";
     NSError *error;
     NSString *stringToBeWritten = @"Jailbreak \"escape sandbox\" check. Writing meaningless text to a file";
     [stringToBeWritten writeToFile:fileToWrite atomically:YES encoding:NSUTF8StringEncoding error:&error];
     
     if (error == nil){
-        NSLog (@"[*]No errors writing to: %@", fileToWrite);
+        NSLog (@"🐝Jailbreak foudn.  No errors writing to: %@", fileToWrite);
         [[NSFileManager defaultManager] removeItemAtPath:fileToWrite error:nil];
         status |= 1 << 1;
-    }else{
-        NSLog (@"[*]Sandboxed error:%@", [error description]);
     }
     
     if(access (fileToWrite.UTF8String, W_OK ) != -1)
-    {
-        NSLog (@"[*]No error throw from Access()");
-    }
+        NSLog (@"🐝No error throw from Access()");
+
+    NSLog(@"🐝%@\tchecked", NSStringFromSelector(_cmd));
 }
 
 
 #pragma mark: Iterate through array of suspicious file locations. looking for presence of file. not assessing  permissions of file
 -(void)checkSuspiciousFiles{
     
-    NSArray *suspectFiles = [[NSArray alloc] initWithObjects:
-                                    @"/bin/bash",
-                                    @"/usr/sbin/sshd",
-                                    @"/bin/sh",
-                                    @"/Applications/Cydia.app",
-                                    @"/Library/MobileSubstrate/MobileSubstrate.dylib",
-                                    @"/var/cache/apt",
-                                    @"/var/lib/cydia",
-                                    nil];
+    NSInteger countSupiciousFiles = sizeof(suspiciousFileStrs) / sizeof(suspiciousFileStrs[0]);
+    NSArray *suspiciousFiles = [NSArray arrayWithObjects:suspiciousFileStrs count: countSupiciousFiles];
     
-
-    for (NSString *file in suspectFiles) {
+    for (NSString *file in suspiciousFiles) {
         NSURL *theURL = [ NSURL fileURLWithPath:file isDirectory:NO ];
         NSError *err;
         if ([ theURL checkResourceIsReachableAndReturnError:&err]  == YES ){
-            NSLog(@"🍭[*]%@\t:%@", NSStringFromSelector(_cmd), file);
+            NSLog(@"🐝%@\t:%@", NSStringFromSelector(_cmd), file);
             status |= 1 << 3;
         }
     }
+    NSLog(@"🐝%@\tchecked:%ld suspicious files", NSStringFromSelector(_cmd), (long)countSupiciousFiles);
 }
 
 #pragma mark: Iterate through all loaded Dynamic libraries at run-time. Goal: detection supicious libraries */
 -(void)checkModules{
-    unsigned int count = 0;
-    NSArray *suspectLibraries = [[NSArray alloc] initWithObjects:
-                                    @"SubstrateLoader.dylib",
-                                    @"MobileSubstrate.dylib",
-                                    @"TweakInject.dylib",
-                                    @"CydiaSubstrate",
-                                    @"cynject",
-                                    nil];
+    unsigned int imageNameCount = 0;
+    
+    NSInteger countsuspectLibraries = sizeof(suspectLibraries) / sizeof(suspectLibraries[0]);
+    NSArray *suspiciousLibraries = [NSArray arrayWithObjects:suspectLibraries count: countsuspectLibraries];
+    
 
-    const char **images = objc_copyImageNames ( &count );
-    for (int y = 0 ; y < count ; y ++) {
-        for (int i = 0; i < suspectLibraries.count; i++) {
-            
+    const char **images = objc_copyImageNames ( &imageNameCount );
+    for (int y = 0 ; y < imageNameCount ; y ++) {
+
+        for (NSString *lib in suspiciousLibraries) {
             NSString *module_in_app = [NSString stringWithUTF8String:images[y]];
-            if ([module_in_app containsString:suspectLibraries[i]]){
-                NSLog(@"\t🍭[*]%@\t:%@", NSStringFromSelector(_cmd), module_in_app);
+            if ([module_in_app containsString:lib]){
+                NSLog(@"\t🐝%@\t:%@", NSStringFromSelector(_cmd), module_in_app);
                 status |= 1 << 4;
                 return;
             }
         }
     }
-    NSLog(@"[*]🐝No suspect modules found");
+
+    NSLog(@"🐝%@\tchecked:%ld modules", NSStringFromSelector(_cmd), (long)imageNameCount);
 }
 
 
@@ -138,9 +130,9 @@
     #if defined(__arm64__)
         int pid = 99;
         pid = fork();
-        NSLog(@"[*]pid returned from fork():%d", pid);
+        NSLog(@"🐝 pid returned from fork():%d", pid);
         if ( pid == -1 )
-            NSLog(@"[*]fork() request denied with Sandbox error: %d", errno);
+            NSLog(@"🐝fork() request denied with Sandbox error: %d", errno);
 
         else if ( pid >= 0 )
             status |= 1 << 1;
@@ -178,16 +170,16 @@
     __unused const char *fp = filepath.UTF8String;
     
     #if defined(__arm64__)
-        NSLog(@"[*]access() call with __arm64__ ASM instructions");
+        NSLog(@"🐝access() call with __arm64__ ASM instructions");
         result = [self asmSyscallFunction:fp];
     #elif defined(__x86_64__)
-        NSLog(@"[*]syscall(SYS_access) __x86_64__");
+        NSLog(@"🐝syscall(SYS_access) __x86_64__");
         result = syscall(SYS_access, fp, F_OK);
     #else
-        NSLog(@"[*]Unknown target.");
+        NSLog(@"🐝Unknown target.");
     #endif
     
-    NSLog(@"[*]Result:%lld", result);
+    NSLog(@"🐝Result:%lld", result);
     return (result == 0) ? YES : NO;;
 }
 
