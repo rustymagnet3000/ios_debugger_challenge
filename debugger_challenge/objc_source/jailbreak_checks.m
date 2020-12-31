@@ -60,14 +60,13 @@
 #pragma mark: fopen() and NSFileManager() adhere to sandboxing, even on a jailbroken Electra device */
 -(void)checkSandboxWrite{
 
-    NSLog (@"🐝Sandboxed area:%@", NSHomeDirectory() );
     NSString *fileToWrite = @"/private/t";
     NSError *error;
     NSString *stringToBeWritten = @"Jailbreak \"escape sandbox\" check. Writing meaningless text to a file";
+
     [stringToBeWritten writeToFile:fileToWrite atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    
     if (error == nil){
-        NSLog (@"🐝Jailbreak foudn.  No errors writing to: %@", fileToWrite);
+        NSLog (@"🐝Jailbreak found.  No errors writing to: %@", fileToWrite);
         [[NSFileManager defaultManager] removeItemAtPath:fileToWrite error:nil];
         status |= 1 << 1;
     }
@@ -130,16 +129,16 @@
     #if defined(__arm64__)
         int pid = 99;
         pid = fork();
-        NSLog(@"🐝 pid returned from fork():%d", pid);
         if ( pid == -1 )
-            NSLog(@"🐝fork() request denied with Sandbox error: %d", errno);
-
+            NSLog(@"\t🐝Expected behaviour from fork() request. Denied with Sandbox error: %d", errno);
         else if ( pid >= 0 )
             status |= 1 << 1;
     
     #elif defined(__x86_64__)
         NSLog(@"[!]Not calling fork() as this works on an iOS simulator");
     #endif
+    
+    NSLog(@"🐝%@\tchecked", NSStringFromSelector(_cmd));
 }
 
 #pragma mark: arm64 asm code to invoke a syscall()

@@ -34,6 +34,7 @@ static const char frida_strings[MAX_FRIDA_STRINGS][MAX_STR_LEN] = {
         "gdbus"
 };
 
+
 @interface YDFridaDetection: NSObject
 +(BOOL)checkIfFridaInstalled;
 +(BOOL)checkDefaultPort;

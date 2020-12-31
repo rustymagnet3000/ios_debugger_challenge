@@ -13,29 +13,37 @@ typedef int (*funcptr)( void );
     const task_t    this_task = mach_task_self();
     const thread_t  this_thread = mach_thread_self();
     
-    kern_return_t kr = task_threads(mach_task_self(), &thread_list, &thread_count);
+    kern_return_t kr = task_threads (this_task, &thread_list, &thread_count);
     if (kr != KERN_SUCCESS){
         NSLog(@"error getting task_threads: %s\n", mach_error_string(kr));
         return NO;
     }
     
     char thread_name[THREAD_NAME_MAX];
+    NSMutableArray *namedThreads = [NSMutableArray new];
     
+    /* create array of Threads with Names */
     for (int i = 0; i < thread_count; i++){
-        pthread_t pt = pthread_from_mach_thread_np(thread_list[i]);
+        pthread_t pt = pthread_from_mach_thread_np (thread_list[i]);
         if (pt) {
             thread_name[0] = '\0';
-            __unused int rc = pthread_getname_np (pt, thread_name, sizeof (thread_name));
+            int rc = pthread_getname_np (pt, thread_name, THREAD_NAME_MAX);
             uint64_t tid;
-            pthread_threadid_np(pt, &tid);
-            if (thread_name[0] != '\0')
-                count_name_threads = [YDFridaDetection loopThroughFridaStrings:thread_name];
+            pthread_threadid_np (pt, &tid);
+            if (thread_name[0] != '\0' && rc == 0){
+                NSString *threadName = [NSString stringWithUTF8String:thread_name];
+                [namedThreads addObject:threadName];
+            }
         }
     }
+    
+    /* check each name against Frida strings */
+    count_name_threads = [YDFridaDetection loopThroughFridaStrs:namedThreads];
     
     mach_port_deallocate(this_task, this_thread);
     vm_deallocate(this_task, (vm_address_t)thread_list, sizeof(thread_t) * thread_count);
 
+    NSLog(@"[*]🐝%@\tNamed threads: %@",  NSStringFromSelector(_cmd), namedThreads);
     NSLog(@"[*]🐝Suspected Frida thread count: %ld", (long)count_name_threads);
     return count_name_threads > 0 ? YES : NO;
 }
@@ -126,6 +134,19 @@ typedef int (*funcptr)( void );
     return count_suspect_modules > 0 ? YES : NO;
 }
 
+
++(NSInteger) loopThroughFridaStrs: (NSMutableArray *)threadNames {
+    
+    NSInteger count = 0;
+    for (NSString *thread in threadNames) {
+        for (int i=0 ; i<MAX_FRIDA_STRINGS; i++) {
+            NSString *friStr= [NSString stringWithUTF8String:frida_strings[i]];
+            if ([thread containsString:friStr])
+                count++;
+        }
+    }
+    return count;
+}
 
     
 +(NSInteger) loopThroughFridaStrings:   (const char *)read_str {
