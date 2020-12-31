@@ -2,25 +2,10 @@
 
 @implementation YDJailbreakCheck
 
- static NSArray *_suspectSymlinks;
-
-
-+ (NSArray *)suspectSymlinks{ return _suspectSymlinks; }
-+ (void)setSuspectSymlinks:(NSArray *)symlinks { _suspectSymlinks = symlinks; }
-
-
-
 - (instancetype)init{
     self = [super init];
     if (self) {
         status = CLEAN_DEVICE;
-        _suspectSymlinks = @[    @"Store",
-                                 @"TweakInject",
-                                 @"/Applications",
-                                 @"DynamicLibraries",
-                                 @"/var/lib/undecimus/apt",
-                                 @"/usr/libexec"
-        ];
         [self checkModules];
         [self checkSuspiciousFiles];
         [self checkSandboxFork];
@@ -54,8 +39,8 @@
 /* ls -lR / | grep ^l                 -> listr all symbolic links on iOS                */
 -(void)checkSymLinks{
 
-
-    for (NSString *link in _suspectSymlinks) {
+    NSArray *symlinks = [symlink_strs componentsSeparatedByString:@","];
+    for (NSString *link in symlinks) {
         struct stat s;
         if (lstat(link.UTF8String, &s) == 0)
         {
@@ -110,10 +95,10 @@
     for (NSString *file in suspectFiles) {
         NSURL *theURL = [ NSURL fileURLWithPath:file isDirectory:NO ];
         NSError *err;
-        if ([ theURL checkResourceIsReachableAndReturnError:&err]  == YES )
+        if ([ theURL checkResourceIsReachableAndReturnError:&err]  == YES ){
             NSLog(@"🍭[*]%@\t:%@", NSStringFromSelector(_cmd), file);
             status |= 1 << 3;
-        
+        }
     }
 }
 

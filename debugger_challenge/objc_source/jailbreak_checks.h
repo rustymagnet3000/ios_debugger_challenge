@@ -22,11 +22,12 @@ typedef enum : NSUInteger {
 #define JB_DYLIB_PRESENT        0x16        // 0b00010000
 #define MAX_BITS                5           // max value where Bit Fields are OR'd together 0b00011111 = 5 bits == 0x31
 
+
+static NSString const *symlink_strs = @"Store,TweakInject,/Applications,DynamicLibraries,/var/lib/undecimus/apt,/usr/libexec";
+
 @interface YDJailbreakCheck: NSObject{
     unsigned short status : MAX_BITS;
 }
-
-@property (class, readonly) NSArray *suspectSymlinks;
 
 -(NSString *)getJailbreakStatus;
 +(BOOL)checkInfoPlistExists;
