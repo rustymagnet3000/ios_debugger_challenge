@@ -21,11 +21,13 @@ typedef enum : NSUInteger {
 #define SUSPICIOUS_FILES        0x08        // 0b00001000
 #define JB_DYLIB_PRESENT        0x16        // 0b00010000
 #define MAX_BITS                5           // max value where Bit Fields are OR'd together 0b00011111 = 5 bits == 0x31
-/* TODO: add IN_PROGRESS define */
 
 @interface YDJailbreakCheck: NSObject{
     unsigned short status : MAX_BITS;
 }
+
+@property (class, readonly) NSArray *suspectSymlinks;
+
 -(NSString *)getJailbreakStatus;
 +(BOOL)checkInfoPlistExists;
 -(void)checkModules;

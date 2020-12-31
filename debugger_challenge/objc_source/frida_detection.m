@@ -2,15 +2,6 @@
 
 @implementation YDFridaDetection
 
-const char frida_strings[MAX_FRIDA_STRINGS][MAX_STR_LEN] = {
-        { 0x66, 0x72, 0x69, 0x64, 0x61 },// frida
-        { 0x66, 0x72, 0x69, 0x64, 0x61, 0x2d, 0x73,0x65,0x72,0x76,0x65,0x72 }, // frida-server
-        { 0x46, 0x52, 0x49, 0x44, 0x41 },
-        "frida-gadget",
-        "gum-js-loop",
-        "gdbus"
-};
-
 typedef int (*funcptr)( void );
 
 #pragma mark: Ask Kernal for the Thread List - task_threads() - inside of app's process. Convert mach thread IDs to pthreads, using pthread_from_mach_thread_np().  Check for names of threads.  Checking for Frida named Threads.

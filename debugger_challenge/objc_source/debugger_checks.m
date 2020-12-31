@@ -3,7 +3,7 @@
 @implementation YDDebuggerChecks
 
 + (void) warning {
-    NSLog(@"[*]🐝⚠️ if a debugger attached, expect a segment fault or exit");
+    NSLog(@"[*]🐝⚠️ if a debugger attached, expect exit");
 }
 
 #pragma mark: Apple's recommended debugger check. Ask sysctl() which sits inside of Kernal for opinion.
@@ -134,7 +134,7 @@
     [self warning];
     BOOL ptrace_detected = false;
     
-    ptrace_ptr_t ptrace_ptr = (ptrace_ptr_t)dlsym(RTLD_SELF, PTRACE_NAME);
+    ptrace_ptr_t ptrace_ptr = (ptrace_ptr_t)dlsym(RTLD_SELF, [ptrace_str UTF8String]);
     int x = ptrace_ptr(31, 0, 0, 0); // PTRACE_DENY_ATTACH = 31
 
     NSLog(@"ptrace result handle: %d", x);

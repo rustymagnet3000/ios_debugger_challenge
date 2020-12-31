@@ -2,10 +2,25 @@
 
 @implementation YDJailbreakCheck
 
+ static NSArray *_suspectSymlinks;
+
+
++ (NSArray *)suspectSymlinks{ return _suspectSymlinks; }
++ (void)setSuspectSymlinks:(NSArray *)symlinks { _suspectSymlinks = symlinks; }
+
+
+
 - (instancetype)init{
     self = [super init];
     if (self) {
         status = CLEAN_DEVICE;
+        _suspectSymlinks = @[    @"Store",
+                                 @"TweakInject",
+                                 @"/Applications",
+                                 @"DynamicLibraries",
+                                 @"/var/lib/undecimus/apt",
+                                 @"/usr/libexec"
+        ];
         [self checkModules];
         [self checkSuspiciousFiles];
         [self checkSandboxFork];
@@ -38,16 +53,9 @@
 /* example: /User is a symbolic link for:    /var/mobile                                */
 /* ls -lR / | grep ^l                 -> listr all symbolic links on iOS                */
 -(void)checkSymLinks{
-    NSArray *suspectSymlinks = [[NSArray alloc] initWithObjects:
-                                    @"Store",                   // Cydia
-                                    @"TweakInject",
-                                    @"/Applications",
-                                    @"DynamicLibraries",
-                                    @"/var/lib/undecimus/apt",
-                                    @"/usr/libexec",
-                                    nil];
 
-    for (NSString *link in suspectSymlinks) {
+
+    for (NSString *link in _suspectSymlinks) {
         struct stat s;
         if (lstat(link.UTF8String, &s) == 0)
         {

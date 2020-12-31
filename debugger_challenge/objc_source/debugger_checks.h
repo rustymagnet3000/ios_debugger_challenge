@@ -9,11 +9,13 @@
 #import <sys/syscall.h>
 #import <sys/sysctl.h>
 #import <sys/types.h>
-#import <mach-o/dyld.h>    // read dynamically loaded libraries
-#import <mach/mach.h>
-#import <dlfcn.h>           // required for dlsym
+#import <mach-o/dyld.h>     // read dynamically loaded libraries
+#import <mach/mach.h>       // Kernal call: task_get_exception_ports()
+#import <dlfcn.h>           // required for dlsym()
 
-#define PTRACE_NAME "ptrace"
+static NSString *const ptrace_str = @"ptrace";
+
+
 
 typedef int (*ptrace_ptr_t)(int _request, pid_t _pid, caddr_t _addr, int _data);
 
