@@ -34,6 +34,7 @@ static const char frida_strings[MAX_FRIDA_STRINGS][MAX_STR_LEN] = {
         "gdbus"
 };
 
+typedef int (*funcptr)( void );
 
 @interface YDFridaDetection: NSObject
 +(BOOL)checkIfFridaInstalled;

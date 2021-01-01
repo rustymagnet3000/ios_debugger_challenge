@@ -2,12 +2,14 @@
 
 @implementation YDFridaDetection
 
-typedef int (*funcptr)( void );
-
-#pragma mark: Ask Kernal for the Thread List - task_threads() - inside of app's process. Convert mach thread IDs to pthreads, using pthread_from_mach_thread_np().  Check for names of threads.  Checking for Frida named Threads.
+#pragma mark: Ask Kernal for a Thread List
+/*- task_threads() gets the Thread List inside of app's process.
+    pthread_from_mach_thread_np() converts the mach thread IDs to pthreads.
+    pthread_getname_np() to get names of the threads.
+*/
 +(BOOL)fridaNamedThreads{
   
-    NSInteger count_name_threads = 0;
+    NSInteger countNameThreads = 0;
     thread_act_array_t thread_list;
     mach_msg_type_number_t thread_count = 0;
     const task_t    this_task = mach_task_self();
@@ -30,22 +32,20 @@ typedef int (*funcptr)( void );
             int rc = pthread_getname_np (pt, thread_name, THREAD_NAME_MAX);
             uint64_t tid;
             pthread_threadid_np (pt, &tid);
-            if (thread_name[0] != '\0' && rc == 0){
-                NSString *threadName = [NSString stringWithUTF8String:thread_name];
-                [namedThreads addObject:threadName];
-            }
+            if (thread_name[0] != '\0' && rc == 0)
+                [namedThreads addObject: [NSString stringWithCString: thread_name encoding:NSASCIIStringEncoding]];
         }
     }
     
     /* check each name against Frida strings */
-    count_name_threads = [YDFridaDetection loopThroughFridaStrs:namedThreads];
+    countNameThreads = [YDFridaDetection loopThroughFridaStrs:namedThreads];
     
     mach_port_deallocate(this_task, this_thread);
     vm_deallocate(this_task, (vm_address_t)thread_list, sizeof(thread_t) * thread_count);
 
     NSLog(@"[*]🐝%@\tNamed threads: %@",  NSStringFromSelector(_cmd), namedThreads);
-    NSLog(@"[*]🐝Suspected Frida thread count: %ld", (long)count_name_threads);
-    return count_name_threads > 0 ? YES : NO;
+    NSLog(@"[*]🐝Suspected Frida thread count: %ld", (long)countNameThreads);
+    return countNameThreads > 0 ? YES : NO;
 }
 
 
@@ -123,44 +123,33 @@ typedef int (*funcptr)( void );
 #pragma mark: Iterate through loaded Modules inside the app, at run-time. Goal: detect Frida-Gadget.dylib
 +(BOOL)checkModules{
     
-    NSInteger count_suspect_modules = 0;
+    NSInteger countSuspectModules = 0;
     unsigned int count = 0;
     const char **images = objc_copyImageNames ( &count );
     
+    NSMutableArray *allModules = [[NSMutableArray alloc] initWithCapacity: count];
     for (int y = 0; y < count; y++)
-        count_suspect_modules += [YDFridaDetection loopThroughFridaStrings:images[y]];
+        [allModules addObject: [NSString stringWithCString: images[y] encoding:NSASCIIStringEncoding]];
     
-    NSLog(@"[*]🐝Suspect Frida modules count: %ld", (long)count_suspect_modules);
-    return count_suspect_modules > 0 ? YES : NO;
+    countSuspectModules = [YDFridaDetection loopThroughFridaStrs:allModules];
+    NSLog(@"[*]🐝Suspect Frida modules count: %ld", (long)countSuspectModules);
+    return countSuspectModules > 0 ? YES : NO;
 }
 
 
-+(NSInteger) loopThroughFridaStrs: (NSMutableArray *)threadNames {
++(NSInteger) loopThroughFridaStrs: (NSMutableArray *)strItems {
     
     NSInteger count = 0;
-    for (NSString *thread in threadNames) {
+    NSLog(@"[*]\t🐝Checking  %ld string items", strItems.count);
+    for (NSString *item in strItems) {
         for (int i=0 ; i<MAX_FRIDA_STRINGS; i++) {
             NSString *friStr= [NSString stringWithUTF8String:frida_strings[i]];
-            if ([thread containsString:friStr])
+            if ([item containsString:friStr])
                 count++;
         }
     }
     return count;
 }
 
-    
-+(NSInteger) loopThroughFridaStrings:   (const char *)read_str {
-    
-    NSInteger count = 0;
-    char *result;
-    
-    for (int i=0 ; i<MAX_FRIDA_STRINGS; i++) {
-        result = nil;
-        result = strnstr (read_str, frida_strings[i], strlen ( read_str ));
-        if (result != nil)
-            count++;
-    }
-    return count;
-}
 
 @end
