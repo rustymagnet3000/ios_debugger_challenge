@@ -17,7 +17,7 @@
     
     kern_return_t kr = task_threads (this_task, &thread_list, &thread_count);
     if (kr != KERN_SUCCESS){
-        NSLog(@"error getting task_threads: %s\n", mach_error_string(kr));
+        NSLog(@"er ror getting task_threads: %s\n", mach_error_string(kr));
         return NO;
     }
     

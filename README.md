@@ -1,6 +1,7 @@
 # iOS Debugger Challenge
 
 ![](https://img.shields.io/github/commit-activity/m/rustymagnet3000/debugger_challenge?style=for-the-badge)
+
 <!-- TOC depthFrom:2 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Challenge: Bypass anti-Frida check ( thread names )](#challenge-bypass-anti-frida-check-thread-names-)
@@ -28,24 +29,53 @@ Since `Frida version ~12.7` it is super simple to run on any iOS device.  Why is
 - No need to `repackage` the iOS app.
 - No requirement for a `Jailbroken` device.
 
-Quick steps:
+##### Setup Frida-Gadget
 
 1. Get `Frida-Gadget` for iOS from https://github.com/frida/frida/releases
 2. `gunzip frida-gadget-12.xx.xx-ios-universal.dylib.gz`
 3. Create this folder: `mkdir -p ~/.cache/frida`
 4. Copy file to new folder: `cp frida-gadget.dylib ~/.cache/frida/gadget-ios.dylib`
 
+##### Get all Named Threads
+How do you get all the `Thread Names` with `iOS`?  
+
+`NSThread` gets you the `main thread` and ` currentThread`.  What about `threads` - like `Frida threads` - that you did not start?  An answer is defined inside of `#include <mach/mach.h>`.  You ask the `Kernel` for a Thread List.  
+
+`task_threads()` gives you all the `threads` inside of `app's process`.  After that, you call `pthread_from_mach_thread_np()` to converts the `mach thread ID` to `pthreads ID`.  Then `    pthread_getname_np()` to get the name of a thread.
+
+##### Run Frida-Gadget
 Now get your clean device. Make sure `frida` is installed on your host machine.   Just connect via USB:
 
 `frida -U -f funky-chicken.debugger-challenge`
 
-##### Getting all named Threads
-on iOS, how do you get all the `Threads` and `Thread Names` with `iOS`?  Apple's `NSThread` won't help.  `NSThread` gets you the `main thread` and ` currentThread`.  What about `threads` - like `Frida threads` - that you did not start?  The answer was inside of `#include <mach/mach.h>`.
-
-You ask the `Kernal` with `task_threads()` for a Thread List.  That gives you all the `threads` inside of `app's process`.  Then you start use code inside of `#include <pthread.h>`.  First you call `pthread_from_mach_thread_np()` to converts the `mach thread ID` to `pthreads ID`.  Then you call into `    pthread_getname_np()` to get names of the threads.
-
-##### Detecting Frida with Thread Names
 ![named_threads](/images/2021/01/named-threads.png)
+
+That got us some `Frida` related Thread names.
+
+### Bypass detection
+There are lots of ways to stop this check of `Thread Names` working.  I like the idea of a `forced fail` response from the `Kernel`, when the code requests a `Thread List`.  Why?  You can re-use the technique on other security controls that rely on the `Kernel`.   However, I don't want it to disrupt other code.
+
+```
+kern_return_t kr = task_threads (this_task, &thread_list, &thread_count);
+if (kr != KERN_SUCCESS) {
+	// handle the error.
+}
+```
+There are over 50 error codes that can be returned from the `kernal`.  The return code gets is passed back as a `kern_return_t`.  Nothing mystical here. This is just an integer: `typedef int kern_return_t;`.
+
+WHatever we do, we have to avoid returning `nil` or '0' as that will be treated as success:
+-
+```
+#include <mach/machine/kern_return.h>
+	#define KERN_SUCCESS                    0
+	#define KERN_INVALID_ADDRESS            1
+	#define KERN_PROTECTION_FAILURE         2
+	#define KERN_NO_SPACE                   3
+	#define KERN_INVALID_ARGUMENT           4
+	......
+	....
+	...
+```
 
 ## Challenge: Understand Jailbreak detections
 ##### Writing Jailbreak detections
