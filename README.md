@@ -39,9 +39,13 @@ Now get your clean device. Make sure `frida` is installed on your host machine. 
 
 `frida -U -f funky-chicken.debugger-challenge`
 
-##### Detecting Frida with Thread Names
+##### Getting all named Threads
+on iOS, how do you get all the `Threads` and `Thread Names` with `iOS`?  Apple's `NSThread` won't help.  `NSThread` gets you the `main thread` and ` currentThread`.  What about `threads` - like `Frida threads` - that you did not start?  The answer was inside of `#include <mach/mach.h>`.
 
-Writing a self
+You ask the `Kernal` with `task_threads()` for a Thread List.  That gives you all the `threads` inside of `app's process`.  Then you start use code inside of `#include <pthread.h>`.  First you call `pthread_from_mach_thread_np()` to converts the `mach thread ID` to `pthreads ID`.  Then you call into `    pthread_getname_np()` to get names of the threads.
+
+##### Detecting Frida with Thread Names
+![named_threads](/images/2021/01/named-threads.png)
 
 ## Challenge: Understand Jailbreak detections
 ##### Writing Jailbreak detections
