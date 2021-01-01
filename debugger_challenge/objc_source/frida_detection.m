@@ -43,8 +43,8 @@
     mach_port_deallocate(this_task, this_thread);
     vm_deallocate(this_task, (vm_address_t)thread_list, sizeof(thread_t) * thread_count);
 
-    NSLog(@"[*]🐝%@\tNamed threads: %@",  NSStringFromSelector(_cmd), namedThreads);
-    NSLog(@"[*]🐝Suspected Frida thread count: %ld", (long)countNameThreads);
+    NSLog(@"🐝%@ check: %@",  NSStringFromSelector(_cmd), namedThreads);
+    NSLog(@"🐝Suspected Frida thread count: %ld", (long)countNameThreads);
     return countNameThreads > 0 ? YES : NO;
 }
 
@@ -60,20 +60,15 @@
     if ([ theURL checkResourceIsReachableAndReturnError:&err]  == YES )
         return YES;
     
-    if ( err != NULL ) {
-        NSLog(@"[*]🐝Error in file check: %ld", (long)err.code);
-        if ( err.code == 257 )
-            NSLog(@"[*]🐝Sandbox permission error.");
-    }
-    
     FILE *file;
-    file = fopen(frida_on_filesystem.fileSystemRepresentation, "r");
-    if ( !file )
-        NSLog(@"[*]🐝if ObjC APIs fails, fopen also failed!");
-
-    NSLog(@"[*]🐝Trying access() as it is a sits libsystem_kernel.dylib!");
+    file = fopen(frida_on_filesystem.UTF8String, "r");
     
-    return (access(frida_on_filesystem.fileSystemRepresentation, F_OK) == 0) ? YES : NO;
+    if ( err != NULL && !file )
+        NSLog(@"🐝%@:fopen() and checkResourceIsReachableAndReturnError() failed ( error:%ld )", NSStringFromSelector(_cmd), (long)err.code);
+    
+    int rst = access(frida_on_filesystem.UTF8String, F_OK);
+    NSLog(@"🐝%@:\taccess() returned: %d",  NSStringFromSelector(_cmd), rst);
+    return rst == 0 ? YES : NO;
 }
 
 #pragma mark: Iterate through local TCP ports. Sending message to identify frida-server */
@@ -85,7 +80,7 @@
     sa.sin_family = AF_INET;
     sa.sin_addr.s_addr = inet_addr(HOSTNAME);
 
-    puts("[*]🐝scan started...");
+    puts("🐝scan started...");
     for( int i = START;  i < END; i++ ){
         sa.sin_port = htons( i );
         sock = socket( AF_INET, SOCK_STREAM, 0 );
@@ -100,7 +95,7 @@
         close ( sock );
     }
 
-    NSLog(@"[*]🐝Completed.\n\tOpen ports: %d\tRefused ports:%d\tUnknown response:%d\n", open_conns, refused_conns, unknown_conns);
+    NSLog(@"🐝Completed.\n\tOpen ports: %d\tRefused ports:%d\tUnknown response:%d\n", open_conns, refused_conns, unknown_conns);
     return NO;
 }
 
@@ -110,7 +105,7 @@
     funcptr ptr = NULL;
 
     for (int i=0; i<MAX_FRIDA_STRINGS; i++) {
-        NSLog(@"[*]🐝Checking: %s", frida_strings[i]);
+        NSLog(@"🐝Checking: %s", frida_strings[i]);
         ptr = (funcptr)dlsym( RTLD_DEFAULT, frida_strings[i] );
 
         if( ptr != NULL )
@@ -132,7 +127,7 @@
         [allModules addObject: [NSString stringWithCString: images[y] encoding:NSASCIIStringEncoding]];
     
     countSuspectModules = [YDFridaDetection loopThroughFridaStrs:allModules];
-    NSLog(@"[*]🐝Suspect Frida modules count: %ld", (long)countSuspectModules);
+    NSLog(@"🐝Suspect Frida modules count: %ld", (long)countSuspectModules);
     return countSuspectModules > 0 ? YES : NO;
 }
 
@@ -140,7 +135,7 @@
 +(NSInteger) loopThroughFridaStrs: (NSMutableArray *)strItems {
     
     NSInteger count = 0;
-    NSLog(@"[*]\t🐝Checking  %ld string items", strItems.count);
+    NSLog(@"\t🐝Checking  %ld string items", strItems.count);
     for (NSString *item in strItems) {
         for (int i=0 ; i<MAX_FRIDA_STRINGS; i++) {
             NSString *friStr= [NSString stringWithUTF8String:frida_strings[i]];

@@ -3,7 +3,7 @@
 ![](https://img.shields.io/github/commit-activity/m/rustymagnet3000/debugger_challenge?style=for-the-badge)
 <!-- TOC depthFrom:2 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-- [Challenge: Adding Entitlements](#challenge-adding-entitlements)
+- [Challenge: Bypass anti-Frida check ( thread names )](#challenge-bypass-anti-frida-check-thread-names-)
 - [Challenge: Understand Jailbreak detections](#challenge-understand-jailbreak-detections)
 - [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)
 - [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)
@@ -16,52 +16,32 @@
 - [Challenge: Dancing with Threads](#challenge-dancing-with-threads)
 - [Challenge: Certificate Pinning bypass ( with Frida )](#challenge-certificate-pinning-bypass-with-frida-)
 - [Challenge: Certificate Pinning bypass ( with Method Swizzle )](#challenge-certificate-pinning-bypass-with-method-swizzle-)
+- [Challenge: Adding Entitlements](#challenge-adding-entitlements)
 
 <!-- /TOC -->
 
-## Challenge: Adding Entitlements
-Let's try and add a basic `entitlement`, after the app is in the wild.  Normally you have to add entitlement by creating a new `provisioning profile` at: https://developer.apple.com/
 
-There is a long list of available `entitlements`:
-https://developer.apple.com/documentation/bundleresources/entitlements
+## Challenge: Bypass anti-Frida check ( thread names )
+##### Running Frida on a Clean device
+Since `Frida version ~12.7` it is super simple to run on any iOS device.  Why is it so good?
 
-Open `XCode` and select `/File/New/PropertyList`.  Now add `com.apple.developer.contacts.notes` as a `Boolean` set to `1`.
+- No need to `repackage` the iOS app.
+- No requirement for a `Jailbroken` device.
 
-If you want to read the file from the command line: `plistutil -i entitlements.plist -f xml`:
+Quick steps:
 
-```
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>com.apple.developer.contacts.notes</key>
-	<true/>
-</dict>
-</plist>
-```
-Now let's get ready to code sign an already generated `ipa` file:
-```
-security find-identity -v -p codesigning				// find the "Apple Development" ID, if the developer license is paid
-export CODESIGNID=xxxx
-```
-Now we need to code sign EVERYTHING that is inside of the app bundle.  There are a few articles online about code signing that only sign the binary. But all the dynamic frameworks, bundles, assets also get signed.
+1. Get `Frida-Gadget` for iOS from https://github.com/frida/frida/releases
+2. `gunzip frida-gadget-12.xx.xx-ios-universal.dylib.gz`
+3. Create this folder: `mkdir -p ~/.cache/frida`
+4. Copy file to new folder: `cp frida-gadget.dylib ~/.cache/frida/gadget-ios.dylib`
 
-I use `applesign` which is a `NodeJS module` and `command line utility` for re-signing iOS applications.
-```
-applesign -7 -i ${CODESIGNID} -m embedded.mobileprovision -e entitlements.plist extracted.ipa
-```
-Now the entire app bundle has be code signed you can install it:
-```
-ios-deploy -W -b signed.ipa
-```
-The first error is:`Error 0xe8008016: The executable was signed with invalid entitlements.`
+Now get your clean device. Make sure `frida` is installed on your host machine.   Just connect via USB:
 
-What if I specify a new `Bundle ID`?
-```
-applesign -7 -i ${CODESIGNID} -m embedded.mobileprovision -e entitlements.plist extracted.ipa -b com.fresh.id
-```
-The same error.
+`frida -U -f funky-chicken.debugger-challenge`
 
+##### Detecting Frida with Thread Names
+
+Writing a self
 
 ## Challenge: Understand Jailbreak detections
 ##### Writing Jailbreak detections
@@ -947,3 +927,46 @@ The swizzle was a lot more effective.   The only trick was to ensure that the Sw
 ![secTrustHook](debugger_challenge/readme_images/secTrustEvalulateHook.png)
 
 Not all Cert Pinning checks were bypassed using these methods.
+
+## Challenge: Adding Entitlements
+Let's try and add a basic `entitlement`, after the app is in the wild.  Normally you have to add entitlement by creating a new `provisioning profile` at: https://developer.apple.com/
+
+There is a long list of available `entitlements`:
+https://developer.apple.com/documentation/bundleresources/entitlements
+
+Open `XCode` and select `/File/New/PropertyList`.  Now add `com.apple.developer.contacts.notes` as a `Boolean` set to `1`.
+
+If you want to read the file from the command line: `plistutil -i entitlements.plist -f xml`:
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.developer.contacts.notes</key>
+	<true/>
+</dict>
+</plist>
+```
+Now let's get ready to code sign an already generated `ipa` file:
+```
+security find-identity -v -p codesigning				// find the "Apple Development" ID, if the developer license is paid
+export CODESIGNID=xxxx
+```
+Now we need to code sign EVERYTHING that is inside of the app bundle.  There are a few articles online about code signing that only sign the binary. But all the dynamic frameworks, bundles, assets also get signed.
+
+I use `applesign` which is a `NodeJS module` and `command line utility` for re-signing iOS applications.
+```
+applesign -7 -i ${CODESIGNID} -m embedded.mobileprovision -e entitlements.plist extracted.ipa
+```
+Now the entire app bundle has be code signed you can install it:
+```
+ios-deploy -W -b signed.ipa
+```
+The first error is:`Error 0xe8008016: The executable was signed with invalid entitlements.`
+
+What if I specify a new `Bundle ID`?
+```
+applesign -7 -i ${CODESIGNID} -m embedded.mobileprovision -e entitlements.plist extracted.ipa -b com.fresh.id
+```
+The same error.
