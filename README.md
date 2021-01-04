@@ -93,11 +93,12 @@ Started tracing 1 function. Press Ctrl+C to stop.
            /* TID 0x407 */
   7387 ms  task_threads()
 ````
+##### Enumerate all Exports, grepping for one function, and quit
+With the `--eval` flag we could pass in a Javascript function for Frida to evaluate.
+
 I was not expecting the `Export` ( `task_threads()` ) to be inside of `libperfcheck.dylib`.  I was expecting it to be inside of `libsystem_kernel.dylib`.
 
-Let's double-check now:
-
-##### Enumerate all Exports, grepping for one function, and quit
+Let's double-check:
 ```
 frida -U -f funky-chicken.debugger-challenge --no-pause -q --eval 'var x={};Process.enumerateModulesSync().forEach(function(m){x[m.name] = Module.enumerateExportsSync(m.name)});' | | grep -B 1 -A 1 task_threads
 
@@ -116,7 +117,61 @@ frida -U -f funky-chicken.debugger-challenge --no-pause -q --eval 'var x={};Proc
     "size": 200704
 }
 ```
+##### Writing a Frida Interceptor Script
+Now, we want to write a longer script.  We will invoke it with the `-l` flag:
 
+`frida -l task_thread.js -U -f funky-chicken.debugger-challenge --no-pause`
+
+Below is our `task_threads.js` script:
+
+```
+/***********************************************************************************/
+// USAGE:  frida -l task_thread.js -U -f funky-chicken.debugger-challenge --no-pause
+/************************************************************************************/
+
+const module_name = "libsystem_kernel.dylib";
+const exp_name = "task_threads";
+
+function prettyExportDetail(message) {
+    return '[*]' + message + '\t' + exp_name + '()\tinside: ' + module_name;
+}
+
+if (ObjC.available) {
+    console.log("[*]Frida running. ObjC API available!");
+
+
+    try {
+        const ptrToExport = Module.findExportByName(module_name, exp_name);
+        if (!ptrToExport) {
+            throw new Error(prettyExportDetail('Cannot find Export:'));
+        }
+        console.log(prettyExportDetail('Pointer to'));
+        Interceptor.attach(ptrToExport, {
+
+            onEnter: function (args) {
+                console.log(prettyExportDetail('onEnter() interceptor ->'));
+                this._threadCountPointer = new NativePointer(args[2]);
+                console.log('[*]Address of Thread Count:' + this._threadCountPointer );
+            },
+
+            onLeave: function (retValue) {
+                console.log(JSON.stringify({
+                    return_value: retValue,
+                    function: exp_name,
+                    name: this._threadCountPointer,
+                    val: this._threadCountPointer.readCString()
+                }));
+            }
+        });
+    }
+    catch(err){
+        console.error(err.message);
+    }
+}
+else {
+    console.log("[!]Objective-C Runtime is not available!");
+}
+```
 
 ## Challenge: Understand Jailbreak detections
 ##### Writing Jailbreak detections
