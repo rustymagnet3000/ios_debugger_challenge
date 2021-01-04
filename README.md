@@ -144,8 +144,8 @@ if (ObjC.available) {
             throw new Error(prettyExportDetail('Cannot find Export:'));
         }
         console.log(prettyExportDetail('Pointer to'));
-        Interceptor.attach(ptrToExport, {
 
+        Interceptor.attach(ptrToExport, {
             onEnter: function (args) {
                 console.log(prettyExportDetail('onEnter() interceptor ->'));
                 this._threadCountPointer = new NativePointer(args[2]);
@@ -153,11 +153,14 @@ if (ObjC.available) {
             },
 
             onLeave: function (retValue) {
+                this._patchInt = 4
                 console.log(JSON.stringify({
                     return_value: retValue,
+                    patched_return_value: this._patchInt,
                     function: exp_name,
                     thread_count: this._threadCountPointer.readPointer().toInt32()
                 }));
+                retValue.replace(this._patchInt)
             }
         });
     }
@@ -168,6 +171,22 @@ if (ObjC.available) {
 else {
     console.log("[!]Objective-C Runtime is not available!");
 }
+```
+
+### Complete
+The bypass works.  
+
+![frida_named_threads_disabled](/images/2021/01/frida-named-threads-disabled.png)
+
+Now, the code, stops checking for `Frida` with `Named Threads` because it got a `kern_return_t` code that it was not able to digest.
+
+```
+[*]Frida running. ObjC API available!
+[*]Pointer to	task_threads()	inside: libsystem_kernel.dylib
+Spawned `funky-chicken.debugger-challenge`. Resuming main thread!       
+[*]onEnter() interceptor ->	task_threads()	inside: libsystem_kernel.dylib
+[*]Address of Thread Count:0x16f5811d4
+{"return_value":"0x0","patched_return_value":4,"function":"task_threads","thread_count":15}
 ```
 
 ## Challenge: Understand Jailbreak detections
