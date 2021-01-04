@@ -36,6 +36,13 @@ Since `Frida version ~12.7` it is super simple to run on any iOS device.  Why is
 3. Create this folder: `mkdir -p ~/.cache/frida`
 4. Copy file to new folder: `cp frida-gadget.dylib ~/.cache/frida/gadget-ios.dylib`
 
+That is it.  Now run `frida` or `frida-trace` with a Jailed device from the command line:
+
+```
+frida -U -f funky-chicken.debugger-challenge --no-pause							// frida-gadget. The --no-pause flags means the app loads as normal, after Frida is injected
+frida-trace -U -f funky-chicken.debugger-challenge									// frida-trace
+```
+
 ##### Get all Named Threads
 How do you get all the `Thread Names` with `iOS`?  
 
@@ -46,14 +53,13 @@ How do you get all the `Thread Names` with `iOS`?
 ##### Run Frida-Gadget
 Now get your clean device. Make sure `frida` is installed on your host machine.   Just connect via USB:
 
-`frida -U -f funky-chicken.debugger-challenge`
 
 ![named_threads](/images/2021/01/named-threads.png)
 
 That got us some `Frida` related Thread names.
 
 ### Bypass detection
-There are lots of ways to stop this check of `Thread Names` working.  I like the idea of a `forced fail` response from the `Kernel`, when the code requests a `Thread List`.  Why?  You can re-use the technique on other security controls that rely on the `Kernel`.   However, I don't want it to disrupt other code.
+There are lots of ways to stop this check of `Thread Names` working.  I like the idea of a `forced fail` response from the `Kernel`, when the code requests a `Thread List`.  Why?  You can re-use the technique on other security controls that rely on the `Kernel`.   
 
 ```
 kern_return_t kr = task_threads (this_task, &thread_list, &thread_count);
@@ -63,7 +69,7 @@ if (kr != KERN_SUCCESS) {
 ```
 There are over 50 error codes that can be returned from the `kernal`.  The return code gets is passed back as a `kern_return_t`.  Nothing mystical here. This is just an integer: `typedef int kern_return_t;`.
 
-WHatever we do, we have to avoid returning `nil` or '0' as that will be treated as success:
+We must avoid returning `nil` or '0' as that will be treated as success:
 -
 ```
 #include <mach/machine/kern_return.h>
@@ -76,6 +82,41 @@ WHatever we do, we have to avoid returning `nil` or '0' as that will be treated 
 	....
 	...
 ```
+##### Bypass detection
+I don't want it to disrupt other code.  Let's check if `task_threads` is called by anybody else on my clean device:
+
+```
+frida-trace -i "task_threads" -U -f funky-chicken.debugger-challenge
+Instrumenting functions...                                              
+task_threads: Loaded handler at "/.../__handlers__/libperfcheck.dylib/task_threads.js"
+Started tracing 1 function. Press Ctrl+C to stop.                       
+           /* TID 0x407 */
+  7387 ms  task_threads()
+````
+I was not expecting the `Export` ( `task_threads()` ) to be inside of `libperfcheck.dylib`.  I was expecting it to be inside of `libsystem_kernel.dylib`.
+
+Let's double-check now:
+
+##### Enumerate all Exports, grepping for one function, and quit
+```
+frida -U -f funky-chicken.debugger-challenge --no-pause -q --eval 'var x={};Process.enumerateModulesSync().forEach(function(m){x[m.name] = Module.enumerateExportsSync(m.name)});' | | grep -B 1 -A 1 task_threads
+
+            "address": "0x1c1c4645c",
+            "name": "task_threads",
+            "type": "function"
+```
+##### Search for Module, with the Exports' Address
+```
+frida -U -f funky-chicken.debugger-challenge --no-pause -q --eval 'var x={};Process.findModuleByAddress("0x1c1c4645c");'
+
+{
+    "base": "0x1c1c2a000",
+    "name": "libsystem_kernel.dylib",
+    "path": "/usr/lib/system/libsystem_kernel.dylib",
+    "size": 200704
+}
+```
+
 
 ## Challenge: Understand Jailbreak detections
 ##### Writing Jailbreak detections
