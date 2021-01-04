@@ -138,8 +138,6 @@ function prettyExportDetail(message) {
 
 if (ObjC.available) {
     console.log("[*]Frida running. ObjC API available!");
-
-
     try {
         const ptrToExport = Module.findExportByName(module_name, exp_name);
         if (!ptrToExport) {
@@ -158,8 +156,7 @@ if (ObjC.available) {
                 console.log(JSON.stringify({
                     return_value: retValue,
                     function: exp_name,
-                    name: this._threadCountPointer,
-                    val: this._threadCountPointer.readCString()
+                    thread_count: this._threadCountPointer.readPointer().toInt32()
                 }));
             }
         });
