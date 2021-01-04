@@ -32,11 +32,10 @@ Since `Frida version ~12.7` it is super simple to run on any iOS device.  Why is
 ##### Setup Frida-Gadget
 
 1. Get `Frida-Gadget` for iOS from https://github.com/frida/frida/releases
-2. `gunzip frida-gadget-12.xx.xx-ios-universal.dylib.gz`
-3. Create this folder: `mkdir -p ~/.cache/frida`
-4. Copy file to new folder: `cp frida-gadget.dylib ~/.cache/frida/gadget-ios.dylib`
+2. Copy file to new folder: `cp frida-gadget.dylib ~/.cache/frida/gadget-ios.dylib`
 
-That is it.  Now run `frida` or `frida-trace` with a Jailed device from the command line:
+##### Run frida or frida-trace
+With a Jailed device from the command line:
 
 ```
 frida -U -f funky-chicken.debugger-challenge --no-pause							// frida-gadget. The --no-pause flags means the app loads as normal, after Frida is injected
@@ -48,7 +47,7 @@ How do you get all the `Thread Names` with `iOS`?
 
 `NSThread` gets you the `main thread` and ` currentThread`.  What about `threads` - like `Frida threads` - that you did not start?  An answer is defined inside of `#include <mach/mach.h>`.  You ask the `Kernel` for a Thread List.  
 
-`task_threads()` gives you all the `threads` inside of `app's process`.  After that, you call `pthread_from_mach_thread_np()` to converts the `mach thread ID` to `pthreads ID`.  Then `    pthread_getname_np()` to get the name of a thread.
+`task_threads()` gives you all the `threads` inside of `app's process`.  After that, you call `pthread_from_mach_thread_np()` to converts the `mach thread ID` to `pthreads ID`.  Then `pthread_getname_np()` to get the thread name.
 
 ##### Run Frida-Gadget
 Now get your clean device. Make sure `frida` is installed on your host machine.   Just connect via USB:
@@ -56,10 +55,12 @@ Now get your clean device. Make sure `frida` is installed on your host machine. 
 
 ![named_threads](/images/2021/01/named-threads.png)
 
-That got us some `Frida` related Thread names.
+That got us `Frida` related Thread names. The detection worked.
 
-### Bypass detection
-There are lots of ways to stop this check of `Thread Names` working.  I like the idea of a `forced fail` response from the `Kernel`, when the code requests a `Thread List`.  Why?  You can re-use the technique on other security controls that rely on the `Kernel`.   
+##### Selecting a bypass
+There are lots of ways to stop this check of `Thread Names` working.  I liked the idea to `force fail` the `Kernel's` response, when it got a request for a `Thread List`.  That way, I could re-use the same bypass script on other code that called into the `Kernel`.
+
+In short, I would write a `Frida` script that is executed when the app starts.  It will patch the variable named `kr`:
 
 ```
 kern_return_t kr = task_threads (this_task, &thread_list, &thread_count);
@@ -67,10 +68,8 @@ if (kr != KERN_SUCCESS) {
 	// handle the error.
 }
 ```
-There are over 50 error codes that can be returned from the `kernal`.  The return code gets is passed back as a `kern_return_t`.  Nothing mystical here. This is just an integer: `typedef int kern_return_t;`.
+There were over 50 error codes returned from the `kernal`.  The return code was passed back as a `kern_return_t` type.  `kern_return_t` was just an integer: `typedef int kern_return_t;`.
 
-We must avoid returning `nil` or '0' as that will be treated as success:
--
 ```
 #include <mach/machine/kern_return.h>
 	#define KERN_SUCCESS                    0
@@ -82,8 +81,8 @@ We must avoid returning `nil` or '0' as that will be treated as success:
 	....
 	...
 ```
-##### Bypass detection
-I don't want it to disrupt other code.  Let's check if `task_threads` is called by anybody else on my clean device:
+##### Avoiding crashes
+I didn't want the bypass to disrupt other code.  Let's check if `task_threads` is called by anybody else on my clean device:
 
 ```
 frida-trace -i "task_threads" -U -f funky-chicken.debugger-challenge
@@ -93,12 +92,13 @@ Started tracing 1 function. Press Ctrl+C to stop.
            /* TID 0x407 */
   7387 ms  task_threads()
 ````
-##### Enumerate all Exports, grepping for one function, and quit
-With the `--eval` flag we could pass in a Javascript function for Frida to evaluate.
 
-I was not expecting the `Export` ( `task_threads()` ) to be inside of `libperfcheck.dylib`.  I was expecting it to be inside of `libsystem_kernel.dylib`.
+Ok. The calls to this api were isolated to the `Frida` detection only.  Good news.
 
-Let's double-check:
+##### Double check our work
+I was not expecting `task_threads()` to be inside of `libperfcheck.dylib`.  I was expecting it to be inside of `libsystem_kernel.dylib`.
+
+Let's double-check with `Frida`:
 ```
 frida -U -f funky-chicken.debugger-challenge --no-pause -q --eval 'var x={};Process.enumerateModulesSync().forEach(function(m){x[m.name] = Module.enumerateExportsSync(m.name)});' | | grep -B 1 -A 1 task_threads
 
@@ -106,7 +106,7 @@ frida -U -f funky-chicken.debugger-challenge --no-pause -q --eval 'var x={};Proc
             "name": "task_threads",
             "type": "function"
 ```
-##### Search for Module, with the Exports' Address
+Now search for the `Module`, with the `Exports' Address`
 ```
 frida -U -f funky-chicken.debugger-challenge --no-pause -q --eval 'var x={};Process.findModuleByAddress("0x1c1c4645c");'
 
@@ -118,7 +118,7 @@ frida -U -f funky-chicken.debugger-challenge --no-pause -q --eval 'var x={};Proc
 }
 ```
 ##### Writing a Frida Interceptor Script
-Now, we want to write a longer script.  We will invoke it with the `-l` flag:
+Now, we can to write a script.  We will invoke it with the `-l` flag:
 
 `frida -l task_thread.js -U -f funky-chicken.debugger-challenge --no-pause`
 
