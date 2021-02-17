@@ -432,7 +432,7 @@ What had gone wrong, when I code signed the IPA? Check the file the `provisionin
 
 Expiry date, device ID were good. Had I chosen the wrong developer Code Signing ID?
 
-```lists
+```xml
 <key>Entitlements</key>
 <key>ExpirationDate</key>
 	<date>2019-05-21T11:01:06Z</date>
@@ -1163,9 +1163,9 @@ Do I trust this server, before establishing a connection to this server?
 
 That question is what `Certificate Pinning` adds to a mobile app.  It derives the answer by comparing Public Keys it has stored locally against Public Keys sent by the Server during a secured network setup.  
 
-Hardened iOS app's often ignore the default `iOS Truststore` and add their own, smaller list of Root and Intermediary Certificate Authorities. This smaller list was called a `pinlist`.  
+Hardened iOS app's often ignore the default `iOS Truststore` and add their own, smaller list of Root and Intermediary Certificate Authorities. This smaller list was called a `pinlist`.
 
-Why ignore the `iOS Truststore`?  It contains a lot of Certificate Authorities.  Refer to https://en.wikipedia.org/wiki/DigiNotar if you want details of why this is a bad thing.  More relevant for this Challenge, a user could add an all powerful `Self-Signed Certificate` via the Settings app on iOS. This would be "trusted" by iOS.
+Why ignore the `iOS Truststore`?  It contained a lot of `Certificate Authorities`.  Refer to <https://en.wikipedia.org/wiki/DigiNotar> if you want details of why this is a bad thing.  More relevant for this Challenge, a user could add an all powerful `Self-Signed Certificate` via the Settings app on iOS. This would be "trusted" by iOS.
 
 This challenge was written to show how to get around checks performed when sending a network request with Apple's `NSURLSession` class.
 
@@ -1173,13 +1173,13 @@ This challenge was written to show how to get around checks performed when sendi
 
 If you send traffic with `NSURLSession` and it was `https` [ the default since iOS 9 ] the `NSURLSessionDelegate` would invoke the following method:
 
-```
+```swift
 func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 ```
 
 This was a great place for a developer to add `Cert Pinning` checks.  If an app is `Pinning` against the `iOS Truststore` you would see code like this:
 
-```
+```swift
 guard let trust: SecTrust = challenge.protectionSpace.serverTrust else {
     return
 }
@@ -1187,13 +1187,13 @@ var secResult = SecTrustResultType.invalid
 var osStatus = SecTrustEvaluate(trust, &secResult)
 ```
 
-
 If the app code could not verify the `Certificate Chain` the `secResult` would be set to negative value.  Afterwards, the app would probably call `completionHandler(.cancelAuthenticationChallenge, nil)` to cancel the attempted TLS connection.
 
-#### Attempt 1 - Frida bypass for iOS Truststore pinning
+#### Attempt 1 - Bypass iOS Truststore
+
 Using `Frida` I used a script that would write over the `secResult` variable.  This was written to with this call `SecTrustEvaluate(trust, &secResult)`.  I would effectively be changing a `DENY` to a `PROCEED`.
 
-```
+```javascript
 const moduleName = 'Security';
 const functionName = 'SecTrustEvaluate';
 const SecTrustEvaluatePtr = Module.findExportByName(moduleName, functionName);
@@ -1218,8 +1218,9 @@ catch(err){
 }
 ```
 
-Success!
-```
+#### COMPLETE
+
+```c
 [*]SecTrustEvaluate called
 	Default SecTrustResultType:  3
 	new SecTrustResultType:  1
@@ -1227,38 +1228,31 @@ Success!
 	Default SecTrustResultType:  0
 	new SecTrustResultType:  1
 ```
+
 ![secTrustHook](debugger_challenge/readme_images/bypassedNSURLSession.png)
 
-## Challenge: Certificate Pinning bypass ( with Method Swizzle )
+## Challenge: Certificate Pinning bypass ( more advanced )
+
 The Frida bypass worked well for trivial `iOS Truststore` pinning. But what happened if the app checked a locally held list of Public Keys ( the `pinlist` ) against the Public Keys it received during the client-server `TLS` setup Z?
 
-I liked this guy's example code:
-https://www.bugsee.com/blog/ssl-certificate-pinning-in-mobile-applications/
-```
-// Public key pinning
-let serverPublicKey = SecCertificateCopyPublicKey(serverCertificate)
-let serverPublicKeyData:NSData = SecKeyCopyExternalRepresentation(serverPublicKey!, nil )!
-let keyHash = sha256(data: serverPublicKeyData as Data)
-if (keyHash == pinnedPublicKeyHash) {
-    // Success! This is our server
-    completionHandler(.useCredential, URLCredential(trust:serverTrust))
-    return
-}
-```
 I could use `Frida trace` to get me so far. I could also `statically patch` out the code. But the latter is hard and takes a lot of analysis.  How about I `Method Swizzle` to avoid this line of code?
-```
+
+```swift
 completionHandler(.cancelAuthenticationChallenge, nil)
 ```
 
 I wrote the following `Method Swizzle` to ignore all checks and proceed with the TLS setup?
-```
+
+```objective-c
 - (void)YDHappyChallenge:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler{
 
     NSLog(@"🍭NSURLSession on: %@", [[challenge protectionSpace] host]);
     completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, NULL);
 }
 ```
-### COMPLETE
+
+#### COMPLETE
+
 The swizzle was a lot more effective.   The only trick was to ensure that the Swizzle inherited from `NSObject` instead of `NSURLSession`.
 
 ![secTrustHook](debugger_challenge/readme_images/secTrustEvalulateHook.png)
@@ -1266,16 +1260,20 @@ The swizzle was a lot more effective.   The only trick was to ensure that the Sw
 Not all Cert Pinning checks were bypassed using these methods.
 
 ## Challenge: Adding Entitlements
-Let's try and add a basic `entitlement`, after the app is in the wild.  Normally you have to add entitlement by creating a new `provisioning profile` at: https://developer.apple.com/
 
-There is a long list of available `entitlements`:
-https://developer.apple.com/documentation/bundleresources/entitlements
+Let's try and add a basic `entitlement`, after the app is in the wild.  Normally you have to add entitlement by creating a new `provisioning profile` at: <https://developer.apple.com/>.
+
+There was a long list of available `entitlements`:
+
+<https://developer.apple.com/documentation/bundleresources/entitlements>
 
 Open `XCode` and select `/File/New/PropertyList`.  Now add `com.apple.developer.contacts.notes` as a `Boolean` set to `1`.
 
-If you want to read the file from the command line: `plistutil -i entitlements.plist -f xml`:
+If you want to read the file from the command line: 
 
-```
+`plistutil -i entitlements.plist -f xml`:
+
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -1285,25 +1283,39 @@ If you want to read the file from the command line: `plistutil -i entitlements.p
 </dict>
 </plist>
 ```
+
 Now let's get ready to code sign an already generated `ipa` file:
-```
-security find-identity -v -p codesigning				// find the "Apple Development" ID, if the developer license is paid
-export CODESIGNID=xxxx
-```
+
+##### get code signing ID
+
+`security find-identity -v -p codesigning`
+
+Find the "Apple Development" ID, if the developer license is paid
+
+##### create variable for key
+
+`export CODESIGNID=xxxx`
+
+##### code sign
+
 Now we need to code sign EVERYTHING that is inside of the app bundle.  There are a few articles online about code signing that only sign the binary. But all the dynamic frameworks, bundles, assets also get signed.
 
-I use `applesign` which is a `NodeJS module` and `command line utility` for re-signing iOS applications.
-```
-applesign -7 -i ${CODESIGNID} -m embedded.mobileprovision -e entitlements.plist extracted.ipa
-```
-Now the entire app bundle has be code signed you can install it:
-```
-ios-deploy -W -b signed.ipa
-```
+I used `applesign` which was a `NodeJS module` and `command line utility` for re-signing iOS applications.
+
+`applesign -7 -i ${CODESIGNID} -m embedded.mobileprovision -e entitlements.plist extracted.ipa`
+
+##### install app
+
+`ios-deploy -W -b signed.ipa`
+
+##### Error - invalid entitlements
+
 The first error is:`Error 0xe8008016: The executable was signed with invalid entitlements.`
 
-What if I specify a new `Bundle ID`?
-```
-applesign -7 -i ${CODESIGNID} -m embedded.mobileprovision -e entitlements.plist extracted.ipa -b com.fresh.id
-```
+##### Create new Bundle ID
+
+`applesign -7 -i ${CODESIGNID} -m embedded.mobileprovision -e entitlements.plist extracted.ipa -b com.fresh.id`
+
 The same error.
+
+TBC.
