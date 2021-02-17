@@ -21,9 +21,10 @@
 
 <!-- /TOC -->
 
-
 ## Challenge: Bypass anti-Frida check ( thread names )
+
 ##### Running Frida on a Clean device
+
 Since `Frida version ~12.7` it is super simple to run on any iOS device.  Why is it so good?
 
 - No need to `repackage` the iOS app.
@@ -35,42 +36,46 @@ Since `Frida version ~12.7` it is super simple to run on any iOS device.  Why is
 2. Copy file to new folder: `cp frida-gadget.dylib ~/.cache/frida/gadget-ios.dylib`
 
 ##### Run frida or frida-trace
+
 With a Jailed device from the command line:
 
-```
+```bash
 frida -U -f funky-chicken.debugger-challenge --no-pause							// frida-gadget. The --no-pause flags means the app loads as normal, after Frida is injected
 frida-trace -U -f funky-chicken.debugger-challenge									// frida-trace
 ```
 
 ##### Get all Named Threads
+
 How do you get all the `Thread Names` with `iOS`?  
 
-`NSThread` gets you the `main thread` and ` currentThread`.  What about `threads` - like `Frida threads` - that you did not start?  An answer is defined inside of `#include <mach/mach.h>`.  You ask the `Kernel` for a Thread List.  
+`NSThread` gets you the `main thread` and `currentThread`.  What about `threads` - like `Frida threads` - that you did not start?  An answer is defined inside of `#include <mach/mach.h>`.  You ask the `Kernel` for a Thread List.  
 
 `task_threads()` gives you all the `threads` inside of `app's process`.  After that, you call `pthread_from_mach_thread_np()` to converts the `mach thread ID` to `pthreads ID`.  Then `pthread_getname_np()` to get the thread name.
 
 ##### Run Frida-Gadget
-Now get your clean device. Make sure `frida` is installed on your host machine.   Just connect via USB:
 
+Now get your clean device. Make sure `frida` is installed on your host machine.   Just connect via USB:
 
 ![named_threads](/images/2021/01/named-threads.png)
 
 That got us `Frida` related Thread names. The detection worked.
 
 ##### Selecting a bypass
+
 There are lots of ways to stop this check of `Thread Names` working.  I liked the idea to `force fail` the `Kernel's` response, when it got a request for a `Thread List`.  That way, I could re-use the same bypass script on other code that called into the `Kernel`.
 
 In short, I would write a `Frida` script that is executed when the app starts.  It will patch the variable named `kr`:
 
-```
+```c
 kern_return_t kr = task_threads (this_task, &thread_list, &thread_count);
 if (kr != KERN_SUCCESS) {
 	// handle the error.
 }
 ```
+
 There were over 50 error codes returned from the `kernal`.  The return code was passed back as a `kern_return_t` type.  `kern_return_t` was just an integer: `typedef int kern_return_t;`.
 
-```
+```c
 #include <mach/machine/kern_return.h>
 	#define KERN_SUCCESS                    0
 	#define KERN_INVALID_ADDRESS            1
@@ -81,33 +86,39 @@ There were over 50 error codes returned from the `kernal`.  The return code was 
 	....
 	...
 ```
+
 ##### Avoiding crashes
+
 I didn't want the bypass to disrupt other code.  Let's check if `task_threads` is called by anybody else on my clean device:
 
-```
+```bash
 frida-trace -i "task_threads" -U -f funky-chicken.debugger-challenge
 Instrumenting functions...                                              
 task_threads: Loaded handler at "/.../__handlers__/libperfcheck.dylib/task_threads.js"
 Started tracing 1 function. Press Ctrl+C to stop.                       
            /* TID 0x407 */
   7387 ms  task_threads()
-````
+```
 
 Ok. The calls to this api were isolated to the `Frida` detection only.  Good news.
 
-##### Double check our work
+##### Double check work
+
 I was not expecting `task_threads()` to be inside of `libperfcheck.dylib`.  I was expecting it to be inside of `libsystem_kernel.dylib`.
 
 Let's double-check with `Frida`:
-```
+
+```bash
 frida -U -f funky-chicken.debugger-challenge --no-pause -q --eval 'var x={};Process.enumerateModulesSync().forEach(function(m){x[m.name] = Module.enumerateExportsSync(m.name)});' | | grep -B 1 -A 1 task_threads
 
             "address": "0x1c1c4645c",
             "name": "task_threads",
             "type": "function"
 ```
+
 Now search for the `Module`, with the `Exports' Address`
-```
+
+```bash
 frida -U -f funky-chicken.debugger-challenge --no-pause -q --eval 'var x={};Process.findModuleByAddress("0x1c1c4645c");'
 
 {
@@ -117,18 +128,16 @@ frida -U -f funky-chicken.debugger-challenge --no-pause -q --eval 'var x={};Proc
     "size": 200704
 }
 ```
+
 ##### Writing a Frida Interceptor Script
+
 Now, we can to write a script.  We will invoke it with the `-l` flag:
 
 `frida -l task_thread.js -U -f funky-chicken.debugger-challenge --no-pause`
 
 Below is our `task_threads.js` script:
 
-```
-/***********************************************************************************/
-// USAGE:  frida -l task_thread.js -U -f funky-chicken.debugger-challenge --no-pause
-/************************************************************************************/
-
+```javascript
 const module_name = "libsystem_kernel.dylib";
 const exp_name = "task_threads";
 
@@ -174,15 +183,14 @@ else {
 ```
 
 ### Complete
+
 The bypass works.  
 
 ![frida_named_threads_disabled](/images/2021/01/frida-named-threads-disabled.png)
 
 Now, the code, stops checking for `Frida` with `Named Threads` because it got a `kern_return_t` code that it was not able to digest.
 
-```
-[*]Frida running. ObjC API available!
-[*]Pointer to	task_threads()	inside: libsystem_kernel.dylib
+```bash
 Spawned `funky-chicken.debugger-challenge`. Resuming main thread!       
 [*]onEnter() interceptor ->	task_threads()	inside: libsystem_kernel.dylib
 [*]Address of Thread Count:0x16f5811d4
@@ -190,27 +198,35 @@ Spawned `funky-chicken.debugger-challenge`. Resuming main thread!
 ```
 
 ## Challenge: Understand Jailbreak detections
+
 ##### Writing Jailbreak detections
-Writing a self-built Jailbreak detection is tempting.  But there are elegant libraries available to detect `Elevated Privilege`.  Check out an open-source Swift version: https://github.com/securing/IOSSecuritySuite.
-```
+
+Writing a self-built Jailbreak detection is tempting.  But there are elegant libraries available to detect `Elevated Privilege`.  Check out an open-source Swift version: <https://github.com/securing/IOSSecuritySuite>.
+
+```swift
 if IOSSecuritySuite.amIJailbroken() {
 	print("This device is jailbroken")
 } else {
 	print("This device is not jailbroken")
 }
 ```
+
 Most of the libraries have a `true/false` response, at a high-level.  But what happens if Apple change an API?  What happens if ARM change something?  What happens if a detection fails or is forced to fail?  You hit two common problem in Security;`false positives` and a `fail close / fail open policy`.
 
 A third party library can probably give you the `Jailbreak == true/false` plus a confidence level whether stuff failed or it was a definite jailbreak.
-```
+
+```swift
 static func amIJailbrokenWithFailedChecks() -> (jailbroken: Bool, failedChecks: [FailedCheck]) {
     let status = performChecks()
     return (!status.passed, status.failedChecks)
 }
 ```
+
 ##### Layers of detections are required
+
 Not all jailbreaks are equal.  You need layers of code to account for this.  For example, the below code is ineffective on a device that has only has a basic jailbreak applied:
-```
+
+```objective-c
 /* Loop through all loaded Dynamic libraries at run-time */
 -(void)checkModules{
     unsigned int count = 0;
@@ -226,26 +242,24 @@ Not all jailbreaks are equal.  You need layers of code to account for this.  For
 For example, with the `Electra jailbreak` for `iOS` it could be set in two modes.  `Tweaks off`: you can `ssh` to the device, start `Frida` manually, run a `debugger`. The above code is not triggered.  `Tweaks on` will dynamically inject `TweakInject.dylib` at run-time, so the detection becomes useful.
 
 Consider another example; it was common to test a `write` call from your app's sandbox to directory like `private`, `root` or `/`:
-```
+
+```objective-c
 -(void)checkSandboxWrite{
 	...
 	..
 	[stringToBeWritten writeToFile:@"/private/foobar.txt" atomically:YES encoding:NSUTF8StringEncoding error:&error];
 	...
 	..
-
 ```
+
 This generated `Code=513 "You don’t have permission to save the file “foobar.txt” in the folder “private”." {Error Domain=NSPOSIXErrorDomain Code=1 "Operation not permitted"}}` on an `Electra` jailbroken device.
 
-
 ##### Jailbroken == YES
-There are tonnes of articles on `patching` out a `Boolean` response to `amIJailbroken()`.  But what happens if there no `Boolean` return type to find?  There is likely to be a counter that increments when it finds evidence of Jailbreak.  That is what this challenge offers.
 
-
-
-
+There are tonnes of internet articles on `patching` out a `Boolean` response to `amIJailbroken()`.  But what happens if there no `Boolean` return type to find?  There is likely to be a counter that increments when it finds evidence of Jailbreak.  That is what this challenge offers.
 
 ## Challenge: Method Swizzling on non-jailbroken device
+
 Why `Swizzle`? If you understand `swizzling` you understand part of `Objective-C's` beauty. Read this from [Apple][20e2b71f]
 :
 
@@ -258,7 +272,8 @@ My goal was to `method swizzle`.  I wanted to swap out a real `random` value wit
 ![swizzle_overview](debugger_challenge/readme_images/SwizzleOverview.png)
 
 #### Step 1: Use a debugger to find information
-```
+
+```lldb
 (lldb) dclass -m YDObjCFramework
 Dumping classes
 ************************************************************
@@ -286,14 +301,17 @@ in YDHelloClass:
 ```
 
 #### Step 2: Write Swizzle code
+
 I needed to write the code that would target the following information:
-```
+
+```swift
 Class = YDHelloClass
 Instance Method = getRandomNumber
 ```
+
 I went back to `xCode` and selected `New\Project\iOS\Framework\Objective-C`.  Using Objective-C `runtime` APIs, I wrote code that would target Alice's SDK.  
 
-```
+```objective-c
 + (void)load
 {
     Class orignalClass = objc_getClass("YDHelloClass");
@@ -310,9 +328,12 @@ I went back to `xCode` and selected `New\Project\iOS\Framework\Objective-C`.  Us
 
 @end
 ```
+
 #### Step 3: Place the Swizzle
+
 Let's start on an iOS Simulator.  I used my trusty debugger connected to the app running on an XCode simulator:
-```
+
+```lldb
 lldb) process load /Users/.../swizzle_framework.framework/swizzle_framework
 [+] 🎣 Found YDHelloClass
 
@@ -321,12 +342,15 @@ lldb) process load /Users/.../swizzle_framework.framework/swizzle_framework
 Loading "/Users/.../swizzle_framework.framework/swizzle_framework"...ok
 Image 0 loaded.
 ```
+
 ### COMPLETE ( IOS SIMULATOR )
+
 After applying the `method swizzle` you would always get a `42` value...
 
 ![success_swizzle](debugger_challenge/readme_images/swizzle_success_resized.png)
 
 ### Repackage app
+
 The way to solve this challenge on a real iOS device depended on whether you had a _jailed_ or _jailbroken_ device.  I had a clean, _jailed iOS12_ device.  I chose to **repackage** the _debuggerChallenge.ipa_ file. This involves taking it apart, adding the `dynamic framework` that contained the _Swizzle_ code and putting the app back together.  
 
 For more info on **repackaging apps**  read [here][5e75f6f0].
@@ -334,6 +358,7 @@ For more info on **repackaging apps**  read [here][5e75f6f0].
   [5e75f6f0]: https://github.com/OWASP/owasp-mstg/blob/master/Document/0x06c-Reverse-Engineering-and-Tampering.md "owasp"
 
 #### Approach
+
 - [x] Build and run Debugger Challenge within xCode.
 - [x] Copy the `Product` (which is a folder called `DebuggerChallenge.app` from Finder).
 - [x] Copy Bob's framework to the _DebuggerChallenge.app/Framework_ folder.
@@ -344,22 +369,29 @@ For more info on **repackaging apps**  read [here][5e75f6f0].
 - [x] Use `iOS-deploy` to get the freshly signed app onto the _Jailed_ device.
 
 It all sounded simple.  But I hit roadblocks:
+
 ##### Hiccup: OpTool
+
 `OpTool` is a small repo that allows you to insert or remove `Load Commands`.  These commands fire when your app opens and decides what dynamically linked files to load into the process.
 
 First, you need a local copy of `OpTool`.  You also need to ensure that you added `submodules`.  This last step tripped me up.
-```
+
+```bash
 git clone https://github.com/alexzielenski/optool.git
 Make initialize optool’s submodules:
 cd optool/
 git submodule update --init --recursive   
 ```
+
 You tell the main app binary to load this new framework.
-```
+
+```bash
 optool install -c load -p "@executable_path/Frameworks/YDBobSwizzle.framework/YDBobSwizzle" -t Payload/debugger_challenge.app/debugger_challenge
 ```
+
 If it worked you would see..
-```
+
+```console
 Found FAT Header
 Found thin header...
 Found thin header...
@@ -369,29 +401,38 @@ Inserting a LC_LOAD_DYLIB command for architecture: arm64
 Successfully inserted a LC_LOAD_DYLIB command for arm64
 Writing executable to debugger_challenge.app/debugger_challenge...
 ```
+
 Verify it..
-```
+
+```shell
 jtool -arch arm64 -l Payload/debugger_challenge.app/debugger_challenge
 ```
+
 ##### Hiccup: Code signatures
+
 If you forgot to `code sign` anything, you would hit obscure Apple errors when you tried to install the app on the iPhone.
-```
+
+```ssh
 applesign -7 -i <DEVELOPER CODE SIGNING ID> -m embedded.mobileprovision unsigned.ipa -o ready.ipa
 ios-deploy -b ready.ipa
 ios-deploy -b debugger_challenge.app
 No code signature found. AMDeviceSecureInstallApplication(0, device, url, options, install_callback, 0)
 ```
+
 ##### Hiccup: Entitlements
-```
+
+```ssh
 ios-deploy -b debugger_challenge.app
 The executable was signed with invalid entitlements.
 ```
+
 What had gone wrong, when I code signed the IPA? Check the file the `provisioning file`  you passed to Applesign.
 
 `security cms -D -i embedded.mobileprovision`
 
 Expiry date, device ID were good. Had I chosen the wrong developer Code Signing ID?
-```
+
+```plist
 <key>Entitlements</key>
 <key>ExpirationDate</key>
 	<date>2019-05-21T11:01:06Z</date>
@@ -402,24 +443,32 @@ Expiry date, device ID were good. Had I chosen the wrong developer Code Signing 
 <key>TeamIdentifier</key>
 		<string>2N3CU4HVH8</string>
 ```
+
 Let's try again with a new code signing ID!
-```
+
+```bash
 security find-identity -v -p codesigning
 applesign -7 -i <NEW DEVELOPER CODE SIGNING ID> -m embedded.mobileprovision debugger_chall_unsigned.ipa -o ready.ipa
 ```
+
 That worked.  I could install the app on the device.
+
 #### Hiccup 4: White screen of death
+
 Argh.  The app won't open but it generated a crash log [] which you could get from XCode ].
-```
+
+```console
 Exception Type:  EXC_CRASH (SIGABRT)
 Exception Codes: 0x0000000000000000, 0x0000000000000000
 Exception Note:  EXC_CORPSE_NOTIFY
 Termination Description: DYLD, Library not loaded: @executable_path/YDBobSwizzle.dylib | Referenced from: /var/containers/Bundle/Application/3F9EDE3F-7BCF-4F25-B438-9145FD3A21B7/debugger_challenge.app/debugger_challenge | Reason: image not found
 Triggered by Thread:  0
 ```
+
 I had forgotten to copy the actual framework!  So I had the _Load Command_ but no code to load!
 
 ### COMPLETE ( real device )
+
 Repeat all the above.  It worked! The Swizzle was placed and working on a `jailed` device.
 
 ![success_swizzle](debugger_challenge/readme_images/swizzled_jailed_device.png)
@@ -427,10 +476,12 @@ Repeat all the above.  It worked! The Swizzle was placed and working on a `jaile
 ## Challenge: Bypass anti-debug (ptrace)
 
 Using `ptrace` on `iOS` is still a common technique to stop a debugger attaching to an iOS app.  If you tried to attach a debugger after `PT_DENY_ATTACH` was issued, you would see something like this...
-```
+
+```lldb
 (lldb) process attach --pid 93791
 error: attach failed: lost connection
 ```
+
 If you attached a debugger before ptrace `PT_DENY_ATTACH` was set, you would see a process crash.
 
 ##### Use dtrace to observe the ptrace call
