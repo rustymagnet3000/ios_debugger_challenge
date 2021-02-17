@@ -939,7 +939,7 @@ The CommonCrypto API `CCCryptorCreate init` was the target.  It was invoked behi
     let ciphertext = RNCryptor.encrypt(data: myData, withPassword: password)
 ```
 
-#### Leveraging Frida-Trace
+#### Leverage Frida-Trace
 
 ```bash
 frida-trace -i "CCCryptorCreate*" -U "Debug CrackMe"
