@@ -1,22 +1,22 @@
 # iOS Debugger Challenge
 
-![Build debugger_challenge](https://github.com/rustymagnet3000/ios_debugger_challenge/workflows/Build%20ios_debugger_challenge/badge.svg?style=flat&logo=appveyor)  ![commits](https://img.shields.io/github/commit-activity/m/rustymagnet3000/ios_debugger_challenge?style=flat)
+![Build app](https://github.com/rustymagnet3000/ios_debugger_challenge/workflows/Build%20app/badge.svg)  ![commits](https://img.shields.io/github/commit-activity/m/rustymagnet3000/ios_debugger_challenge?style=flat)
 
-<!-- TOC depthFrom:2 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
+<!-- TOC depthfrom:2 depthto:2 withlinks:true updateonsave:true orderedlist:false -->
 
-- [Challenge: Bypass anti-Frida check ( thread names )](#challenge-bypass-anti-frida-check-thread-names-)
+- [Challenge: Bypass anti-Frida check  thread names](#challenge-bypass-anti-frida-check--thread-names)
 - [Challenge: Understand Jailbreak detections](#challenge-understand-jailbreak-detections)
 - [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)
-- [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)
-- [Challenge: Bypass ptrace (asm Syscall)](#challenge-bypass-ptrace-asm-syscall)
-- [Challenge: Bypass anti-debug (sysctl)](#challenge-bypass-anti-debug-sysctl)
-- [Challenge: Bypass anti-debug ( sysctl, more advanced )](#challenge-bypass-anti-debug-sysctl-more-advanced-)
-- [Challenge: Bypass anti-debug (Exception Ports)](#challenge-bypass-anti-debug-exception-ports)
+- [Challenge: Bypass anti-debug ptrace](#challenge-bypass-anti-debug-ptrace)
+- [Challenge: Bypass ptrace asm Syscall](#challenge-bypass-ptrace-asm-syscall)
+- [Challenge: Bypass anti-debug sysctl](#challenge-bypass-anti-debug-sysctl)
+- [Challenge: Bypass anti-debug  sysctl, more advanced](#challenge-bypass-anti-debug--sysctl-more-advanced)
+- [Challenge: Bypass anti-debug Exception Ports](#challenge-bypass-anti-debug-exception-ports)
 - [Challenge: Hook Apple's Random String function](#challenge-hook-apples-random-string-function)
 - [Challenge: Find Encryption key](#challenge-find-encryption-key)
 - [Challenge: Dancing with Threads](#challenge-dancing-with-threads)
-- [Challenge: Certificate Pinning bypass ( with Frida )](#challenge-certificate-pinning-bypass-with-frida-)
-- [Challenge: Certificate Pinning bypass ( with Method Swizzle )](#challenge-certificate-pinning-bypass-with-method-swizzle-)
+- [Challenge: Certificate Pinning bypass  with Frida](#challenge-certificate-pinning-bypass--with-frida)
+- [Challenge: Certificate Pinning bypass  more advanced](#challenge-certificate-pinning-bypass--more-advanced)
 - [Challenge: Adding Entitlements](#challenge-adding-entitlements)
 
 <!-- /TOC -->
@@ -999,6 +999,7 @@ If you look at <http://www.manpagez.com/man/3/CCCryptorCreate/> this API will le
 ```c
 (lldb) rb CCCrypt
 ```
+
 - [ ] CCCryptorCreate
 - [ ] CCCryptorCreateWithMode
 - [ ] CCCryptorGetOutputLength
