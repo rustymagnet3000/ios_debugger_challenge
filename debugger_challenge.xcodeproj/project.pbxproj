@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,8 +20,6 @@
 		0F59981622046D62001D0DAF /* YDEnclaveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F59981522046D62001D0DAF /* YDEnclaveVC.swift */; };
 		0F68B5AA21B8519C00C0D35F /* YDEnclaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F68B5A921B8519C00C0D35F /* YDEnclaveManager.swift */; };
 		0F72899B2535E15C0011D9DE /* YDSpinnerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F72899A2535E15C0011D9DE /* YDSpinnerVC.swift */; };
-		0FF69547228EED8500D767C4 /* YDAliceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */; };
-		0FF69548228EED8500D767C4 /* YDAliceSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0FFAAE19252B5ABD00BACA90 /* jailbreak_checks.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFAAE18252B5ABD00BACA90 /* jailbreak_checks.m */; };
 		30D4BA0A2115E00700C31AE5 /* RNCryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA092115E00600C31AE5 /* RNCryptor.swift */; };
 		30D4BA0F2115E1C100C31AE5 /* YDCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4BA0E2115E1C100C31AE5 /* YDCrypto.swift */; };
@@ -32,6 +30,8 @@
 		30D4E6F12080725900ABE7AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30D4E6EF2080725900ABE7AA /* LaunchScreen.storyboard */; };
 		30D4E6FE208072CD00ABE7AA /* YDAlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4E6FC208072CD00ABE7AA /* YDAlertHelper.swift */; };
 		30D4E6FF208072CD00ABE7AA /* YDTimeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D4E6FD208072CD00ABE7AA /* YDTimeHelper.swift */; };
+		F5C081A925DE620200E03BA4 /* YDAliceSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5C081A725DE61D900E03BA4 /* YDAliceSDK.xcframework */; };
+		F5C081AA25DE620200E03BA4 /* YDAliceSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F5C081A725DE61D900E03BA4 /* YDAliceSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,7 +41,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0FF69548228EED8500D767C4 /* YDAliceSDK.framework in Embed Frameworks */,
+				F5C081AA25DE620200E03BA4 /* YDAliceSDK.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -67,7 +67,6 @@
 		0F68B5A921B8519C00C0D35F /* YDEnclaveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YDEnclaveManager.swift; sourceTree = "<group>"; };
 		0F72899A2535E15C0011D9DE /* YDSpinnerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YDSpinnerVC.swift; sourceTree = "<group>"; };
 		0F82A83C23585ECC00728710 /* YDswizzleNSURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YDswizzleNSURLSession.m; sourceTree = "<group>"; };
-		0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YDAliceSDK.framework; sourceTree = "<group>"; };
 		0FFAAE18252B5ABD00BACA90 /* jailbreak_checks.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jailbreak_checks.m; sourceTree = "<group>"; };
 		0FFAAE1A252B5B7C00BACA90 /* jailbreak_checks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jailbreak_checks.h; sourceTree = "<group>"; };
 		30D4BA092115E00600C31AE5 /* RNCryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNCryptor.swift; sourceTree = "<group>"; };
@@ -83,6 +82,7 @@
 		30D4E6F82080729800ABE7AA /* debugger_challenge-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "debugger_challenge-Bridging-Header.h"; sourceTree = "<group>"; };
 		30D4E6FC208072CD00ABE7AA /* YDAlertHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YDAlertHelper.swift; sourceTree = "<group>"; };
 		30D4E6FD208072CD00ABE7AA /* YDTimeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YDTimeHelper.swift; sourceTree = "<group>"; };
+		F5C081A725DE61D900E03BA4 /* YDAliceSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = YDAliceSDK.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0FF69547228EED8500D767C4 /* YDAliceSDK.framework in Frameworks */,
+				F5C081A925DE620200E03BA4 /* YDAliceSDK.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,8 +141,7 @@
 				30D4BA0C2115E03500C31AE5 /* RNCryptor.h */,
 				30D4BA092115E00600C31AE5 /* RNCryptor.swift */,
 			);
-			name = RNCryptor;
-			path = debugger_challenge/RNCryptor;
+			path = RNCryptor;
 			sourceTree = "<group>";
 		};
 		30D4E6DA2080725700ABE7AA = {
@@ -150,6 +149,7 @@
 			children = (
 				30D4E6E52080725700ABE7AA /* debugger_challenge */,
 				30D4BA082115E00600C31AE5 /* RNCryptor */,
+				F5C081A325DE619100E03BA4 /* Frameworks */,
 				30D4E6E42080725700ABE7AA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -171,11 +171,18 @@
 				30D4E6ED2080725900ABE7AA /* Assets.xcassets */,
 				30D4E6EA2080725700ABE7AA /* Main.storyboard */,
 				30D4E6EF2080725900ABE7AA /* LaunchScreen.storyboard */,
-				0FB4C597228EEC770017BDFA /* YDAliceSDK.framework */,
 				30D4E6F22080725900ABE7AA /* Info.plist */,
 				30D4E6F82080729800ABE7AA /* debugger_challenge-Bridging-Header.h */,
 			);
 			path = debugger_challenge;
+			sourceTree = "<group>";
+		};
+		F5C081A325DE619100E03BA4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F5C081A725DE61D900E03BA4 /* YDAliceSDK.xcframework */,
+			);
+			path = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
