@@ -1,4 +1,4 @@
-name: Build ios_debugger_challenge
+name: Build app
 
 on:
 

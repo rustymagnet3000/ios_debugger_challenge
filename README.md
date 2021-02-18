@@ -1,11 +1,6 @@
 # iOS Debugger Challenge
 
-![Build debugger_challenge](https://github.com/rustymagnet3000/ios_debugger_challenge/workflows/Build%20ios_debugger_challenge/badge.svg?style=flat&logo=appveyor)  ![commits](https://img.shields.io/github/commit-activity/m/rustymagnet3000/ios_debugger_challenge?style=flat)![languages](https://img.shields.io/github/languages/count/rustymagnet3000/ios_debugger_challenge?style=flat&logo=appveyor)
-
-
-
-
-
+![Build debugger_challenge](https://github.com/rustymagnet3000/ios_debugger_challenge/workflows/Build%20ios_debugger_challenge/badge.svg?style=flat&logo=appveyor)  ![commits](https://img.shields.io/github/commit-activity/m/rustymagnet3000/ios_debugger_challenge?style=flat)
 
 <!-- TOC depthFrom:2 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
 
