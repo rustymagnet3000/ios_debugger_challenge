@@ -2,24 +2,7 @@
 
 ![Build app](https://github.com/rustymagnet3000/ios_debugger_challenge/workflows/Build%20app/badge.svg)  ![commits](https://img.shields.io/github/commit-activity/m/rustymagnet3000/ios_debugger_challenge?style=flat)
 
-<!-- TOC depthfrom:2 depthto:2 withlinks:true updateonsave:true orderedlist:false -->
-
-- [Challenge: Bypass anti-Frida check  thread names](#challenge-bypass-anti-frida-check--thread-names)
-- [Challenge: Understand Jailbreak detections](#challenge-understand-jailbreak-detections)
-- [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)
-- [Challenge: Bypass anti-debug ptrace](#challenge-bypass-anti-debug-ptrace)
-- [Challenge: Bypass ptrace asm Syscall](#challenge-bypass-ptrace-asm-syscall)
-- [Challenge: Bypass anti-debug sysctl](#challenge-bypass-anti-debug-sysctl)
-- [Challenge: Bypass anti-debug  sysctl, more advanced](#challenge-bypass-anti-debug--sysctl-more-advanced)
-- [Challenge: Bypass anti-debug Exception Ports](#challenge-bypass-anti-debug-exception-ports)
-- [Challenge: Hook Apple's Random String function](#challenge-hook-apples-random-string-function)
-- [Challenge: Find Encryption key](#challenge-find-encryption-key)
-- [Challenge: Dancing with Threads](#challenge-dancing-with-threads)
-- [Challenge: Certificate Pinning bypass  with Frida](#challenge-certificate-pinning-bypass--with-frida)
-- [Challenge: Certificate Pinning bypass  more advanced](#challenge-certificate-pinning-bypass--more-advanced)
-- [Challenge: Adding Entitlements](#challenge-adding-entitlements)
-
-<!-- /TOC -->
+<!-- TOC depthFrom:2 depthTo:2 orderedList:false updateOnSave:true withLinks:true -->autoauto- [Challenge: Bypass anti-Frida check ( thread names )](#challenge-bypass-anti-frida-check--thread-names-)auto- [Challenge: Understand Jailbreak detections](#challenge-understand-jailbreak-detections)auto- [Challenge: Method Swizzling on non-jailbroken device](#challenge-method-swizzling-on-non-jailbroken-device)auto- [Challenge: Bypass anti-debug (ptrace)](#challenge-bypass-anti-debug-ptrace)auto- [Challenge: Bypass ptrace (asm Syscall)](#challenge-bypass-ptrace-asm-syscall)auto- [Challenge: Bypass anti-debug (sysctl)](#challenge-bypass-anti-debug-sysctl)auto- [Challenge: Bypass anti-debug ( sysctl, more advanced )](#challenge-bypass-anti-debug--sysctl-more-advanced-)auto- [Challenge: Bypass anti-debug (Exception Ports)](#challenge-bypass-anti-debug-exception-ports)auto- [Challenge: Hook Apple's Random String function](#challenge-hook-apples-random-string-function)auto- [Challenge: Find Encryption key](#challenge-find-encryption-key)auto- [Challenge: Dancing with Threads](#challenge-dancing-with-threads)autoauto<!-- /TOC -->
 
 ## Challenge: Bypass anti-Frida check ( thread names )
 
@@ -1160,13 +1143,15 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
 ## Challenge: Certificate Pinning bypass ( with Frida )
 
-Do I trust this server, before establishing a connection to this server?
+>Do I trust this server, before establishing a connection ?
 
-That question is what `Certificate Pinning` adds to a mobile app.  It derives the answer by comparing Public Keys it has stored locally against Public Keys sent by the Server during a secured network setup.  
+`Certificate Pinning` asks that question when starting a `TLS` connection with a server.  It derives the answer by comparing `CA certificates` it has persisted locally against the `Certificate Chain` passed by the Server during a `TLS handshake`.
 
-Hardened iOS app's often ignore the default `iOS Truststore` and add their own, smaller list of Root and Intermediary Certificate Authorities. This smaller list was called a `pinlist`.
+Hardened iOS and Android app's ignore the default mobile O/S `Trust Store` and use their own, smaller list of `Root and Intermediary Certificate Authorities`.
 
-Why ignore the `iOS Truststore`?  It contained a lot of `Certificate Authorities`.  Refer to <https://en.wikipedia.org/wiki/DigiNotar> if you want details of why this is a bad thing.  More relevant for this Challenge, a user could add an all powerful `Self-Signed Certificate` via the Settings app on iOS. This would be "trusted" by iOS.
+This smaller list is commonly referred to as a `pinlist`.
+
+Why ignore the default mobile O/S `Trust Store` ? First, a user could add an all powerful `Self-Signed Certificate` to this `Trust Store`. Second, by default it contained 100s of Certificate Authorities.  Time has shown that not all can CAs can be trusted; refer to <https://en.wikipedia.org/wiki/DigiNotar>.
 
 This challenge was written to show how to get around checks performed when sending a network request with Apple's `NSURLSession` class.
 
